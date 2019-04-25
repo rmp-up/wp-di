@@ -7,7 +7,9 @@ variables:
 test:
   image: pretzlaw/php:7.1-apache
   services:
-    - mariadb
+    - name: mariadb
+      alias: db
   script:
     - ls
     - env
+    - ping -c1 db
