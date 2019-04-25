@@ -1,3 +1,13 @@
+variables:
+  MYSQL_USER: dev
+  MYSQL_PASSWORD: dev
+  MYSQL_DATABASE: dev
+
+
 test:
+  image: pretzlaw/php:7.1-apache
+  services:
+    - mariadb
   script:
     - ls
+    - env
