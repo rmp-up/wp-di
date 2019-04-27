@@ -1,0 +1,25 @@
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/7.0/phpunit.xsd"
+         backupGlobals="false"
+         colors="true"
+         bootstrap="lib/Test/functions.php"
+>
+    <testsuites>
+        <testsuite name="default">
+            <directory>lib/Test</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>lib/</directory>
+            <exclude>
+                <directory>lib/Test</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-html" target="var/phpunit"/>
+    </logging>
+</phpunit>
