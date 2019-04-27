@@ -9,7 +9,9 @@ test:
   services:
     - name: mariadb
       alias: db
+
+  before_script:
+    - cp .env.dist .env
+
   script:
     - ls
-    - env
-    - ping -c1 db
