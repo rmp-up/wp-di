@@ -2,5 +2,6 @@
 /var
 /vendor
 
+.docker
 .env
 composer.lock
