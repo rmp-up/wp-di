@@ -1,0 +1,18 @@
+{
+  "name": "rmp-up/wp-di",
+  "license": "proprietary",
+  "description": "Simple PHP Dependency Injection Container for WordPress",
+  "autoload": {
+    "psr-4": {
+      "RmpUp\\WpDi\\": "lib"
+    }
+  },
+  "require": {
+    "pimple/pimple": "^3.0"
+  },
+  "require-dev": {
+    "php": "^7.0",
+    "phpunit/phpunit": "~7",
+    "roave/security-advisories": "dev-master"
+  }
+}
