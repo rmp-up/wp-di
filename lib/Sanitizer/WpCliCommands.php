@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Mirror.php
+ * WpCliCommands.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -17,56 +17,40 @@
  * @copyright  2019 Mike Pretzlaw
  * @license    https://mike-pretzlaw.de/license-generic.txt
  * @link       https://project.mike-pretzlaw.de/wp-di
- * @since      2019-04-25
+ * @since      2019-04-29
  */
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test;
+namespace RmpUp\WpDi\Sanitizer;
 
 /**
- * Helper for testing that mirrors things it gets called with.
+ * WpCliCommands
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-04-25
+ * @since      2019-04-29
  */
-class Mirror
+class WpCliCommands extends Services
 {
-    /**
-     * @var array
-     */
-    public static $staticCalls = [];
-    /**
-     * @var array
-     */
-    private $construct;
-
-    public function __construct(...$construct)
+    public function sanitize($node): array
     {
-        $this->construct = $construct;
-    }
+        $sanitized = [];
 
-    public function __invoke(...$invoked)
-    {
-        return [
-            'constructor' => $this->getConstructorArgs(),
-            'invoked' => $invoked,
-        ];
-    }
+        foreach ($node as $serviceName => $serviceDefinition) {
+            $service = parent::sanitize([$serviceName => $serviceDefinition]);
 
-    public static function __callStatic($method, $arguments)
-    {
-        static::$staticCalls[] = [
-            'method' => $method,
-            'arguments' => $arguments,
-        ];
-    }
+            if (is_string($serviceDefinition)) {
+                $service[$serviceName][\RmpUp\WpDi\Provider\WpCliCommands::KEY] = [
+                    \RmpUp\WpDi\Provider\WpCliCommands::COMMAND => $serviceName,
+                ];
 
-    /**
-     * @return array
-     */
-    public function getConstructorArgs(): array
-    {
-        return $this->construct;
+                $serviceDefinition = $service[$serviceName];
+                $serviceName = $serviceDefinition[\RmpUp\WpDi\Provider\Services::CLASS_NAME];
+            }
+
+            $sanitized[$serviceName] = $serviceDefinition;
+        }
+
+        return $sanitized;
     }
 }

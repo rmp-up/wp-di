@@ -54,8 +54,6 @@ abstract class AbstractTestCase extends TestCase
 
     protected function setUp()
     {
-        parent::setUp();
-
         $this->pimple = new Container();
         $this->container = new \Pimple\Psr11\Container($this->pimple);
     }
@@ -102,5 +100,6 @@ abstract class AbstractTestCase extends TestCase
         parent::tearDown();
 
         static::$actions = [];
+        Mirror::$staticCalls = [];
     }
 }
