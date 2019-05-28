@@ -16,10 +16,10 @@ variables:
   before_script:
     - cp .env.dist .env
     - composer install
+    - vendor/bin/wp --allow-root core download --version=$WP_VERSION
 
   script:
-    - vendor/bin/wp --allow-root core download --version=$WP_VERSION
-    - ls
+    - vendor/bin/phpunit
 
 wp:
   extends: ".test"
