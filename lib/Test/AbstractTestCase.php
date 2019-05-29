@@ -46,6 +46,7 @@ abstract class AbstractTestCase extends TestCase
     protected $services = [];
 
     public static $actions = [];
+    public static $calls = [];
 
     /**
      * @var \Pimple\Psr11\Container
@@ -99,6 +100,7 @@ abstract class AbstractTestCase extends TestCase
     {
         parent::tearDown();
 
+        static::$calls = [];
         static::$actions = [];
         Mirror::$staticCalls = [];
     }
