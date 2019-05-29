@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Provider;
 
 use Pimple\Container;
+use Pimple\Psr11\Container as PsrContainer;
 use RmpUp\WpDi\LazyService;
 
 /**
@@ -42,7 +43,7 @@ class WpActions extends Services
 
     public function register(Container $pimple)
     {
-        $psr = new \Pimple\Psr11\Container($pimple);
+        $psr = new PsrContainer($pimple);
 
         foreach ($this->services as $event => $hooks) {
             foreach ($hooks as $definition) {
@@ -60,13 +61,38 @@ class WpActions extends Services
                     $this->compile($pimple, $serviceName, reset($definition[self::SERVICE]));
                 }
 
-                add_action(
-                    $event,
-                    new LazyService($psr, $serviceName),
-                    $definition[self::PRIORITY],
-                    $definition[self::ARG_COUNT]
+                $this->registerAction(
+                    (string)$event,
+                    $psr,
+                    (string)$serviceName,
+                    (int)$definition[self::PRIORITY],
+                    (int)$definition[self::ARG_COUNT]
                 );
             }
         }
+    }
+
+    /**
+     * @param $event
+     * @param PsrContainer $container
+     * @param $serviceName
+     * @param int $priority
+     * @param int $argCount
+     * @return true|void
+     */
+    protected function registerAction(
+        string $event,
+        PsrContainer $container,
+        string $serviceName,
+        int $priority,
+        int $argCount
+    )
+    {
+        return add_action(
+            $event,
+            new LazyService($container, $serviceName),
+            $priority,
+            $argCount
+        );
     }
 }

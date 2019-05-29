@@ -4,14 +4,27 @@ variables:
   MYSQL_DATABASE: dev
   MYSQL_ROOT_PASSWORD: dev
 
-test:
+.test: &test
   image: pretzlaw/php:7.1-apache
   services:
     - name: mariadb
       alias: db
 
+  variables:
+    WP_VERSION: "latest"
+
   before_script:
     - cp .env.dist .env
+    - composer install
+    - vendor/bin/wp --allow-root core download --version=$WP_VERSION
 
   script:
-    - ls
+    - vendor/bin/phpunit
+
+wp:
+  extends: ".test"
+
+wp50:
+  extends: ".test"
+  variables:
+    WP_VERSION: "5.0"
