@@ -19,6 +19,19 @@
         </whitelist>
     </filter>
 
+    <listeners>
+        <listener class="Pretzlaw\PHPUnit\DocGen\TestCaseListener">
+            <arguments>
+                <string>var/documentation.md</string>
+            </arguments>
+        </listener>
+        <listener class="Pretzlaw\PHPUnit\DocGen\TestCaseListener">
+            <arguments>
+                <string>var/documentation.html</string>
+            </arguments>
+        </listener>
+    </listeners>
+
     <logging>
         <log type="coverage-html" target="var/phpunit"/>
     </logging>
