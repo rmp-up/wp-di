@@ -32,6 +32,7 @@ use RmpUp\WpDi\Test\Mirror;
 /**
  * AsLazyServiceTest
  *
+ * @internal
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-29
  */
