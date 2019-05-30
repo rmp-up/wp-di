@@ -22,13 +22,38 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Provider\WpPostType;
+namespace RmpUp\WpDi\Test\WordPress\PostTypes\Provider;
 
 use RmpUp\WpDi\Sanitizer\WpPostTypes;
 use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**
- * PostTypeDefinitionAsArray
+ * The post-type definition class
+ *
+ * Another option is to have an `__invoke()` method which takes care of the registration.
+ * In that case the complete registration process will be delegated to this callable:
+ *
+ * ```php
+ * <?php
+ *
+ * class PostTypeDefinition {
+ *
+ *   public function __invoke(string $postType) {
+ *
+ *     register_post_type(
+ *       $postType,
+ *       [
+ *         'label' => 'Foo',
+ *         'public' => false,
+ *       ]
+ *     );
+ *
+ *  }
+ * }
+ * ```
+ *
+ * As you can see the name of the post type will be provided
+ * to let the object know which one shall be registered.
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-05-29

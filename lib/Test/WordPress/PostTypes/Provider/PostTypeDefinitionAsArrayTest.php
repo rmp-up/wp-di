@@ -22,13 +22,28 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Provider\WpPostType;
+namespace RmpUp\WpDi\Test\WordPress\PostTypes\Provider;
 
 use RmpUp\WpDi\Sanitizer\WpPostTypes;
 use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**
- * PostTypeDefinitionAsArray
+ * The post-type definition class
+ *
+ * When then definition class can be converted it into an array
+ * then its fields will be used for post type registration.
+ * Such class should contain the config as public fields:
+ *
+ * ```php
+ * <?php
+ *
+ * class PostTypeDefinition {
+ *   public $label = 'Foo';
+ *   public $public = false;
+ * }
+ * ```
+ *
+ * In this case the post-type won't be public but occur using the label "Foo".
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-05-29

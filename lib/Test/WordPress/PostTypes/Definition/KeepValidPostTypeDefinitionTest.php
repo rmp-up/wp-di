@@ -22,18 +22,17 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Sanitizer\WpPostType;
+namespace RmpUp\WpDi\Test\WordPress\PostTypes\Definition;
 
 use RmpUp\WpDi\Provider\Services;
-use RmpUp\WpDi\Sanitizer\WpCliCommands;
 use RmpUp\WpDi\Sanitizer\WpPostTypes;
-use RmpUp\WpDi\Test\AbstractTestCase;
 use RmpUp\WpDi\Test\Mirror;
 use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
  * KeepValidPostTypeDefinitionTest
  *
+ * @internal
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-05-28
  */
