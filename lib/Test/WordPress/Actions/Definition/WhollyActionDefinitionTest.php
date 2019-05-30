@@ -22,7 +22,7 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Sanitizer\WpActions;
+namespace RmpUp\WpDi\Test\WordPress\Actions\Definition;
 
 use RmpUp\WpDi\Provider\WpActions as WpActionsProvider;
 use RmpUp\WpDi\Sanitizer\WpActions;
@@ -30,12 +30,14 @@ use RmpUp\WpDi\Test\Mirror;
 use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
- * KeepProperDefinitionsTest
+ * Internal definition
  *
+ *
+ * @internal
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-27
  */
-class KeepProperDefinitionsTest extends SanitizerTestCase
+class WhollyActionDefinitionTest extends SanitizerTestCase
 {
 
     protected function setUp()

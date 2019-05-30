@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * SimpleServiceReferenceTest.php
+ * WithArgumentsTest.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -17,46 +17,43 @@
  * @copyright  2019 Mike Pretzlaw
  * @license    https://mike-pretzlaw.de/license-generic.txt
  * @link       https://project.mike-pretzlaw.de/wp-di
- * @since      2019-04-25
+ * @since      2019-04-26
  */
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Provider\WpActions;
+namespace RmpUp\WpDi\Test\WordPress\Actions;
 
 use RmpUp\WpDi\Test\Mirror;
 
 /**
- * SimpleServiceReferenceTest
+ * WithArgumentsTest
  *
+ * @internal
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-04-25
+ * @since      2019-04-26
  */
-class SimpleServiceReferenceTest extends AbstractWpActionsTest
+class WithArgumentsTest extends AbstractWpActionsTest
 {
-    const SERVICE_NAME = 'butNamed';
-
     protected function setUp()
     {
-        $this->services = [
-            __CLASS__ => [
-                Mirror::class,
-                self::SERVICE_NAME => Mirror::class,
+        $this->services['actions'] = [
+            Mirror::class => [
+                42,
+                1337,
             ]
         ];
 
         parent::setUp();
     }
 
-    public function testAddsService()
+    public function testRegistersServiceWithArgs()
     {
-        static::assertInstanceOf(Mirror::class, $this->container->get(Mirror::class));
-        static::assertInstanceOf(Mirror::class, $this->container->get(self::SERVICE_NAME));
-    }
+        /** @var Mirror $mirror */
+        $mirror = $this->container->get(Mirror::class);
 
-    public function testAddsAction()
-    {
-        static::assertLazyService(Mirror::class, static::$actions[__CLASS__][0][0]);
-        static::assertLazyService(self::SERVICE_NAME, static::$actions[__CLASS__][1][0]);
+        static::assertInstanceOf(Mirror::class, $mirror);
+
+        static::assertEquals([42, 1337], $mirror->getConstructorArgs());
     }
 }

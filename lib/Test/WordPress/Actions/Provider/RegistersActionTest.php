@@ -22,13 +22,38 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Provider\WpActions;
+namespace RmpUp\WpDi\Test\WordPress\Actions;
 
 use RmpUp\WpDi\Provider\WpActions;
 use RmpUp\WpDi\Test\Mirror;
 
 /**
- * ClosuresTest
+ * Priority and arguments
+ *
+ * There is often the need to only adjust the priority
+ * or the argument count.
+ * This is how it can be done:
+ *
+ * ```php
+ * <?php
+ *
+ * use \RmpUp\WpDi\Provider;
+ *
+ * return [
+ *   Provider\WpActions => [
+ *     'wp_ajax_crop_image_pre_save' => [
+ *       [
+ *         WpActions::SERVICE => Mirror::class,
+ *         WpActions::PRIORITY => 5,
+ *         WpActions::ARG_COUNT => 3,
+ *       ]
+ *     ]
+ *   ]
+ * ];
+ * ```
+ *
+ * This registers the service using priority 5
+ * and allows all 3 arguments to be passed to the service.
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-05-28

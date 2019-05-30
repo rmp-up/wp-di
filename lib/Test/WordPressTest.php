@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * WithArgumentsTest.php
+ * WordPressTest.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -17,42 +17,23 @@
  * @copyright  2019 Mike Pretzlaw
  * @license    https://mike-pretzlaw.de/license-generic.txt
  * @link       https://project.mike-pretzlaw.de/wp-di
- * @since      2019-04-26
+ * @since      2019-05-30
  */
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Provider\WpActions;
-
-use RmpUp\WpDi\Test\Mirror;
+namespace RmpUp\WpDi\Test;
 
 /**
- * WithArgumentsTest
+ * WordPress
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-04-26
+ * @since      2019-05-30
  */
-class WithArgumentsTest extends AbstractWpActionsTest
+class WordPressTest extends AbstractTestCase
 {
-    protected function setUp()
+    public function testNothing()
     {
-        $this->services['actions'] = [
-            Mirror::class => [
-                42,
-                1337,
-            ]
-        ];
-
-        parent::setUp();
-    }
-
-    public function testRegistersServiceWithArgs()
-    {
-        /** @var Mirror $mirror */
-        $mirror = $this->container->get(Mirror::class);
-
-        static::assertInstanceOf(Mirror::class, $mirror);
-
-        static::assertEquals([42, 1337], $mirror->getConstructorArgs());
+        static::assertTrue(true);
     }
 }

@@ -22,7 +22,7 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Sanitizer\WpActions;
+namespace RmpUp\WpDi\Test\WordPress\Actions\Definition;
 
 use RmpUp\WpDi\Provider\WpActions as WpActionsProvider;
 use RmpUp\WpDi\Sanitizer\WpActions;
@@ -30,12 +30,35 @@ use RmpUp\WpDi\Test\Mirror;
 use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
- * ExtendsServiceReferencesTest
+ * Direct service definition at once
+ *
+ * One way to bind a service to the action is
+ * to directly define it within the actions part:
+ *
+ * ```php
+ * <?php
+ *
+ * use \RmpUp\WpDi\Provider;
+ *
+ * return [
+ *   Provider\WpActions => [
+ *     'plugin_loaded' => [
+ *       Foo::class,
+ *     ]
+ *   ]
+ * ];
+ * ```
+ *
+ * This does not only create a service named "Foo"
+ * but also registers it (via `add_action`)
+ * to watch for the "plugin_loaded"-action.
+ * All arguments (just like the one for "plugin_loaded")
+ * will be passed to the service like `$service( $plugin_name )` in this example.
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-27
  */
-class ExtendsServiceReferencesTest extends SanitizerTestCase
+class ServiceDefinitionTest extends SanitizerTestCase
 {
     protected function setUp()
     {

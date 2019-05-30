@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * AbstractWpActionsTest.php
+ * ActionsTest.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -17,30 +17,26 @@
  * @copyright  2019 Mike Pretzlaw
  * @license    https://mike-pretzlaw.de/license-generic.txt
  * @link       https://project.mike-pretzlaw.de/wp-di
- * @since      2019-04-26
+ * @since      2019-05-30
  */
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Provider\WpActions;
+namespace RmpUp\WpDi\Test\WordPress;
 
-use RmpUp\WpDi\Provider\WpActions;
-use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
+use RmpUp\WpDi;
 
 /**
- * AbstractWpActionsTest
+ * Actions
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-04-26
+ * @since      2019-05-30
  */
-abstract class AbstractWpActionsTest extends SanitizerTestCase
+class ActionsTest extends WpDi\Test\AbstractTestCase
 {
-    protected function setUp()
+    public function testBasicsExist()
     {
-        parent::setUp();
-
-        $this->sanitizer = new \RmpUp\WpDi\Sanitizer\WpActions();
-
-        $this->pimple->register(new WpActions($this->sanitizer->sanitize($this->services)));
+        static::assertTrue(class_exists(WpDi\Provider\WpActions::class));
+        static::assertTrue(class_exists(WpDi\Sanitizer\WpActions::class));
     }
 }

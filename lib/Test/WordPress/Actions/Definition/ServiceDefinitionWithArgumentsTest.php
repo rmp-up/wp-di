@@ -22,7 +22,7 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Sanitizer\WpActions;
+namespace RmpUp\WpDi\Test\WordPress\Actions\Definition;
 
 use RmpUp\WpDi\Provider\WpActions as WpActionsProvider;
 use RmpUp\WpDi\Sanitizer\WpActions;
@@ -30,12 +30,35 @@ use RmpUp\WpDi\Test\Mirror;
 use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
- * ExtendsServiceDefinitionsTest
+ * Direct service definition at once
+ *
+ * If your service needs other things injected via constructor then this is possible within the same config:
+ *
+ * ```php
+ * <?php
+ *
+ * use \RmpUp\WpDi\Provider;
+ *
+ * return [
+ *   Provider\WpActions => [
+ *     'init' => [
+ *       Bar::class => [
+ *         'argument 1',
+ *         2,
+ *         Three::class
+ *       ]
+ *     ]
+ *   ]
+ * ];
+ * ```
+ *
+ * This results in a service named "Bar" which has three arguments injected (via `__construct`).
+ * As said this service runs when the action (here: "init") runs.
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-27
  */
-class ExtendsServiceDefinitionsTest extends SanitizerTestCase
+class ServiceDefinitionWithArgumentsTest extends SanitizerTestCase
 {
     protected function setUp()
     {
