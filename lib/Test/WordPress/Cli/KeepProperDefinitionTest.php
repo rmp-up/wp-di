@@ -22,7 +22,7 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Sanitizer\WpCliCommands;
+namespace RmpUp\WpDi\Test\WordPress\Cli;
 
 use RmpUp\WpDi\Provider\Services;
 use RmpUp\WpDi\Sanitizer\WpCliCommands;
@@ -32,6 +32,7 @@ use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 /**
  * KeepProperDefinitionTest
  *
+ * @internal
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-29
  */

@@ -22,7 +22,7 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Sanitizer\WpCliCommands;
+namespace RmpUp\WpDi\Test\WordPress\Cli;
 
 use RmpUp\WpDi\Provider\Services;
 use RmpUp\WpDi\Sanitizer\WpCliCommands;
@@ -30,7 +30,24 @@ use RmpUp\WpDi\Test\Mirror;
 use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
- * KeepProperDefinitionTest
+ * Adding commands
+ *
+ * Defining commands can be done with an associative array:
+ *
+ * ```php
+ * <?php
+ *
+ * return [
+ *   Provider\WpCliCommands::class => [
+ *     'some thing' => SomeCommand::class,
+ *     'foo'        => Another::class,
+ *   ]
+ * ]
+ * ```
+ *
+ * When running wp-cli it will have the two new commands `some thing`
+ * and `foo` which invokes the defined classes/services the same way as wp-cli does
+ * (e.g. via `__invoke`).
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-29
