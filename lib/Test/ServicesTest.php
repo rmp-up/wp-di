@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * ArgumentShortcutTest.php
+ * LazyServiceTest.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -17,58 +17,49 @@
  * @copyright  2019 Mike Pretzlaw
  * @license    https://mike-pretzlaw.de/license-generic.txt
  * @link       https://project.mike-pretzlaw.de/wp-di
- * @since      2019-04-26
+ * @since      2019-04-27
  */
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Sanitizer\ArraySanitizer;
+namespace RmpUp\WpDi\Test;
 
-use RmpUp\WpDi\Sanitizer\Services;
-use RmpUp\WpDi\Sanitizer\SanitizerInterface;
-use RmpUp\WpDi\Test\AbstractTestCase;
-use RmpUp\WpDi\Test\Mirror;
+use RmpUp\WpDi\LazyService;
 
 /**
- * ArgumentShortcutTest
+ * Services
+ *
+ * As usual services are loaded only when needed from the container.
+ * This way they spare some costs (ticks, memory, reads/writes, network, etc.)
+ * and can be exchanged as long as not yet loaded.
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-04-26
+ * @since      2019-04-27
  */
-class ArgumentsShortcutTest extends AbstractTestCase
+class ServicesTest extends AbstractTestCase
 {
     /**
-     * @var SanitizerInterface
+     * @var LazyService
      */
-    private $sanitizer;
+    private $lazy;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->sanitizer = new Services();
+        $this->pimple['qux'] = static function () {
+            return new Mirror();
+        };
+
+        $this->lazy = new LazyService($this->container, 'qux');
     }
 
-    public function testAddsKeyWhereItIsMissing()
+    public function testLoadsServiceWhenAsked()
     {
-        static::assertEquals(
-            [
-                Mirror::class => [
-                    'class' => Mirror::class,
-                    'arguments' => [
-                        42,
-                        1337
-                    ],
-                ]
-            ],
-            $this->sanitizer->sanitize(
-                [
-                    Mirror::class => [
-                        42,
-                        1337,
-                    ],
-                ]
-            )
-        );
+        $this->assertServiceNotLoaded('qux');
+
+        $this->lazy->__invoke('test');
+
+        $this->assertServiceLoaded('qux');
     }
 }

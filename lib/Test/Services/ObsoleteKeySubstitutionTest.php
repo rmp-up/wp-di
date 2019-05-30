@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * RemainsProperDefinitionsUnchanged.php
+ * ObsoleteKeySubstitutionTest.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -17,28 +17,29 @@
  * @copyright  2019 Mike Pretzlaw
  * @license    https://mike-pretzlaw.de/license-generic.txt
  * @link       https://project.mike-pretzlaw.de/wp-di
- * @since      2019-04-27
+ * @since      2019-04-26
  */
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Sanitizer\ArraySanitizer;
+namespace RmpUp\WpDi\Test\Services;
 
-use RmpUp\WpDi\Sanitizer;
-use RmpUp\WpDi\Provider;
+use RmpUp\WpDi\Sanitizer\Services;
+use RmpUp\WpDi\Sanitizer\SanitizerInterface;
 use RmpUp\WpDi\Test\AbstractTestCase;
 use RmpUp\WpDi\Test\Mirror;
 
 /**
- * RemainsProperDefinitionsUnchanged
+ * ObsoleteKeySubstitutionTest
  *
+ * @internal
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-04-27
+ * @since      2019-04-26
  */
-class RemainsProperDefinitionsUnchangedTest extends AbstractTestCase
+class ObsoleteKeySubstitutionTest extends AbstractTestCase
 {
     /**
-     * @var Sanitizer\Services
+     * @var SanitizerInterface
      */
     private $sanitizer;
 
@@ -46,39 +47,23 @@ class RemainsProperDefinitionsUnchangedTest extends AbstractTestCase
     {
         parent::setUp();
 
-        $this->sanitizer = new Sanitizer\Services();
+        $this->sanitizer = new Services();
     }
 
-
-    public function possibleScenarios(): array
+    public function testAddsKeyWhereItIsMissing()
     {
-        return [
-            [ // First test
-                [ // Arguments
-                    Mirror::class => [
-                        Provider\Services::CLASS_NAME => Mirror::class,
-                        Provider\Services::ARGUMENTS => [],
-                    ]
+        static::assertEquals(
+            [
+                Mirror::class => [
+                    'class' => Mirror::class,
+                    'arguments' => [],
                 ]
             ],
-            [
-                // Already lazy one
+            $this->sanitizer->sanitize(
                 [
-                    Mirror::class => static function () {
-                        return 'foo';
-                    }
+                    Mirror::class,
                 ]
-            ]
-        ];
-    }
-
-    /**
-     * @group unit
-     * @dataProvider possibleScenarios
-     * @param $definition
-     */
-    public function testRemainUnchanged($definition)
-    {
-        static::assertEquals($definition, $this->sanitizer->sanitize($definition));
+            )
+        );
     }
 }

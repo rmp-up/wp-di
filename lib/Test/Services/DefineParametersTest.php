@@ -22,7 +22,7 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Provider\Parameters;
+namespace RmpUp\WpDi\Test\Services;
 
 use RmpUp\WpDi\Provider\Parameters;
 use RmpUp\WpDi\Provider\Services;
@@ -30,12 +30,42 @@ use RmpUp\WpDi\Test\AbstractTestCase;
 use RmpUp\WpDi\Test\Mirror;
 
 /**
- * KeepStringsTest
+ * Parameters
+ *
+ * Primitives values that shall remain as they are can be added as parameters:
+ *
+ * ```php
+ * <?php
+ *
+ * return [
+ *   Provider\Parameters::class => [
+ *     'answer' => 'XLII',
+ *   ]
+ * ];
+ * ```
+ *
+ * Such key-value-data can be injected in other services:
+ *
+ * ```php
+ * <?php
+ *
+ * return [
+ *   Provider\Services::class => [
+ *     Question::class => [
+ *       'answer',
+ *     ]
+ *   ]
+ * ];
+ * ```
+ *
+ * Once the service "Question" is instantiated it will receive the "answer"-parameter
+ * (like `new Question('XLII')`).
+ *
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-27
  */
-class KeepStringsTest extends AbstractTestCase
+class DefineParametersTest extends AbstractTestCase
 {
     protected function setUp()
     {

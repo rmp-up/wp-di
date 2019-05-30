@@ -22,7 +22,7 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Provider\ArrayProvider;
+namespace RmpUp\WpDi\Test\Services;
 
 use ArrayIterator;
 use ArrayObject;
@@ -32,12 +32,31 @@ use RmpUp\WpDi\Sanitizer;
 use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**
- * FlatArrayTest
+ * Service definition
+ *
+ * Services can be defined using a very simple data structure:
+ *
+ * ```php
+ * <?php
+ *
+ * return [
+ *   Provider\Services => [
+ *
+ *     SomeThing::class,
+ *
+ *   ]
+ * ];
+ * ```
+ *
+ * This kind of definition registers one service named "SomeThing"
+ * which points to an instance of same class.
+ * The second is named "AnotherThing"
+ * and will have the three listed arguments in the constructor.
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-25
  */
-class FlatArrayTest extends AbstractTestCase
+class NoArgumentsTest extends AbstractTestCase
 {
     protected function setUp()
     {
