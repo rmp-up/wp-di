@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * AsLazyServiceTest.php
+ * KeepValidPostTypeDefinitionTest.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -17,60 +17,44 @@
  * @copyright  2019 Mike Pretzlaw
  * @license    https://mike-pretzlaw.de/license-generic.txt
  * @link       https://project.mike-pretzlaw.de/wp-di
- * @since      2019-04-29
+ * @since      2019-05-28
  */
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Provider\WpCli\Command;
+namespace RmpUp\WpDi\Test\WordPress\PostTypes\Definition;
 
 use RmpUp\WpDi\Provider\Services;
-use RmpUp\WpDi\Provider\WpCliCommands;
-use RmpUp\WpDi\Test\AbstractTestCase;
+use RmpUp\WpDi\Sanitizer\WpPostTypes;
 use RmpUp\WpDi\Test\Mirror;
+use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
- * AsLazyServiceTest
+ * KeepValidPostTypeDefinitionTest
  *
  * @internal
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-04-29
+ * @since      2019-05-28
  */
-class AsLazyServiceTest extends AbstractTestCase
+class KeepValidPostTypeDefinitionTest extends SanitizerTestCase
 {
-    const SERVICE_NAME = 'someService';
-    /**
-     * @var array
-     */
-    private $definitions;
-
     protected function setUp()
     {
         parent::setUp();
 
-        require_once __DIR__ . '/../../../../../vendor/wp-cli/wp-cli/tests/bootstrap.php';
-        require_once __DIR__ . '/../../../../../vendor/wp-cli/wp-cli/php/bootstrap.php';
+        $this->sanitizer = new WpPostTypes();
+    }
 
-        $this->definitions = [
-            self::SERVICE_NAME => [
+    public function testKeepsCompletePostTypeDefinition()
+    {
+        $definition = [
+            'post_type_name' => [
                 Services::CLASS_NAME => Mirror::class,
-                Services::ARGUMENTS => [13],
-                WpCliCommands::KEY => [
-                    WpCliCommands::COMMAND => 'some command'
-                ]
+                Services::ARGUMENTS => [],
+                \RmpUp\WpDi\Provider\WpPostTypes::KEY => 'post_type_name',
             ]
         ];
 
-        $this->pimple->register(new WpCliCommands($this->definitions, Mirror::class));
-    }
-
-    public function testIsLazyService()
-    {
-        static::assertLazyService(self::SERVICE_NAME, Mirror::$staticCalls[0]['arguments'][1]);
-    }
-
-    public function testAddsCommand()
-    {
-        static::assertEquals('some command', Mirror::$staticCalls[0]['arguments'][0]);
+        static::assertEquals($definition, $this->sanitizer->sanitize($definition));
     }
 }

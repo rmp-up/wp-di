@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * AsLazyServiceTest.php
+ * KeepProperDefinitionTest.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -22,55 +22,53 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\Provider\WpCli\Command;
+namespace RmpUp\WpDi\Test\WordPress\Cli;
 
 use RmpUp\WpDi\Provider\Services;
-use RmpUp\WpDi\Provider\WpCliCommands;
-use RmpUp\WpDi\Test\AbstractTestCase;
+use RmpUp\WpDi\Sanitizer\WpCliCommands;
 use RmpUp\WpDi\Test\Mirror;
+use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
- * AsLazyServiceTest
+ * KeepProperDefinitionTest
  *
  * @internal
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-29
  */
-class AsLazyServiceTest extends AbstractTestCase
+class KeepProperDefinitionTest extends SanitizerTestCase
 {
-    const SERVICE_NAME = 'someService';
-    /**
-     * @var array
-     */
-    private $definitions;
-
     protected function setUp()
     {
         parent::setUp();
 
-        require_once __DIR__ . '/../../../../../vendor/wp-cli/wp-cli/tests/bootstrap.php';
-        require_once __DIR__ . '/../../../../../vendor/wp-cli/wp-cli/php/bootstrap.php';
+        $this->sanitizer = new WpCliCommands();
+    }
 
-        $this->definitions = [
-            self::SERVICE_NAME => [
-                Services::CLASS_NAME => Mirror::class,
-                Services::ARGUMENTS => [13],
-                WpCliCommands::KEY => [
-                    WpCliCommands::COMMAND => 'some command'
+    public function definitions()
+    {
+        return [
+            [
+                // First test
+                [
+                    // First arg
+                    'someService' => [
+                        Services::CLASS_NAME => Mirror::class,
+                        Services::ARGUMENTS => [42, 1337],
+                        \RmpUp\WpDi\Provider\WpCliCommands::KEY => [
+                            \RmpUp\WpDi\Provider\WpCliCommands::COMMAND => 'some command'
+                        ],
+                    ]
                 ]
             ]
         ];
-
-        $this->pimple->register(new WpCliCommands($this->definitions, Mirror::class));
     }
 
-    public function testIsLazyService()
+    /**
+     * @dataProvider definitions
+     */
+    public function testKeepProperWpCliDefinitions($definitions)
     {
-        static::assertLazyService(self::SERVICE_NAME, Mirror::$staticCalls[0]['arguments'][1]);
-    }
-
-    public function testAddsCommand()
-    {
-        static::assertEquals('some command', Mirror::$staticCalls[0]['arguments'][0]);
+        static::assertEquals($definitions, $this->sanitizer->sanitize($definitions));
     }
 }

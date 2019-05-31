@@ -1,0 +1,89 @@
+body {
+    line-height: 1.5em;
+    font-family: sans-serif;
+    counter-reset: h1counter h2counter h3counter;
+}
+
+blockquote {
+    border-left: 5px solid #1e73be;
+    padding-left: 1em;
+    margin-left: 1em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #1e73be;
+}
+
+code {
+    font-family: monospace, serif;
+    display: inline-block;
+    color: #1373be;
+}
+
+img {
+    max-width: 80%;
+}
+
+pre code, .code {
+    font: 14px monospace;
+    white-space: pre-wrap;
+    display: block;
+    margin: 1em;
+    padding: 1em;
+    border: 5px dashed #ddd;
+    color: #000;
+}
+
+h1 {
+    border-bottom: 2px solid #1e73be;
+    page-break-before: left;
+}
+
+h1:first-of-type {
+    border-bottom: none;
+    text-align: center;
+    font-size: 4em;
+    line-height: 2em;
+}
+
+h1:before {
+    content: counter(h1counter) ".\0000a0\0000a0";
+    counter-increment: h1counter;
+    counter-reset: h2counter h3counter;
+    page-break-before: always;
+}
+
+h1:first-of-type:before {
+    content: '';
+}
+
+h1:nth-of-type(2) {
+    counter-reset: h1counter h2counter h3counter;
+}
+
+h2 {
+    page-break-before: always;
+}
+
+@media print {
+    a, a:visited, a:hover, a:focus {
+        text-decoration: none;
+        color: #000;
+    }
+
+    a:after {
+        content: " (" attr(href) ")";
+    }
+
+    body {
+        font-family: serif;
+    }
+
+    code {
+        font-family: monospace, serif;
+    }
+
+    @page {
+        margin: 12.5mm 10mm 15mm 24.1mm;
+    }
+}
