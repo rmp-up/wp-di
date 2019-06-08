@@ -24,6 +24,9 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress\PostTypes\Provider;
 
+use PHPUnit\Framework\Constraint\IsEqual;
+use Pretzlaw\WPInt\Filter\FilterAssertions;
+use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
 use RmpUp\WpDi\Sanitizer\WpPostTypes;
 use RmpUp\WpDi\Test\AbstractTestCase;
 
@@ -50,6 +53,8 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  */
 class PostTypeDefinitionAsArrayTest extends AbstractTestCase
 {
+    use FilterAssertions;
+
     public $public = false;
     public $description = 'Yayyyyy';
     public $capability_type = 'custom_stuff';
@@ -77,20 +82,10 @@ class PostTypeDefinitionAsArrayTest extends AbstractTestCase
         static::assertEmpty(static::$calls);
 
         $this->pimple->register($this->provider);
-        do_action('init');
 
-        static::assertArrayHasKey('register_post_type', static::$calls);
-
-        static::assertEquals(
-            [
-                'some_type',
-                [
-                    'public' => $this->public,
-                    'description' => $this->description,
-                    'capability_type' => $this->capability_type
-                ]
-            ],
-            reset(static::$calls['register_post_type'])
+        static::assertFilterHasCallback(
+            'init',
+            new IsEqual(new RegisterPostType($this->container, 'some_type', 'some_type'))
         );
     }
 }

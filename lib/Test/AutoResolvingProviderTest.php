@@ -28,6 +28,7 @@ use ArrayObject;
 use PHPUnit\Framework\Constraint\IsEqual;
 use PHPUnit\Framework\Constraint\IsInstanceOf;
 use Pretzlaw\WPInt\Filter\FilterAssertions;
+use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
 use RmpUp\WpDi\LazyService;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Provider\Services;
@@ -170,15 +171,8 @@ class AutoResolvingProviderTest extends AbstractTestCase
 
     public function testPostTypeRegistered()
     {
-        do_action('init');
-
-        static::assertArrayHasKey('register_post_type', static::$calls);
-
-        $call = static::$calls['register_post_type'][0];
-
-        static::assertCount(2, $call);
-        static::assertEquals('qux', $call[0]);
-        static::assertEquals([], $call[1]);
+        static::assertFilterHasCallback('init', new IsInstanceOf(RegisterPostType::class));
+        static::assertFilterHasCallback('init', new IsEqual(new RegisterPostType($this->container, 'qux', 'qux')));
     }
 
     public function testThrowsExceptionWhenProviderInvalid()

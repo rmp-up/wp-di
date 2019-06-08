@@ -24,6 +24,10 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress\Actions;
 
+use PHPUnit\Framework\Constraint\IsEqual;
+use PHPUnit\Framework\Constraint\IsInstanceOf;
+use Pretzlaw\WPInt\Filter\FilterAssertions;
+use RmpUp\WpDi\LazyService;
 use RmpUp\WpDi\Test\Mirror;
 
 /**
@@ -56,6 +60,8 @@ use RmpUp\WpDi\Test\Mirror;
  */
 class SimpleServiceReferenceTest extends AbstractWpActionsTest
 {
+    use FilterAssertions;
+
     const SERVICE_NAME = 'butNamed';
 
     protected function setUp()
@@ -78,7 +84,17 @@ class SimpleServiceReferenceTest extends AbstractWpActionsTest
 
     public function testAddsAction()
     {
-        static::assertLazyService(Mirror::class, static::$actions[__CLASS__][0][0]);
-        static::assertLazyService(self::SERVICE_NAME, static::$actions[__CLASS__][1][0]);
+        $lazyService = new LazyService($this->container, Mirror::class);
+
+        static::assertFilterHasCallback(__CLASS__, new IsInstanceOf(LazyService::class));
+        static::assertFilterHasCallback(__CLASS__, new IsEqual($lazyService));
+        static::assertFilterHasCallback(__CLASS__, new IsEqual(new LazyService($this->container, self::SERVICE_NAME)));
+    }
+
+    protected function tearDown()
+    {
+        remove_all_actions(__CLASS__);
+
+        parent::tearDown();
     }
 }
