@@ -2,7 +2,7 @@
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/7.0/phpunit.xsd"
          backupGlobals="false"
          colors="true"
-         bootstrap="lib/Test/functions.php"
+         bootstrap="vendor/pretzlaw/wp-integration-test/bootstrap.php"
 >
     <testsuites>
         <testsuite name="default">

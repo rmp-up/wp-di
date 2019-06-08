@@ -25,7 +25,9 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Test;
 
 use ArrayObject;
-use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
+use PHPUnit\Framework\Constraint\IsEqual;
+use PHPUnit\Framework\Constraint\IsInstanceOf;
+use Pretzlaw\WPInt\Filter\FilterAssertions;
 use RmpUp\WpDi\LazyService;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Provider\Services;
@@ -117,6 +119,8 @@ use RmpUp\WpDi\Provider\WpPostTypes;
  */
 class AutoResolvingProviderTest extends AbstractTestCase
 {
+    use FilterAssertions;
+
     private $definition = [
         Services::class => [
             ArrayObject::class,
@@ -158,9 +162,10 @@ class AutoResolvingProviderTest extends AbstractTestCase
 
     public function testActionsRegistered()
     {
-        static::assertArrayHasKey('template_redirect', static::$actions);
-
-        static::assertEquals(new LazyService($this->container, Mirror::class), static::$actions['template_redirect'][0][0]);
+        self::assertFilterHasCallback('template_redirect', new IsInstanceOf(LazyService::class));
+        self::assertFilterHasCallback('template_redirect', new IsEqual(
+            new LazyService($this->container, Mirror::class)
+        ));
     }
 
     public function testPostTypeRegistered()

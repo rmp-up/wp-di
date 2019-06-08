@@ -17,7 +17,7 @@ core config:
   dbname: dev
   dbprefix: wp_
   dbcharset: utf8
-  locale: de_DE
+  locale: en_GB
   extra-php: |
     // for development only
     define( 'AUTOMATIC_UPDATER_DISABLED', true ); // no automatic updates
