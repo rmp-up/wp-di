@@ -1,1 +1,31 @@
 path: srv
+
+apache_modules:
+  - mod_rewrite
+
+core install:
+  url: http://10.210.9.10
+  title: "New website"
+  admin_user: "admin"
+  admin_password: "letmein"
+  admin_email: "foo@example.org"
+
+core config:
+  dbhost: db
+  dbuser: dev
+  dbpass: dev
+  dbname: dev
+  dbprefix: wp_
+  dbcharset: utf8
+  locale: de_DE
+  extra-php: |
+    // for development only
+    define( 'AUTOMATIC_UPDATER_DISABLED', true ); // no automatic updates
+    define( 'IMAGE_EDIT_OVERWRITE', true);        // developer may overwrite images
+    define( 'SCRIPT_DEBUG', true);                // do not minimize scripts
+    define( 'WP_CACHE', false );                  // do not cache
+
+    define( 'WP_DEBUG', true );
+    define( 'WP_DEBUG_DISPLAY', true );
+    define( 'WP_DEBUG_LOG', true );
+

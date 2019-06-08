@@ -31,6 +31,18 @@ $container->register(
 with as much config files as you like.
 Those shall return an array like the following.
 
+
+## Features
+
+wp-di does not only support registering services but also:
+
+* Register post-types
+* Add action/filter handler (as service)
+* Register wp-cli commands
+
+See how simple it is with the following examples.
+
+
 ## Examples
 
 ### Services and parameters
@@ -95,3 +107,28 @@ Add a service "InitPlugin" which is invoked when the init-action occurs.
 * wp-cli commands
 
 Read how this works in the official documentation of every release.
+
+
+## Contributing
+
+We used this in older projects but still maintain this use this for my own projects,
+so please [open an issue](https://github.com/rmp-up/wp-di/issues/new)
+if there is anything we can help with.
+
+If you'd like to contribute,
+please fork the repository and make changes as you'd like.
+Pull requests are warmly welcome.
+
+
+## Related projects
+
+Please also note the following projects
+about dependency injection container in WordPress:
+
+* [Pimple Dependency Injection Container](https://packagist.org/packages/pimple/pimple)
+* [Plugin-Boilerplate by Gary Jones](https://github.com/GaryJones/plugin-boilerplate)
+* []()
+
+## Licensing
+
+See the [LICENSE.txt](./LICENSE.txt) for details.
