@@ -1,0 +1,61 @@
+language: php
+
+php:
+  # see http://php.net/supported-versions.php
+  - '7.1' # Until 1 Dec 2019
+  - '7.2' # Until 30 Nov 2020
+  - '7.3' # Until 6 Dec 2021
+
+
+addons:
+  apt:
+    packages:
+      - parallel
+
+env:
+  global:
+    - PHPUNIT_VERSION=6.5.*
+  matrix:
+    # see https://codex.wordpress.org/WordPress_Versions
+    # see https://phpunit.de/supported-versions.html
+    - WP_VERSION=5.0
+    - WP_VERSION=nightly
+
+matrix:
+  include:
+    # additional combination among env (as above)
+    - php: '7.0'
+      env: PHPUNIT_VERSION=~5
+    # Intermediate version tests due to unstable SemVer
+    - php: '7.1'
+      env: PHPUNIT_VERSION="~7" WP_VERSION=4.9
+  # in the process to achieve support
+  allow_failures:
+    - php: '7.0'
+    # this one is waiting for phpunit-docgen to be compatible with phpunit 7
+    - php: '7.1'
+      env: PHPUNIT_VERSION="~7" WP_VERSION=4.9
+
+services:
+  - mysql
+
+before_install:
+  - mysql -e 'CREATE DATABASE dev;'
+  # Try supporting other versions
+  - composer require --update-with-dependencies phpunit/phpunit:$PHPUNIT_VERSION
+
+install:
+  - composer install
+  # Using WP-CLI instead of Composer because this way we can use the env matrix (above).
+  - vendor/bin/wp --allow-root core download --version=$WP_VERSION --force
+  - vendor/bin/wp --allow-root config create --force --dbuser=travis --dbpass="" --dbhost="127.0.0.1"
+  - vendor/bin/wp --allow-root core install --skip-email
+  # We get the latest patch version here to have less maintenance on the env matrix above.
+  - vendor/bin/wp --allow-root core update --minor
+
+script:
+  - composer validate --strict --no-check-lock
+  - vendor/bin/phpunit
+
+after_failure:
+  - cat srv/wp-content/debug.log || true
