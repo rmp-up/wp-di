@@ -29,6 +29,7 @@ use RmpUp\WpDi\Test\WordPress\Options\OptionsTestCase;
 /**
  * UnknownOption
  *
+ * @internal
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-06-09
  */

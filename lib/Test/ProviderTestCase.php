@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * ValidityTest.php
+ * ProviderTestCase.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -22,21 +22,17 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\WordPress\Options;
+namespace RmpUp\WpDi\Test;
 
-use RmpUp\WpDi\Helper\WordPress\OptionsResolver;
+use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
- * Behaviour in WordPress
+ * ProviderTestCase
  *
- * @internal
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-06-09
  */
-class ValidityTest extends OptionsTestCase
+abstract class ProviderTestCase extends SanitizerTestCase
 {
-    public function testOptionResolverExists()
-    {
-        static::assertTrue(class_exists(OptionsResolver::class));
-    }
+    protected $provider;
 }

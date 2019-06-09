@@ -25,6 +25,8 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Test\WordPress\Options;
 
 use RmpUp\WpDi\Helper\WordPress\OptionsResolver;
+use RmpUp\WpDi\Provider;
+use RmpUp\WpDi\Provider\WordPress\Options;
 use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**
@@ -40,21 +42,31 @@ abstract class OptionsTestCase extends AbstractTestCase
      */
     protected $optionsResolver;
 
+    protected $optionsDefinition = [];
+
     protected function setUp()
     {
         parent::setUp();
 
-        $this->pimple->offsetSet('foo', 'bar');
+        $this->optionsDefinition = [
+            'foo' => 'bar',
+            'baz' => static function () {
+                return 'qux';
+            },
+            'ref' => static function ($container) {
+                return $container['foo'];
+            },
+            'invalid' => static function ($container) {
+                return $container[uniqid('', true)];
+            }
+        ];
 
-        $this->pimple->offsetSet('baz', static function () {
-            return 'qux';
-        });
-
-        $this->pimple->offsetSet('ref', static function ($container) {
-            return $container['foo'];
-        });
+        foreach ($this->optionsDefinition as $key => $value) {
+            $this->pimple[$key] = $value;
+        }
 
         $this->optionsResolver = new OptionsResolver($this->container);
+        $this->pimple->register(new Provider([Options::class => $this->optionsDefinition]));
     }
 
     protected function option($optionName, $default = null)
@@ -62,4 +74,14 @@ abstract class OptionsTestCase extends AbstractTestCase
         return $this->optionsResolver->__invoke($default, $optionName, func_num_args() > 1);
     }
 
+    protected function tearDown()
+    {
+        foreach (array_keys($this->optionsDefinition) as $key) {
+            if (is_string($key)) {
+                remove_all_actions('default_option_' . $key);
+            }
+        }
+
+        parent::tearDown();
+    }
 }

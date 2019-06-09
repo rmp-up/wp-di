@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * ValidityTest.php
+ * OptionSpecTest.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -17,26 +17,39 @@
  * @copyright  2019 Mike Pretzlaw
  * @license    https://mike-pretzlaw.de/license-generic.txt
  * @link       https://project.mike-pretzlaw.de/wp-di
- * @since      2019-06-09
+ * @since      2019-06-08
  */
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\WordPress\Options;
+namespace RmpUp\WpDi\Test\WordPress\Options\Definition;
 
-use RmpUp\WpDi\Helper\WordPress\OptionsResolver;
+use RmpUp\WpDi\Sanitizer\WordPress\Options;
+use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
- * Behaviour in WordPress
+ * Full option spec
  *
  * @internal
+ *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-06-09
+ * @since      2019-06-08
  */
-class ValidityTest extends OptionsTestCase
+class OptionSpecTest extends SanitizerTestCase
 {
-    public function testOptionResolverExists()
+    private $spec = [
+        'some_option' => 'some_default_value',
+    ];
+
+    protected function setUp()
     {
-        static::assertTrue(class_exists(OptionsResolver::class));
+        parent::setUp();
+
+        $this->sanitizer = new Options();
+    }
+
+    public function testDoesNotChangeSpec()
+    {
+        static::assertEquals($this->spec, $this->sanitizer->sanitize($this->spec));
     }
 }

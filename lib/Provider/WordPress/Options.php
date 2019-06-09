@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * OptionsTest.php
+ * Options.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -22,43 +22,46 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\WordPress;
+namespace RmpUp\WpDi\Provider\WordPress;
 
-use RmpUp\WpDi\Sanitizer\WordPress\Options;
-use RmpUp\WpDi\Test\AbstractTestCase;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
+use RmpUp\WpDi\Helper\WordPress\OptionsResolver;
 
 /**
  * Options
  *
- * Options can be manipulated or loaded from other services using the options-provider:
- *
- * ```php
- * <?php
- *
- * use \RmpUp\WpDi\Provider\WordPress;
- *
- * return [
- *   WordPress\Options::class => [
- *     'my_fav_isni' => 423379498,
- *   ]
- * ];
- * ```
- *
- * Speaking of WordPress 4.7.0 (and above) this service will only be triggered
- * when the option is not set.
- * Once the option is set (e.g. in the database / via `set_option`)
- * the service won't be used.
- * This again saves some runtime for huge callbacks
- * or references as shown below.
- *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-06-08
  */
-class OptionsTest extends AbstractTestCase
+class Options implements ServiceProviderInterface
 {
-    public function testExists()
+    /**
+     * @var array
+     */
+    private $serviceDefinition = [];
+
+    public function __construct(array $serviceDefinition)
     {
-        static::assertTrue(class_exists(Options::class));
-        static::assertTrue(class_exists(\RmpUp\WpDi\Provider\WordPress\Options::class));
+        $this->serviceDefinition = $serviceDefinition;
+    }
+
+    /**
+     * Registers services on the given container.
+     *
+     * This method should only be used to configure services and parameters.
+     * It should not get services.
+     *
+     * @param Container $pimple A container instance
+     */
+    public function register(Container $pimple)
+    {
+        $optionResolver = new OptionsResolver(new \Pimple\Psr11\Container($pimple));
+
+        foreach ($this->serviceDefinition as $optionKey => $value) {
+            $pimple[$optionKey] = $value;
+
+            add_filter('default_option_' . $optionKey, $optionResolver, 10, 3);
+        }
     }
 }
