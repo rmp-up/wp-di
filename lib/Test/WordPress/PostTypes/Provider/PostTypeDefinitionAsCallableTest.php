@@ -24,6 +24,9 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress\PostTypes\Provider;
 
+use PHPUnit\Framework\Constraint\IsEqual;
+use Pretzlaw\WPInt\Filter\FilterAssertions;
+use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
 use RmpUp\WpDi\Sanitizer\WpPostTypes;
 use RmpUp\WpDi\Test\AbstractTestCase;
 
@@ -60,6 +63,8 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  */
 class PostTypeDefinitionAsCallableTest extends AbstractTestCase
 {
+    use FilterAssertions;
+
     /**
      * @var \RmpUp\WpDi\Provider\WpPostTypes
      */
@@ -99,21 +104,10 @@ class PostTypeDefinitionAsCallableTest extends AbstractTestCase
         static::assertEmpty(static::$calls);
 
         $this->pimple->register($this->provider);
-        do_action('init');
 
-        static::assertTrue(static::$called);
-        static::assertArrayHasKey('register_post_type', static::$calls);
-
-        static::assertEquals(
-            [
-                'callable_type',
-                [
-                    'public' => true,
-                    'description' => 'Wuseldusel',
-                    'capability_type' => 'elephant'
-                ]
-            ],
-            reset(static::$calls['register_post_type'])
+        static::assertFilterHasCallback(
+            'init',
+            new IsEqual(new RegisterPostType($this->container, 'callable_type', 'callable_type'))
         );
     }
 }

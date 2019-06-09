@@ -14,6 +14,7 @@
     "php": "^7.0",
     "phpunit/phpunit": "~6",
     "pretzlaw/phpunit-docgen": "^2.1",
+    "pretzlaw/wp-integration-test": "^0.2.0",
     "roave/security-advisories": "dev-master",
     "wp-cli/config-command": "^2.0",
     "wp-cli/core-command": "^2.0",

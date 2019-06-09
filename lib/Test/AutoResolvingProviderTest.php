@@ -25,6 +25,9 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Test;
 
 use ArrayObject;
+use PHPUnit\Framework\Constraint\IsEqual;
+use PHPUnit\Framework\Constraint\IsInstanceOf;
+use Pretzlaw\WPInt\Filter\FilterAssertions;
 use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
 use RmpUp\WpDi\LazyService;
 use RmpUp\WpDi\Provider;
@@ -117,6 +120,8 @@ use RmpUp\WpDi\Provider\WpPostTypes;
  */
 class AutoResolvingProviderTest extends AbstractTestCase
 {
+    use FilterAssertions;
+
     private $definition = [
         Services::class => [
             ArrayObject::class,
@@ -158,22 +163,16 @@ class AutoResolvingProviderTest extends AbstractTestCase
 
     public function testActionsRegistered()
     {
-        static::assertArrayHasKey('template_redirect', static::$actions);
-
-        static::assertEquals(new LazyService($this->container, Mirror::class), static::$actions['template_redirect'][0][0]);
+        self::assertFilterHasCallback('template_redirect', new IsInstanceOf(LazyService::class));
+        self::assertFilterHasCallback('template_redirect', new IsEqual(
+            new LazyService($this->container, Mirror::class)
+        ));
     }
 
     public function testPostTypeRegistered()
     {
-        do_action('init');
-
-        static::assertArrayHasKey('register_post_type', static::$calls);
-
-        $call = static::$calls['register_post_type'][0];
-
-        static::assertCount(2, $call);
-        static::assertEquals('qux', $call[0]);
-        static::assertEquals([], $call[1]);
+        static::assertFilterHasCallback('init', new IsInstanceOf(RegisterPostType::class));
+        static::assertFilterHasCallback('init', new IsEqual(new RegisterPostType($this->container, 'qux', 'qux')));
     }
 
     public function testThrowsExceptionWhenProviderInvalid()
