@@ -48,9 +48,16 @@ class OptionsResolver
 
     private $cache = [];
 
+    private $defaults = [];
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+    }
+
+    public function addDefault($key, $value)
+    {
+        $this->defaults[$key] = $value;
     }
 
     public function __invoke($currentDefault, string $option, $hasDefault)
@@ -63,6 +70,10 @@ class OptionsResolver
         if (array_key_exists($option, $this->cache)) {
             // Keep it cached to not resolve this again.
             return $this->cache[$option];
+        }
+
+        if (array_key_exists($option, $this->defaults)) {
+            return $this->defaults[$option];
         }
 
         try {

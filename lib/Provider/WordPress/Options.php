@@ -59,6 +59,14 @@ class Options implements ServiceProviderInterface
         $optionResolver = new OptionsResolver(new \Pimple\Psr11\Container($pimple));
 
         foreach ($this->serviceDefinition as $optionKey => $value) {
+            if (!is_callable($value)) {
+                $optionResolver->addDefault($optionKey, $value);
+
+                $value = static function () use ($optionKey) {
+                    return get_option($optionKey);
+                };
+            }
+
             $pimple[$optionKey] = $value;
 
             add_filter('default_option_' . $optionKey, $optionResolver, 10, 3);
