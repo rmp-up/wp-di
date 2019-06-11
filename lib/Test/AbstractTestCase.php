@@ -27,6 +27,7 @@ namespace RmpUp\WpDi\Test;
 use Closure;
 use PHPUnit\Framework\TestCase;
 use Pimple\Container;
+use Pretzlaw\PHPUnit\DocGen\DocComment\Parser;
 use ReflectionException;
 use ReflectionObject;
 use RmpUp\WpDi\LazyService;
@@ -39,6 +40,8 @@ use RmpUp\WpDi\LazyService;
  */
 abstract class AbstractTestCase extends TestCase
 {
+    use Parser;
+
     /**
      * @var Container
      */
