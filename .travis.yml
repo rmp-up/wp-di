@@ -14,27 +14,26 @@ addons:
 
 env:
   global:
-    - PHPUNIT_VERSION=6.5.*
+    - PHPUNIT_VERSION="~7|~8"
   matrix:
     # see https://codex.wordpress.org/WordPress_Versions
     # see https://phpunit.de/supported-versions.html
+    - WP_VERSION=4.8
     - WP_VERSION=5.0
+    - WP_VERSION=5.2
     - WP_VERSION=nightly
 
 matrix:
   include:
     # additional combination among env (as above)
     - php: '7.0'
-      env: PHPUNIT_VERSION=~5
     # Intermediate version tests due to unstable SemVer
-    - php: '7.1'
-      env: PHPUNIT_VERSION="~7" WP_VERSION=4.9
+    #- php: '7.1'
+    #  env: PHPUNIT_VERSION="~7" WP_VERSION=4.9
   # in the process to achieve support
   allow_failures:
     - php: '7.0'
-    # this one is waiting for phpunit-docgen to be compatible with phpunit 7
-    - php: '7.1'
-      env: PHPUNIT_VERSION="~7" WP_VERSION=4.9
+    - env: WP_VERSION=nightly
 
 services:
   - mysql

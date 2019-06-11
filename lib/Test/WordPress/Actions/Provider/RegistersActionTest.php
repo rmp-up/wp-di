@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress\Actions;
 
+use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Provider\WpActions;
 use RmpUp\WpDi\Test\Mirror;
 
@@ -101,5 +102,55 @@ class RegistersActionTest extends AbstractWpActionsTest
             );
 
         $this->provider->register($this->pimple);
+    }
+
+    public function testClosureDefinition()
+    {
+        $this->pimple->register(
+            new Provider(
+                [
+                    WpActions::class => [
+                        'myOwnSomething' => [
+                            'okydoky' => function ($container) {
+                                return $container;
+                            }
+                        ]
+                    ]
+                ]
+            )
+        );
+
+        static::assertEquals($this->pimple, $this->pimple['okydoky']);
+    }
+
+    public function testRegisterReference()
+    {
+        $this->pimple->register(
+            new Provider(
+                [
+                    Provider\Services::class => [
+                        'okydoky' => function ($container) {
+                            return static function () {
+                                return 1337.42;
+                            };
+                        }
+                    ],
+
+                    WpActions::class => [
+                        'myOwnSomething' => [
+                            'okydoky',
+                        ]
+                    ]
+                ]
+            )
+        );
+
+        static::assertSame(1337.42, apply_filters('myOwnSomething', 0.0));
+    }
+
+    protected function tearDown()
+    {
+        remove_all_filters('myOwnSomething');
+        parent::tearDown();
     }
 }
