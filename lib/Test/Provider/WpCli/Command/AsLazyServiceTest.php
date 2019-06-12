@@ -25,7 +25,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Test\Provider\WpCli\Command;
 
 use RmpUp\WpDi\Provider\Services;
-use RmpUp\WpDi\Provider\WpCliCommands;
+use RmpUp\WpDi\Provider\WordPress\CliCommands;
 use RmpUp\WpDi\Test\AbstractTestCase;
 use RmpUp\WpDi\Test\Mirror;
 
@@ -55,13 +55,13 @@ class AsLazyServiceTest extends AbstractTestCase
             self::SERVICE_NAME => [
                 Services::CLASS_NAME => Mirror::class,
                 Services::ARGUMENTS => [13],
-                WpCliCommands::KEY => [
-                    WpCliCommands::COMMAND => 'some command'
+                CliCommands::KEY => [
+                    CliCommands::COMMAND => 'some command'
                 ]
             ]
         ];
 
-        $this->pimple->register(new WpCliCommands($this->definitions, Mirror::class));
+        $this->pimple->register(new CliCommands($this->definitions, Mirror::class));
     }
 
     public function testIsLazyService()

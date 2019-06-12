@@ -25,7 +25,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Test\WordPress\Cli;
 
 use RmpUp\WpDi\Provider\Services;
-use RmpUp\WpDi\Sanitizer\WpCliCommands;
+use RmpUp\WpDi\Sanitizer\WordPress\CliCommands;
 use RmpUp\WpDi\Test\Mirror;
 use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
@@ -38,7 +38,7 @@ use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
  * <?php
  *
  * return [
- *   Provider\WpCliCommands::class => [
+ *   WordPress\CliCommands::class => [
  *     'some thing' => SomeCommand::class,
  *     'foo'        => Another::class,
  *   ]
@@ -58,7 +58,7 @@ class ShortSyntaxTest extends SanitizerTestCase
     {
         parent::setUp();
 
-        $this->sanitizer = new WpCliCommands();
+        $this->sanitizer = new CliCommands();
     }
 
     /**
@@ -71,8 +71,8 @@ class ShortSyntaxTest extends SanitizerTestCase
                 Mirror::class => [
                     Services::CLASS_NAME => Mirror::class,
                     Services::ARGUMENTS => [],
-                    \RmpUp\WpDi\Provider\WpCliCommands::KEY => [
-                        \RmpUp\WpDi\Provider\WpCliCommands::COMMAND => 'some command'
+                    \RmpUp\WpDi\Provider\WordPress\CliCommands::KEY => [
+                        \RmpUp\WpDi\Provider\WordPress\CliCommands::COMMAND => 'some command'
                     ]
                 ]
             ],

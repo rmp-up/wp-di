@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * WpCliCommands.php
+ * CliCommand.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -17,26 +17,42 @@
  * @copyright  2019 Mike Pretzlaw
  * @license    https://mike-pretzlaw.de/license-generic.txt
  * @link       https://project.mike-pretzlaw.de/wp-di
- * @since      2019-04-29
+ * @since      2019-06-12
  */
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Sanitizer;
+namespace RmpUp\WpDi\Sanitizer\WordPress;
 
-use RmpUp\WpDi\Sanitizer\WordPress\CliCommands;
+use RmpUp\WpDi\Sanitizer\Services;
 
 /**
- * WpCliCommands
+ * CliCommand
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-04-29
- * @deprecated 1.0.0 Please use \RmpUp\WpDi\Sanitizer\WordPress\CliCommands instead.
+ * @since      2019-06-12
  */
-class WpCliCommands extends CliCommands
+class CliCommands extends Services
 {
-    public function __construct()
+    public function sanitize($node): array
     {
-        trigger_error('Please use \RmpUp\WpDi\Provider\WordPress\CliCommands instead', E_USER_DEPRECATED);
+        $sanitized = [];
+
+        foreach ($node as $serviceName => $serviceDefinition) {
+            $service = parent::sanitize([$serviceName => $serviceDefinition]);
+
+            if (is_string($serviceDefinition)) {
+                $service[$serviceName][\RmpUp\WpDi\Provider\WordPress\CliCommands::KEY] = [
+                    \RmpUp\WpDi\Provider\WordPress\CliCommands::COMMAND => $serviceName,
+                ];
+
+                $serviceDefinition = $service[$serviceName];
+                $serviceName = $serviceDefinition[\RmpUp\WpDi\Provider\Services::CLASS_NAME];
+            }
+
+            $sanitized[$serviceName] = $serviceDefinition;
+        }
+
+        return $sanitized;
     }
 }

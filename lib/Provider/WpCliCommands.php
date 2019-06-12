@@ -27,6 +27,7 @@ namespace RmpUp\WpDi\Provider;
 use Pimple\Container;
 use Psr\Container\ContainerInterface;
 use RmpUp\WpDi\LazyService;
+use RmpUp\WpDi\Provider\WordPress\CliCommands;
 use RmpUp\WpDi\Test\Mirror;
 
 /**
@@ -34,60 +35,15 @@ use RmpUp\WpDi\Test\Mirror;
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-29
+ * @deprecated 1.0.0 Please use \RmpUp\WpDi\Provider\WordPress\CliCommands instead.
  */
-class WpCliCommands extends Services
+class WpCliCommands extends CliCommands
 {
-    const COMMAND = 'command';
-    const KEY = 'wp_cli';
-
-    /**
-     * @var string
-     */
-    private $wpCliClass;
-
     public function __construct(array $services, string $wpCliClass = null)
     {
-        parent::__construct($services);
+        parent::__construct($services, $wpCliClass);
 
-        if (null === $wpCliClass) {
-            $wpCliClass = \WP_CLI::class;
-        }
-
-        $this->wpCliClass = $wpCliClass;
+        trigger_error('Please use \RmpUp\WpDi\Provider\WordPress\CliCommands instead', E_USER_DEPRECATED);
     }
 
-    public function register(Container $pimple)
-    {
-        if (!class_exists($this->wpCliClass)) {
-            // Wrong context.
-            return;
-        }
-
-        parent::register($pimple);
-
-        $container = new \Pimple\Psr11\Container($pimple);
-
-        foreach ($this->services as $serviceName => $service) {
-            if (!array_key_exists(static::KEY, $service) || !is_string($serviceName)) {
-                continue;
-            }
-
-            if (array_key_exists(static::COMMAND, $service[static::KEY])) {
-                $this->addCommand($container, $serviceName, $service);
-            }
-        }
-    }
-
-    private function addCommand(ContainerInterface $container, string $serviceName, array $definition)
-    {
-        $command = $definition[static::KEY][static::COMMAND];
-        $class = $this->wpCliClass;
-
-        if (!$definition[Services::ARGUMENTS]) {
-            $class::add_command($command, $definition[Services::CLASS_NAME]);
-            return;
-        }
-
-        $class::add_command($command, new LazyService($container, $serviceName));
-    }
 }
