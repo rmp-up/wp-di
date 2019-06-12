@@ -32,7 +32,7 @@ use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
 use RmpUp\WpDi\LazyService;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Provider\Services;
-use RmpUp\WpDi\Provider\WpActions;
+use RmpUp\WpDi\Provider\WordPress\Actions;
 use RmpUp\WpDi\Provider\WpPostTypes;
 
 /**
@@ -130,7 +130,7 @@ class AutoResolvingProviderTest extends AbstractTestCase
             ]
         ],
 
-        WpActions::class => [
+        Actions::class => [
             'template_redirect' => [
                 Mirror::class,
             ]

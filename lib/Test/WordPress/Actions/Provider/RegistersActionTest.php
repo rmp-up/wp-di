@@ -25,7 +25,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Test\WordPress\Actions;
 
 use RmpUp\WpDi\Provider;
-use RmpUp\WpDi\Provider\WpActions;
+use RmpUp\WpDi\Provider\WordPress\Actions;
 use RmpUp\WpDi\Test\Mirror;
 
 /**
@@ -38,15 +38,15 @@ use RmpUp\WpDi\Test\Mirror;
  * ```php
  * <?php
  *
- * use \RmpUp\WpDi\Provider;
+ * use \RmpUp\WpDi\Provider\WordPress;
  *
  * return [
- *   Provider\WpActions => [
+ *   WordPress\Actions::class => [
  *     'wp_ajax_crop_image_pre_save' => [
  *       [
- *         WpActions::SERVICE => Mirror::class,
- *         WpActions::PRIORITY => 5,
- *         WpActions::ARG_COUNT => 3,
+ *         WordPress\Actions::SERVICE => Mirror::class,
+ *         WordPress\Actions::PRIORITY => 5,
+ *         WordPress\Actions::ARG_COUNT => 3,
  *       ]
  *     ]
  *   ]
@@ -59,10 +59,10 @@ use RmpUp\WpDi\Test\Mirror;
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-05-28
  */
-class RegistersActionTest extends AbstractWpActionsTest
+class RegistersActionTest extends AbstractActionsTest
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|WpActions
+     * @var \PHPUnit\Framework\MockObject\MockObject|Actions
      */
     private $provider;
 
@@ -75,14 +75,14 @@ class RegistersActionTest extends AbstractWpActionsTest
         $services = $this->sanitizer->sanitize([
             'foo_event' => [
                 [
-                    WpActions::SERVICE => Mirror::class,
-                    WpActions::PRIORITY => 1337,
-                    WpActions::ARG_COUNT => 42,
+                    Actions::SERVICE => Mirror::class,
+                    Actions::PRIORITY => 1337,
+                    Actions::ARG_COUNT => 42,
                 ],
             ]
         ]);
 
-        $this->provider = $this->getMockBuilder(WpActions::class)
+        $this->provider = $this->getMockBuilder(Actions::class)
             ->setConstructorArgs([$services])
             ->setMethods(['registerAction'])
             ->enableProxyingToOriginalMethods()
@@ -109,7 +109,7 @@ class RegistersActionTest extends AbstractWpActionsTest
         $this->pimple->register(
             new Provider(
                 [
-                    WpActions::class => [
+                    Actions::class => [
                         'myOwnSomething' => [
                             'okydoky' => function ($container) {
                                 return $container;
@@ -129,14 +129,14 @@ class RegistersActionTest extends AbstractWpActionsTest
             new Provider(
                 [
                     Provider\Services::class => [
-                        'okydoky' => function ($container) {
+                        'okydoky' => function () {
                             return static function () {
                                 return 1337.42;
                             };
                         }
                     ],
 
-                    WpActions::class => [
+                    Actions::class => [
                         'myOwnSomething' => [
                             'okydoky',
                         ]

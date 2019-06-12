@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * SanitizeWpActions.php
+ * WpActions.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -24,46 +24,17 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Sanitizer;
 
-use RmpUp\WpDi\Provider\WpActions as Provider;
+use RmpUp\WpDi\Sanitizer\WordPress\Actions;
 
 /**
- * SanitizeWpActions
+ * Sanitize actions
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-26
+ * @deprecated 1.0.0 Please use \RmpUp\WpDi\Sanitizer\WordPress\Actions instead
  */
-class WpActions extends Services
-{
-    const DEFAULT_ARG_COUNT = 1;
-    const DEFAULT_PRIORITY = 10;
-
-    public function sanitize($node): array
-    {
-        foreach ($node as $actionName => $hooks) {
-            foreach ($hooks as $hookId => $hook) {
-                if (!is_array($hook)) {
-                    // Possibly simple class or service.
-                    $hook = [
-                        Provider::SERVICE => [$hookId => $hook],
-                        Provider::PRIORITY => self::DEFAULT_PRIORITY,
-                        Provider::ARG_COUNT => self::DEFAULT_ARG_COUNT,
-                    ];
-                }
-
-                if (is_array($hook) && !array_key_exists(Provider::SERVICE, $hook)) {
-                    $hook = [
-                        Provider::SERVICE => [$hookId => $hook],
-                        Provider::PRIORITY => self::DEFAULT_PRIORITY,
-                        Provider::ARG_COUNT => self::DEFAULT_ARG_COUNT,
-                    ];
-                }
-
-                $hook[Provider::SERVICE] = parent::sanitize((array) $hook[Provider::SERVICE]);
-
-                $node[$actionName][$hookId] = $hook;
-            }
-        }
-
-        return $node;
-    }
+class WpActions extends Actions {
+	public function __construct() {
+		trigger_error( 'Please use ' . Actions::class . ' instead', E_USER_DEPRECATED );
+	}
 }

@@ -64,7 +64,7 @@ class IncludesTest extends ProviderTestCase
         $this->sanitizer = new Options();
         $this->provider = new Provider(
             [
-                Provider\WpActions::class => [
+                Provider\WordPress\Actions::class => [
                     IncludesTest::class => [
                         Mirror::class => [
                             'blog_public',

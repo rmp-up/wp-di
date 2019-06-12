@@ -1,11 +1,13 @@
 # Contribution
 
+
+
 ## Use the container if you like
 
 ```bash
+cp .env.dist .env # if not already done
 docker-compose down # just to be sure
-docker-compose up -d 
-
+docker-compose up -d
 docker-compose exec php71 bash
 ```
 
