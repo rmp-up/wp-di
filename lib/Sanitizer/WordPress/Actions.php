@@ -35,8 +35,8 @@ use RmpUp\WpDi\Provider\WordPress\Actions as Provider;
  */
 class Actions extends Services
 {
-	const DEFAULT_ARG_COUNT = 1;
-	const DEFAULT_PRIORITY = 10;
+	public const DEFAULT_ARG_COUNT = 1;
+	public const DEFAULT_PRIORITY = 10;
 
 	public function sanitize($node): array
 	{

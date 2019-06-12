@@ -65,7 +65,7 @@ class IncludesTest extends ProviderTestCase
         $this->provider = new Provider(
             [
                 Provider\WordPress\Actions::class => [
-                    IncludesTest::class => [
+                    __CLASS__ => [
                         Mirror::class => [
                             'blog_public',
                             'ping_sites',

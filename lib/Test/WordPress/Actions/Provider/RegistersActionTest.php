@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress\Actions;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Provider\WordPress\Actions;
 use RmpUp\WpDi\Test\Mirror;
@@ -62,7 +63,7 @@ use RmpUp\WpDi\Test\Mirror;
 class RegistersActionTest extends AbstractActionsTest
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Actions
+     * @var MockObject|Actions
      */
     private $provider;
 
@@ -111,7 +112,7 @@ class RegistersActionTest extends AbstractActionsTest
                 [
                     Actions::class => [
                         'myOwnSomething' => [
-                            'okydoky' => function ($container) {
+                            'okydoky' => static function ($container) {
                                 return $container;
                             }
                         ]
@@ -129,7 +130,7 @@ class RegistersActionTest extends AbstractActionsTest
             new Provider(
                 [
                     Provider\Services::class => [
-                        'okydoky' => function () {
+                        'okydoky' => static function () {
                             return static function () {
                                 return 1337.42;
                             };

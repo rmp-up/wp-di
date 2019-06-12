@@ -24,7 +24,6 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Helper\WordPress;
 
-use Pimple\Exception\UnknownIdentifierException;
 use Pimple\Psr11\Container;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -55,7 +54,7 @@ class OptionsResolver
         $this->container = $container;
     }
 
-    public function addDefault($key, $value)
+    public function addDefault($key, $value): void
     {
         $this->defaults[$key] = $value;
     }

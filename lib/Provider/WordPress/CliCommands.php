@@ -28,6 +28,7 @@ use Pimple\Container;
 use Psr\Container\ContainerInterface;
 use RmpUp\WpDi\LazyService;
 use RmpUp\WpDi\Provider\Services;
+use WP_CLI;
 
 /**
  * CliCommands
@@ -37,8 +38,8 @@ use RmpUp\WpDi\Provider\Services;
  */
 class CliCommands extends Services
 {
-    const COMMAND = 'command';
-    const KEY = 'wp_cli';
+    public const COMMAND = 'command';
+    public const KEY = 'wp_cli';
 
     /**
      * @var string
@@ -50,13 +51,13 @@ class CliCommands extends Services
         parent::__construct($services);
 
         if (null === $wpCliClass) {
-            $wpCliClass = \WP_CLI::class;
+            $wpCliClass = WP_CLI::class;
         }
 
         $this->wpCliClass = $wpCliClass;
     }
 
-    public function register(Container $pimple)
+    public function register(Container $pimple): void
     {
         if (!class_exists($this->wpCliClass)) {
             // Wrong context.
@@ -78,16 +79,18 @@ class CliCommands extends Services
         }
     }
 
-    private function addCommand(ContainerInterface $container, string $serviceName, array $definition)
+    private function addCommand(ContainerInterface $container, string $serviceName, array $definition): void
     {
         $command = $definition[static::KEY][static::COMMAND];
         $class = $this->wpCliClass;
 
         if (!$definition[Services::ARGUMENTS]) {
+            /** @noinspection PhpUndefinedMethodInspection */
             $class::add_command($command, $definition[Services::CLASS_NAME]);
             return;
         }
 
+        /** @noinspection PhpUndefinedMethodInspection */
         $class::add_command($command, new LazyService($container, $serviceName));
     }
 }

@@ -36,7 +36,7 @@ use RmpUp\WpDi\Provider\Services;
  */
 class PostTypes extends Services
 {
-    const KEY = 'wp_post_types';
+    public const KEY = 'wp_post_types';
 
     /**
      * Registers services on the given container.
@@ -46,12 +46,12 @@ class PostTypes extends Services
      *
      * @param Container $pimple A container instance
      */
-    public function register(Container $pimple)
+    public function register(Container $pimple): void
     {
         $psr = new \Pimple\Psr11\Container($pimple);
 
         foreach ($this->services as $serviceName => $definition) {
-            parent::compile($pimple, $serviceName, $definition);
+            $this->compile($pimple, $serviceName, $definition);
 
             if (array_key_exists(static::KEY, $definition)) {
                 add_action('init', new RegisterPostType($psr, $serviceName, $definition[static::KEY]));

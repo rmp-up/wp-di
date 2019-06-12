@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Test;
 
 use ArrayObject;
+use InvalidArgumentException;
 use PHPUnit\Framework\Constraint\IsEqual;
 use PHPUnit\Framework\Constraint\IsInstanceOf;
 use Pretzlaw\WPInt\Filter\FilterAssertions;
@@ -102,7 +103,7 @@ use RmpUp\WpDi\Provider\WordPress\PostTypes;
  *
  * ... and more.
  *
- * We suggest seperating the definition into it's own file(s)
+ * We suggest separating the definition into it's own file(s)
  * and load it into the (Pimple-)Container afterwards:
  *
  * ```php
@@ -122,27 +123,29 @@ class AutoResolvingProviderTest extends AbstractTestCase
 {
     use FilterAssertions;
 
-    private $definition = [
-        Services::class => [
-            ArrayObject::class,
-            Mirror::class => [
-                'foo',
-            ]
-        ],
-
-        Actions::class => [
-            'template_redirect' => [
-                Mirror::class,
-            ]
-        ],
-
-        PostTypes::class => [
-            'qux' => ArrayObject::class
-        ]
-    ];
+    private $definition;
 
     protected function setUp()
     {
+        $this->definition = [
+            Services::class => [
+                ArrayObject::class,
+                Mirror::class => [
+                    'foo',
+                ]
+            ],
+
+            Actions::class => [
+                'template_redirect' => [
+                    Mirror::class,
+                ]
+            ],
+
+            PostTypes::class => [
+                'qux' => ArrayObject::class
+            ]
+        ];
+
         parent::setUp();
 
         $this->pimple->register(
@@ -177,7 +180,7 @@ class AutoResolvingProviderTest extends AbstractTestCase
 
     public function testThrowsExceptionWhenProviderInvalid()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->pimple->register(
             new Provider([uniqid('', true) => []])

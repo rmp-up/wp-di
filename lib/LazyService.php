@@ -49,14 +49,12 @@ class LazyService
 
     public function __call($name, $arguments)
     {
-        $object = $this->getService();
-        return $object->$name(...$arguments);
+        return $this->getService()->$name(...$arguments);
     }
 
     public function __invoke(...$arguments)
     {
-        $object = $this->getService();
-        return $object(...$arguments);
+        return ($this->getService())(...$arguments);
     }
 
     private function getService()

@@ -67,7 +67,7 @@ class PostTypeDefinitionAsCallableTest extends AbstractTestCase
     use FilterAssertions;
 
     /**
-     * @var \RmpUp\WpDi\Provider\WordPress\PostTypes
+     * @var PostTypesProvider
      */
     private $provider;
     private static $called = false;
@@ -80,7 +80,7 @@ class PostTypeDefinitionAsCallableTest extends AbstractTestCase
         $this->provider = new PostTypesProvider(
             $sanitizer->sanitize(
                 [
-                    'callable_type' => PostTypeDefinitionAsCallableTest::class,
+                    'callable_type' => __CLASS__,
                 ]
             )
         );

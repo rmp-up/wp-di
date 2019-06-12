@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Helper\WordPress;
 
 use Pimple\Psr11\Container;
+use Psr\Container\ContainerInterface;
 
 /**
  * RegisterPostType
@@ -41,7 +42,7 @@ class RegisterPostType
     private $serviceName;
     private $postType;
 
-    public function __construct(Container $container, $serviceName, $postType)
+    public function __construct(ContainerInterface $container, $serviceName, $postType)
     {
         $this->container = $container;
         $this->serviceName = $serviceName;

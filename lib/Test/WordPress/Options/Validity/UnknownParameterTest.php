@@ -49,7 +49,7 @@ class UnknownParameterTest extends OptionsTestCase
 
     public function testInvalidReferencesNeitherFail()
     {
-        $this->pimple['invalid'] = function ($container) {
+        $this->pimple['invalid'] = static function ($container) {
             return $container[uniqid('', true)];
         };
 

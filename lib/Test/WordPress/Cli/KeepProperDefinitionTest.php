@@ -66,8 +66,9 @@ class KeepProperDefinitionTest extends SanitizerTestCase
 
     /**
      * @dataProvider definitions
+     * @param array $definitions
      */
-    public function testKeepProperWpCliDefinitions($definitions)
+    public function testKeepProperWpCliDefinitions(array $definitions)
     {
         static::assertEquals($definitions, $this->sanitizer->sanitize($definitions));
     }

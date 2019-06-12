@@ -68,7 +68,7 @@ class DefaultOptionTest extends OptionsTestCase
 
         $optionValue = get_option('my_fav_isni');
 
-        static::assertInternalType('int', $optionValue);
+        static::assertIsInt($optionValue);
         static::assertEquals(423379498, $optionValue);
     }
 
@@ -123,7 +123,7 @@ class DefaultOptionTest extends OptionsTestCase
      *
      * return [
      *   WordPress\Options::class => [
-     *     'key_entitiy_ii' => 'Holly Wood',
+     *     'key_entity_ii' => 'Holly Wood',
      *     'the_cracked' => static function ($container) {
      *       return $container['key_entity_ii'];
      *     },

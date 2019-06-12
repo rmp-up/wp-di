@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi;
 
+use InvalidArgumentException;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use RmpUp\WpDi\Sanitizer\SanitizerInterface;
@@ -62,11 +63,11 @@ class Provider implements ServiceProviderInterface
      *
      * @param Container $pimple A container instance
      */
-    public function register(Container $pimple)
+    public function register(Container $pimple): void
     {
         foreach ($this->serviceDefinition as $provider => $definition) {
             if (!class_exists($provider)) {
-                throw new \InvalidArgumentException('Unknown provider: ' . $provider);
+                throw new InvalidArgumentException('Unknown provider: ' . $provider);
             }
 
             $pimple->register(
@@ -75,9 +76,9 @@ class Provider implements ServiceProviderInterface
         }
     }
 
-    private function sanitize(string $provider, array $definition)
+    private function sanitize(string $provider, array $definition): array
     {
-        $sanitizer = $this->sanitizer($provider, $definition);
+        $sanitizer = $this->sanitizer($provider);
 
         if ($sanitizer instanceof SanitizerInterface) {
             $definition = $sanitizer->sanitize($definition);
@@ -88,9 +89,9 @@ class Provider implements ServiceProviderInterface
 
     /**
      * @param string $provider
-     * @return array
+     * @return SanitizerInterface
      */
-    private function sanitizer(string $provider)
+    private function sanitizer(string $provider): ?SanitizerInterface
     {
         if (!array_key_exists($provider, $this->sanitizer)) {
             $this->sanitizer[$provider] = null;

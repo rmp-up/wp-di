@@ -60,7 +60,7 @@ class PostTypeDefinitionAsArrayTest extends AbstractTestCase
     public $description = 'Yayyyyy';
     public $capability_type = 'custom_stuff';
     /**
-     * @var \RmpUp\WpDi\Provider\WordPress\PostTypes
+     * @var PostTypesProvider
      */
     private $provider;
 
@@ -72,7 +72,7 @@ class PostTypeDefinitionAsArrayTest extends AbstractTestCase
         $this->provider = new PostTypesProvider(
             $sanitizer->sanitize(
                 [
-                    'some_type' => PostTypeDefinitionAsArrayTest::class,
+                    'some_type' => __CLASS__,
                 ]
             )
         );

@@ -28,6 +28,8 @@ use RmpUp\WpDi\Helper\WordPress\OptionsResolver;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Provider\WordPress\Options;
 use RmpUp\WpDi\Test\AbstractTestCase;
+use RmpUp\WpDi\Test\ProviderTestCase;
+use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
  * OptionsTestCase
@@ -35,7 +37,7 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-06-09
  */
-abstract class OptionsTestCase extends AbstractTestCase
+abstract class OptionsTestCase extends ProviderTestCase
 {
     /**
      * @var OptionsResolver

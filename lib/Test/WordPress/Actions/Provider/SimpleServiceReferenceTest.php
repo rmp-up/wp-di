@@ -62,7 +62,7 @@ class SimpleServiceReferenceTest extends AbstractActionsTest
 {
     use FilterAssertions;
 
-    const SERVICE_NAME = 'butNamed';
+    private const SERVICE_NAME = 'butNamed';
 
     protected function setUp()
     {

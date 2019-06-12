@@ -34,7 +34,7 @@ use RmpUp\WpDi\Sanitizer\SanitizerInterface;
  */
 class Options implements SanitizerInterface
 {
-    public function sanitize($node)
+    public function sanitize($node): array
     {
         $sanitized = [];
 

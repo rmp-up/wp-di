@@ -38,7 +38,7 @@ use RmpUp\WpDi\Test\Mirror;
  */
 class AsLazyServiceTest extends AbstractTestCase
 {
-    const SERVICE_NAME = 'someService';
+    private const SERVICE_NAME = 'someService';
     /**
      * @var array
      */

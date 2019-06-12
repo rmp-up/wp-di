@@ -24,11 +24,7 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Provider;
 
-use Pimple\Container;
-use Psr\Container\ContainerInterface;
-use RmpUp\WpDi\LazyService;
 use RmpUp\WpDi\Provider\WordPress\CliCommands;
-use RmpUp\WpDi\Test\Mirror;
 
 /**
  * WpCliCommands

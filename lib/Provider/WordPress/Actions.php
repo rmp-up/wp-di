@@ -39,12 +39,12 @@ use RmpUp\WpDi\Provider\Services;
  */
 class Actions extends Services
 {
-	const KEY = 'actions';
-	const SERVICE = 'service';
-	const PRIORITY = 'priority';
-	const ARG_COUNT = 'arg_count';
+	public const KEY = 'actions';
+	public const SERVICE = 'service';
+	public const PRIORITY = 'priority';
+	public const ARG_COUNT = 'arg_count';
 
-	public function register(Container $pimple)
+	public function register(Container $pimple): void
 	{
 		$psr = new PsrContainer($pimple);
 

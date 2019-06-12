@@ -34,6 +34,9 @@ use RmpUp\WpDi\Sanitizer\WordPress\Actions;
  * @deprecated 1.0.0 Please use \RmpUp\WpDi\Sanitizer\WordPress\Actions instead
  */
 class WpActions extends Actions {
+    /**
+     * WpActions constructor.
+     */
 	public function __construct() {
 		trigger_error( 'Please use ' . Actions::class . ' instead', E_USER_DEPRECATED );
 	}

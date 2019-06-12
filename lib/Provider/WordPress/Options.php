@@ -39,7 +39,7 @@ class Options implements ServiceProviderInterface
     /**
      * @var array
      */
-    private $serviceDefinition = [];
+    private $serviceDefinition;
 
     public function __construct(array $serviceDefinition)
     {
@@ -54,7 +54,7 @@ class Options implements ServiceProviderInterface
      *
      * @param Container $pimple A container instance
      */
-    public function register(Container $pimple)
+    public function register(Container $pimple): void
     {
         $optionResolver = new OptionsResolver(new \Pimple\Psr11\Container($pimple));
 

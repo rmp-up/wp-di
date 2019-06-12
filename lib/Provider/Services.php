@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Provider;
 
+use Closure;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -35,8 +36,8 @@ use Pimple\ServiceProviderInterface;
  */
 class Services implements ServiceProviderInterface
 {
-    const CLASS_NAME = 'class';
-    const ARGUMENTS = 'arguments';
+    public const CLASS_NAME = 'class';
+    public const ARGUMENTS = 'arguments';
 
     /**
      * @var array
@@ -56,7 +57,7 @@ class Services implements ServiceProviderInterface
      *
      * @param Container $pimple A container instance
      */
-    public function register(Container $pimple)
+    public function register(Container $pimple): void
     {
         foreach ($this->services as $key => $value) {
             $this->compile($pimple, $key, $value);
@@ -68,9 +69,9 @@ class Services implements ServiceProviderInterface
      * @param string $serviceName
      * @param array|string|callable $definition
      */
-    protected function compile(Container $pimple, string $serviceName, $definition)
+    protected function compile(Container $pimple, string $serviceName, $definition): void
     {
-        if ($definition instanceof \Closure) {
+        if ($definition instanceof Closure) {
             // Already lazy
             $pimple[$serviceName] = $definition;
             return;
@@ -90,7 +91,7 @@ class Services implements ServiceProviderInterface
      * @param string $serviceName
      * @param array $definition
      */
-    protected function compileArray(Container $pimple, string $serviceName, array $definition)
+    protected function compileArray(Container $pimple, string $serviceName, array $definition): void
     {
         $pimple[$serviceName] = static function ($pimple) use ($definition) {
             $className = $definition[static::CLASS_NAME];
