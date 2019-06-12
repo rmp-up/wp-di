@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * KeepValidPostTypeDefinitionTest.php
+ * PostTypes.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -17,45 +17,45 @@
  * @copyright  2019 Mike Pretzlaw
  * @license    https://mike-pretzlaw.de/license-generic.txt
  * @link       https://project.mike-pretzlaw.de/wp-di
- * @since      2019-05-28
+ * @since      2019-06-12
  */
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\WordPress\PostTypes\Definition;
+namespace RmpUp\WpDi\Provider\WordPress;
 
+use Pimple\Container;
+use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
 use RmpUp\WpDi\Provider\Services;
-use RmpUp\WpDi\Provider\WordPress\PostTypes as Provider;
-use RmpUp\WpDi\Sanitizer\WordPress\PostTypes;
-use RmpUp\WpDi\Test\Mirror;
-use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
- * KeepValidPostTypeDefinitionTest
+ * PostTypes
  *
- * @internal
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-05-28
+ * @since      2019-06-12
  */
-class KeepValidPostTypeDefinitionTest extends SanitizerTestCase
+class PostTypes extends Services
 {
-    protected function setUp()
+    const KEY = 'wp_post_types';
+
+    /**
+     * Registers services on the given container.
+     *
+     * This method should only be used to configure services and parameters.
+     * It should not get services.
+     *
+     * @param Container $pimple A container instance
+     */
+    public function register(Container $pimple)
     {
-        parent::setUp();
+        $psr = new \Pimple\Psr11\Container($pimple);
 
-        $this->sanitizer = new PostTypes();
-    }
+        foreach ($this->services as $serviceName => $definition) {
+            parent::compile($pimple, $serviceName, $definition);
 
-    public function testKeepsCompletePostTypeDefinition()
-    {
-        $definition = [
-            'post_type_name' => [
-                Services::CLASS_NAME => Mirror::class,
-                Services::ARGUMENTS => [],
-                Provider::KEY => 'post_type_name',
-            ]
-        ];
-
-        static::assertEquals($definition, $this->sanitizer->sanitize($definition));
+            if (array_key_exists(static::KEY, $definition)) {
+                add_action('init', new RegisterPostType($psr, $serviceName, $definition[static::KEY]));
+            }
+        }
     }
 }

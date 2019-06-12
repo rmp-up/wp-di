@@ -33,7 +33,7 @@ use RmpUp\WpDi\LazyService;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Provider\Services;
 use RmpUp\WpDi\Provider\WordPress\Actions;
-use RmpUp\WpDi\Provider\WpPostTypes;
+use RmpUp\WpDi\Provider\WordPress\PostTypes;
 
 /**
  * Introduction
@@ -136,7 +136,7 @@ class AutoResolvingProviderTest extends AbstractTestCase
             ]
         ],
 
-        WpPostTypes::class => [
+        PostTypes::class => [
             'qux' => ArrayObject::class
         ]
     ];
