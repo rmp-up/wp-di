@@ -39,64 +39,64 @@ use RmpUp\WpDi\Provider\Services;
  */
 class Actions extends Services
 {
-	public const KEY = 'actions';
-	public const SERVICE = 'service';
-	public const PRIORITY = 'priority';
-	public const ARG_COUNT = 'arg_count';
+    public const KEY = 'actions';
+    public const SERVICE = 'service';
+    public const PRIORITY = 'priority';
+    public const ARG_COUNT = 'arg_count';
 
-	public function register(Container $pimple): void
-	{
-		$psr = new PsrContainer($pimple);
+    public function register(Container $pimple): void
+    {
+        $psr = new PsrContainer($pimple);
 
-		foreach ($this->services as $event => $hooks) {
-			foreach ($hooks as $definition) {
-				if (!array_key_exists(self::SERVICE, $definition) || !is_array($definition[self::SERVICE])) {
-					throw new MissingServiceDefinitionException('Invalid hook definition: Missing service');
-				}
+        foreach ($this->services as $event => $hooks) {
+            foreach ($hooks as $definition) {
+                if (!array_key_exists(self::SERVICE, $definition) || !is_array($definition[self::SERVICE])) {
+                    throw new MissingServiceDefinitionException('Invalid hook definition: Missing service');
+                }
 
-				$serviceName = (string) key($definition[self::SERVICE]);
+                $serviceName = (string) key($definition[self::SERVICE]);
 
-				if (!$serviceName) {
-					throw new InvalidActionDefinitionException('Invalid action definition');
-				}
+                if (!$serviceName) {
+                    throw new InvalidActionDefinitionException('Invalid action definition');
+                }
 
-				if (!$psr->has($serviceName)) {
-					$this->compile($pimple, $serviceName, reset($definition[self::SERVICE]));
-				}
+                if (!$psr->has($serviceName)) {
+                    $this->compile($pimple, $serviceName, reset($definition[self::SERVICE]));
+                }
 
-				$this->registerAction(
-					(string)$event,
-					$psr,
-					$serviceName,
-					(int)$definition[self::PRIORITY],
-					(int)$definition[self::ARG_COUNT]
-				);
-			}
-		}
-	}
+                $this->registerAction(
+                    (string)$event,
+                    $psr,
+                    $serviceName,
+                    (int)$definition[self::PRIORITY],
+                    (int)$definition[self::ARG_COUNT]
+                );
+            }
+        }
+    }
 
-	/**
-	 * @param string $event
-	 * @param PsrContainer $container
-	 * @param string $serviceName
-	 * @param int $priority
-	 * @param int $argCount
+    /**
+     * @param string $event
+     * @param PsrContainer $container
+     * @param string $serviceName
+     * @param int $priority
+     * @param int $argCount
      *
-	 * @return true|void
-	 */
-	protected function registerAction(
-		string $event,
-		PsrContainer $container,
-		string $serviceName,
-		int $priority,
-		int $argCount
-	)
-	{
-		return add_action(
-			$event,
-			new LazyService($container, $serviceName),
-			$priority,
-			$argCount
-		);
-	}
+     * @return true|void
+     */
+    protected function registerAction(
+        string $event,
+        PsrContainer $container,
+        string $serviceName,
+        int $priority,
+        int $argCount
+    )
+    {
+        return add_action(
+            $event,
+            new LazyService($container, $serviceName),
+            $priority,
+            $argCount
+        );
+    }
 }

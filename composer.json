@@ -18,6 +18,7 @@
     "pretzlaw/phpunit-docgen": "^3",
     "pretzlaw/wp-integration-test": "^0.2.0",
     "roave/security-advisories": "dev-master",
+    "squizlabs/php_codesniffer": "*",
     "wp-cli/config-command": "^2.0",
     "wp-cli/core-command": "^2.0",
     "wp-cli/wp-cli": "^2.2"
