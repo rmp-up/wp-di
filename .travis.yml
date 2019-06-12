@@ -55,6 +55,7 @@ install:
 script:
   - composer validate --strict --no-check-lock
   - vendor/bin/phpunit
+  - vendor/bin/phpstan analyse lib/
 
 after_failure:
   - cat srv/wp-content/debug.log || true

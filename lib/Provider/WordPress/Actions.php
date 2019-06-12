@@ -54,7 +54,7 @@ class Actions extends Services
 					throw new MissingServiceDefinitionException('Invalid hook definition: Missing service');
 				}
 
-				$serviceName = key($definition[self::SERVICE]);
+				$serviceName = (string) key($definition[self::SERVICE]);
 
 				if (!$serviceName) {
 					throw new InvalidActionDefinitionException('Invalid action definition');
@@ -67,7 +67,7 @@ class Actions extends Services
 				$this->registerAction(
 					(string)$event,
 					$psr,
-					(string)$serviceName,
+					$serviceName,
 					(int)$definition[self::PRIORITY],
 					(int)$definition[self::ARG_COUNT]
 				);
@@ -76,11 +76,12 @@ class Actions extends Services
 	}
 
 	/**
-	 * @param $event
+	 * @param string $event
 	 * @param PsrContainer $container
-	 * @param $serviceName
+	 * @param string $serviceName
 	 * @param int $priority
 	 * @param int $argCount
+     *
 	 * @return true|void
 	 */
 	protected function registerAction(

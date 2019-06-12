@@ -71,13 +71,13 @@ class Services implements ServiceProviderInterface
      */
     protected function compile(Container $pimple, string $serviceName, $definition): void
     {
-        if ($definition instanceof Closure) {
+        if ($definition instanceof Closure || is_callable($definition)) {
             // Already lazy
             $pimple[$serviceName] = $definition;
             return;
         }
 
-        if (is_scalar($definition) || is_numeric($definition)) {
+        if (is_scalar($definition)) {
             // Remain scalar as they are.
             $pimple[$serviceName] = $definition;
             return;

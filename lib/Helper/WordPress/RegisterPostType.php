@@ -36,7 +36,7 @@ use Psr\Container\ContainerInterface;
 class RegisterPostType
 {
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
     private $serviceName;
@@ -51,13 +51,13 @@ class RegisterPostType
 
     public function __invoke()
     {
-        $postType = $this->container->get($this->serviceName);
+        $postTypeService = $this->container->get($this->serviceName);
 
-        if (is_callable($postType) || method_exists($postType, '__invoke')) {
-            $postType($this->postType);
+        if (is_callable($postTypeService) || method_exists($postTypeService, '__invoke')) {
+            $postTypeService($this->postType);
             return;
         }
 
-        register_post_type($this->postType, get_object_vars($postType));
+        register_post_type($this->postType, get_object_vars($postTypeService));
     }
 }

@@ -41,7 +41,7 @@ use Psr\Container\NotFoundExceptionInterface;
 class OptionsResolver
 {
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
