@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/rmp-up/wp-di.svg?branch=master)](https://travis-ci.org/rmp-up/wp-di)
-[![Coverage Status](https://coveralls.io/repos/github/pretzlaw/wp-integration-test/badge.svg?branch=master)](https://coveralls.io/github/pretzlaw/wp-integration-test?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/rmp-up/wp-di/badge.svg?branch=master)](https://coveralls.io/github/rmp-up/wp-di?branch=master)
 
 # WP DI
 
