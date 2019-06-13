@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/rmp-up/wp-di.svg?branch=master)](https://travis-ci.org/rmp-up/wp-di)
+[![Coverage Status](https://coveralls.io/repos/github/pretzlaw/wp-integration-test/badge.svg?branch=master)](https://coveralls.io/github/pretzlaw/wp-integration-test?branch=master)
+
 # WP DI
 
 > PHP Dependency Injection for WordPress (based on Pimple)
@@ -127,7 +130,6 @@ about dependency injection container in WordPress:
 
 * [Pimple Dependency Injection Container](https://packagist.org/packages/pimple/pimple)
 * [Plugin-Boilerplate by Gary Jones](https://github.com/GaryJones/plugin-boilerplate)
-* []()
 
 ## Licensing
 

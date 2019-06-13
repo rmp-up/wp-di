@@ -54,8 +54,13 @@ install:
 
 script:
   - composer validate --strict --no-check-lock
-  - vendor/bin/phpunit
+  - vendor/bin/phpunit --coverage-clover coverage.xml
   - vendor/bin/phpstan analyse lib/
+
+after_script:
+  # upload coverage.xml file to Coveralls to analyze it
+  - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
+  - php coveralls.phar --verbose
 
 after_failure:
   - cat srv/wp-content/debug.log || true
