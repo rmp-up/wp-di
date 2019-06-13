@@ -39,10 +39,10 @@ use RmpUp\WpDi\Test\Mirror;
  * ```php
  * <?php
  *
- * use \RmpUp\WpDi\Provider;
+ * use \RmpUp\WpDi\Provider\WordPress;
  *
  * return [
- *   Provider\WpActions => [
+ *   WordPress\Actions => [
  *     'init' => [
  *       'some_other_name' => TheActual::class,
  *     ]
@@ -58,11 +58,11 @@ use RmpUp\WpDi\Test\Mirror;
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-25
  */
-class SimpleServiceReferenceTest extends AbstractWpActionsTest
+class SimpleServiceReferenceTest extends AbstractActionsTest
 {
     use FilterAssertions;
 
-    const SERVICE_NAME = 'butNamed';
+    private const SERVICE_NAME = 'butNamed';
 
     protected function setUp()
     {

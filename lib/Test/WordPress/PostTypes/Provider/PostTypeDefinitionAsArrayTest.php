@@ -27,7 +27,8 @@ namespace RmpUp\WpDi\Test\WordPress\PostTypes\Provider;
 use PHPUnit\Framework\Constraint\IsEqual;
 use Pretzlaw\WPInt\Filter\FilterAssertions;
 use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
-use RmpUp\WpDi\Sanitizer\WpPostTypes;
+use RmpUp\WpDi\Provider\WordPress\PostTypes as PostTypesProvider;
+use RmpUp\WpDi\Sanitizer\WordPress\PostTypes;
 use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**
@@ -59,7 +60,7 @@ class PostTypeDefinitionAsArrayTest extends AbstractTestCase
     public $description = 'Yayyyyy';
     public $capability_type = 'custom_stuff';
     /**
-     * @var \RmpUp\WpDi\Provider\WpPostTypes
+     * @var PostTypesProvider
      */
     private $provider;
 
@@ -67,11 +68,11 @@ class PostTypeDefinitionAsArrayTest extends AbstractTestCase
     {
         parent::setUp();
 
-        $sanitizer = new WpPostTypes();
-        $this->provider = new \RmpUp\WpDi\Provider\WpPostTypes(
+        $sanitizer = new PostTypes();
+        $this->provider = new PostTypesProvider(
             $sanitizer->sanitize(
                 [
-                    'some_type' => PostTypeDefinitionAsArrayTest::class,
+                    'some_type' => __CLASS__,
                 ]
             )
         );

@@ -24,33 +24,19 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Sanitizer;
 
+use RmpUp\WpDi\Sanitizer\WordPress\CliCommands;
+
 /**
  * WpCliCommands
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-29
+ * @deprecated 1.0.0 Please use \RmpUp\WpDi\Sanitizer\WordPress\CliCommands instead.
  */
-class WpCliCommands extends Services
+class WpCliCommands extends CliCommands
 {
-    public function sanitize($node): array
+    public function __construct()
     {
-        $sanitized = [];
-
-        foreach ($node as $serviceName => $serviceDefinition) {
-            $service = parent::sanitize([$serviceName => $serviceDefinition]);
-
-            if (is_string($serviceDefinition)) {
-                $service[$serviceName][\RmpUp\WpDi\Provider\WpCliCommands::KEY] = [
-                    \RmpUp\WpDi\Provider\WpCliCommands::COMMAND => $serviceName,
-                ];
-
-                $serviceDefinition = $service[$serviceName];
-                $serviceName = $serviceDefinition[\RmpUp\WpDi\Provider\Services::CLASS_NAME];
-            }
-
-            $sanitized[$serviceName] = $serviceDefinition;
-        }
-
-        return $sanitized;
+        trigger_error('Please use \RmpUp\WpDi\Provider\WordPress\CliCommands instead', E_USER_DEPRECATED);
     }
 }

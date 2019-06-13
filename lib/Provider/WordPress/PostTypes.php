@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Options.php
+ * PostTypes.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -17,7 +17,7 @@
  * @copyright  2019 Mike Pretzlaw
  * @license    https://mike-pretzlaw.de/license-generic.txt
  * @link       https://project.mike-pretzlaw.de/wp-di
- * @since      2019-06-08
+ * @since      2019-06-12
  */
 
 declare(strict_types=1);
@@ -25,26 +25,18 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Provider\WordPress;
 
 use Pimple\Container;
-use Pimple\ServiceProviderInterface;
-use RmpUp\WpDi\Helper\WordPress\OptionsResolver;
+use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
+use RmpUp\WpDi\Provider\Services;
 
 /**
- * Options
+ * PostTypes
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-06-08
+ * @since      2019-06-12
  */
-class Options implements ServiceProviderInterface
+class PostTypes extends Services
 {
-    /**
-     * @var array
-     */
-    private $serviceDefinition;
-
-    public function __construct(array $serviceDefinition)
-    {
-        $this->serviceDefinition = $serviceDefinition;
-    }
+    public const KEY = 'wp_post_types';
 
     /**
      * Registers services on the given container.
@@ -56,20 +48,14 @@ class Options implements ServiceProviderInterface
      */
     public function register(Container $pimple): void
     {
-        $optionResolver = new OptionsResolver(new \Pimple\Psr11\Container($pimple));
+        $psr = new \Pimple\Psr11\Container($pimple);
 
-        foreach ($this->serviceDefinition as $optionKey => $value) {
-            if (!is_callable($value)) {
-                $optionResolver->addDefault($optionKey, $value);
+        foreach ($this->services as $serviceName => $definition) {
+            $this->compile($pimple, $serviceName, $definition);
 
-                $value = static function () use ($optionKey) {
-                    return get_option($optionKey);
-                };
+            if (array_key_exists(static::KEY, $definition)) {
+                add_action('init', new RegisterPostType($psr, $serviceName, $definition[static::KEY]));
             }
-
-            $pimple[$optionKey] = $value;
-
-            add_filter('default_option_' . $optionKey, $optionResolver, 10, 3);
         }
     }
 }

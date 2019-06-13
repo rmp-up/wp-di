@@ -1,0 +1,8 @@
+parameters:
+    level: 7
+    autoload_directories:
+        - ./lib
+    autoload_files:
+        - ./lib/Test/functions.php
+    excludes_analyse:
+        - ./lib/Test

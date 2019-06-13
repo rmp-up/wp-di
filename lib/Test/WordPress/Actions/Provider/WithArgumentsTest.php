@@ -33,7 +33,7 @@ use RmpUp\WpDi\Test\Mirror;
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-26
  */
-class WithArgumentsTest extends AbstractWpActionsTest
+class WithArgumentsTest extends AbstractActionsTest
 {
     protected function setUp()
     {

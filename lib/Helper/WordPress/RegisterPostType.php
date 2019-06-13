@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Helper\WordPress;
 
 use Pimple\Psr11\Container;
+use Psr\Container\ContainerInterface;
 
 /**
  * RegisterPostType
@@ -35,13 +36,13 @@ use Pimple\Psr11\Container;
 class RegisterPostType
 {
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
     private $serviceName;
     private $postType;
 
-    public function __construct(Container $container, $serviceName, $postType)
+    public function __construct(ContainerInterface $container, $serviceName, $postType)
     {
         $this->container = $container;
         $this->serviceName = $serviceName;
@@ -50,13 +51,13 @@ class RegisterPostType
 
     public function __invoke()
     {
-        $postType = $this->container->get($this->serviceName);
+        $postTypeService = $this->container->get($this->serviceName);
 
-        if (is_callable($postType) || method_exists($postType, '__invoke')) {
-            $postType($this->postType);
+        if (is_callable($postTypeService) || method_exists($postTypeService, '__invoke')) {
+            $postTypeService($this->postType);
             return;
         }
 
-        register_post_type($this->postType, get_object_vars($postType));
+        register_post_type($this->postType, get_object_vars($postTypeService));
     }
 }

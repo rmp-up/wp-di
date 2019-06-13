@@ -29,7 +29,7 @@ use Pretzlaw\WPInt\Filter\FilterAssertions;
 use RmpUp\WpDi\LazyService;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Test\Mirror;
-use RmpUp\WpDi\Test\WordPress\Actions\AbstractWpActionsTest;
+use RmpUp\WpDi\Test\WordPress\Actions\AbstractActionsTest;
 
 /**
  * ReferenceToServiceTest
@@ -38,7 +38,7 @@ use RmpUp\WpDi\Test\WordPress\Actions\AbstractWpActionsTest;
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-06-11
  */
-class ReferenceToServiceTest extends AbstractWpActionsTest
+class ReferenceToServiceTest extends AbstractActionsTest
 {
     use FilterAssertions;
 
@@ -53,7 +53,7 @@ class ReferenceToServiceTest extends AbstractWpActionsTest
                         'test_service' => Mirror::class,
                     ],
 
-                    Provider\WpActions::class => [
+                    Provider\WordPress\Actions::class => [
                         'test_action' => [
                             'test_service',
                         ]

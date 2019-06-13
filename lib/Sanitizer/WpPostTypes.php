@@ -24,30 +24,15 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Sanitizer;
 
+use RmpUp\WpDi\Sanitizer\WordPress\PostTypes;
+
 /**
  * WpPostType
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-05-28
+ * @deprecated 1.0.0 Please use RmpUp\WpDi\Sanitizer\WordPress\PostTypes instead.
  */
-class WpPostTypes extends Services
+class WpPostTypes extends PostTypes
 {
-    public function sanitize($node): array
-    {
-        $sanitized = [];
-
-        foreach ($node as $serviceName => $serviceDefinition) {
-            $service = parent::sanitize([$serviceName => $serviceDefinition]);
-
-            if (is_string($serviceDefinition)) {
-                $service[$serviceName][\RmpUp\WpDi\Provider\WpPostTypes::KEY] = $serviceName;
-                $serviceDefinition = $service[$serviceName];
-            }
-
-            $sanitized[$serviceName] = $serviceDefinition;
-        }
-
-        return $sanitized;
-    }
-
 }

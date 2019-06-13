@@ -25,7 +25,8 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Test\WordPress\PostTypes\Definition;
 
 use RmpUp\WpDi\Provider\Services;
-use RmpUp\WpDi\Provider\WpPostTypes;
+use RmpUp\WpDi\Provider\WordPress\PostTypes;
+use RmpUp\WpDi\Sanitizer\WordPress\PostTypes as Sanitizer;
 use RmpUp\WpDi\Test\Mirror;
 use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
@@ -37,10 +38,10 @@ use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
  * ```php
  * <?php
  *
- * use \RmpUp\WpDi\Provider;
+ * use \RmpUp\WpDi\Provider\WordPress;
  *
  * return [
- *   Provider\WpPostTypes => [
+ *   WordPress\PostTypes::class => [
  *     'name_of_cpt_here' => PostTypeDefinition::class,
  *   ]
  * ];
@@ -59,7 +60,7 @@ class ExtendClassNameOnlyDefinitionTest extends SanitizerTestCase
     {
         parent::setUp();
 
-        $this->sanitizer = new \RmpUp\WpDi\Sanitizer\WpPostTypes();
+        $this->sanitizer = new Sanitizer();
     }
 
     public function testScaffoldConfigFromMapping()
@@ -69,7 +70,7 @@ class ExtendClassNameOnlyDefinitionTest extends SanitizerTestCase
                 'the_name_here' => [
                     Services::CLASS_NAME => Mirror::class,
                     Services::ARGUMENTS => [],
-                    WpPostTypes::KEY => 'the_name_here',
+                    PostTypes::KEY => 'the_name_here',
                 ]
             ],
             $this->sanitizer->sanitize(

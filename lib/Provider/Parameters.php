@@ -53,7 +53,7 @@ class Parameters implements ServiceProviderInterface
      *
      * @param Container $pimple A container instance
      */
-    public function register(Container $pimple)
+    public function register(Container $pimple): void
     {
         foreach ($this->parameters as $parameterName => $value) {
             $pimple[$parameterName] = $value;

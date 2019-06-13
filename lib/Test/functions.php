@@ -32,7 +32,19 @@ function do_action($name, ...$arguments)
     }
 }
 
+function add_filter() {
+    _rmp_record_call(__FUNCTION__, func_get_args());
+}
+
+function get_option() {
+    _rmp_record_call(__FUNCTION__, func_get_args());
+}
+
 function register_post_type()
 {
     _rmp_record_call(__FUNCTION__, func_get_args());
+}
+
+class WP_CLI {
+
 }

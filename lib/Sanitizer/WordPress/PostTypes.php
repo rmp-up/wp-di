@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * AbstractWpActionsTest.php
+ * PostTypes.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -17,30 +17,39 @@
  * @copyright  2019 Mike Pretzlaw
  * @license    https://mike-pretzlaw.de/license-generic.txt
  * @link       https://project.mike-pretzlaw.de/wp-di
- * @since      2019-04-26
+ * @since      2019-06-12
  */
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\WordPress\Actions;
+namespace RmpUp\WpDi\Sanitizer\WordPress;
 
-use RmpUp\WpDi\Provider\WpActions;
-use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
+use RmpUp\WpDi\Provider\WordPress\PostTypes as PostTypesProvider;
+use RmpUp\WpDi\Sanitizer\Services;
 
 /**
- * AbstractWpActionsTest
+ * PostTypes
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-04-26
+ * @since      2019-06-12
  */
-abstract class AbstractWpActionsTest extends SanitizerTestCase
+class PostTypes extends Services
 {
-    protected function setUp()
+    public function sanitize($node): array
     {
-        parent::setUp();
+        $sanitized = [];
 
-        $this->sanitizer = new \RmpUp\WpDi\Sanitizer\WpActions();
+        foreach ($node as $serviceName => $serviceDefinition) {
+            $service = parent::sanitize([$serviceName => $serviceDefinition]);
 
-        $this->pimple->register(new WpActions($this->sanitizer->sanitize($this->services)));
+            if (is_string($serviceDefinition)) {
+                $service[$serviceName][PostTypesProvider::KEY] = $serviceName;
+                $serviceDefinition = $service[$serviceName];
+            }
+
+            $sanitized[$serviceName] = $serviceDefinition;
+        }
+
+        return $sanitized;
     }
 }

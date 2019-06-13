@@ -42,7 +42,7 @@ use RmpUp\WpDi\Test\WordPress\Options\OptionsTestCase;
  *     'ping_sites',
  *   ],
  *
- *   WpActions::class => [
+ *   WordPress\Actions::class => [
  *     'publish_report' => [
  *       TellOtherAboutNewReport::class => [
  *         'blog_public',
@@ -71,7 +71,7 @@ class UseInServiceTest extends OptionsTestCase
         $this->sanitizer = new Options();
         $this->provider = new Provider(
             [
-                Provider\WpActions::class => [
+                Provider\WordPress\Actions::class => [
                     IncludesTest::class => [
                         Mirror::class => [
                             'blog_public',

@@ -27,7 +27,8 @@ namespace RmpUp\WpDi\Test\WordPress\PostTypes\Provider;
 use PHPUnit\Framework\Constraint\IsEqual;
 use Pretzlaw\WPInt\Filter\FilterAssertions;
 use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
-use RmpUp\WpDi\Sanitizer\WpPostTypes;
+use RmpUp\WpDi\Provider\WordPress\PostTypes as PostTypesProvider;
+use RmpUp\WpDi\Sanitizer\WordPress\PostTypes;
 use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**
@@ -66,7 +67,7 @@ class PostTypeDefinitionAsCallableTest extends AbstractTestCase
     use FilterAssertions;
 
     /**
-     * @var \RmpUp\WpDi\Provider\WpPostTypes
+     * @var PostTypesProvider
      */
     private $provider;
     private static $called = false;
@@ -75,11 +76,11 @@ class PostTypeDefinitionAsCallableTest extends AbstractTestCase
     {
         parent::setUp();
 
-        $sanitizer = new WpPostTypes();
-        $this->provider = new \RmpUp\WpDi\Provider\WpPostTypes(
+        $sanitizer = new PostTypes();
+        $this->provider = new PostTypesProvider(
             $sanitizer->sanitize(
                 [
-                    'callable_type' => PostTypeDefinitionAsCallableTest::class,
+                    'callable_type' => __CLASS__,
                 ]
             )
         );

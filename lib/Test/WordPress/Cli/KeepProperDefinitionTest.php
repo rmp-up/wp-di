@@ -25,7 +25,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Test\WordPress\Cli;
 
 use RmpUp\WpDi\Provider\Services;
-use RmpUp\WpDi\Sanitizer\WpCliCommands;
+use RmpUp\WpDi\Sanitizer\WordPress\CliCommands;
 use RmpUp\WpDi\Test\Mirror;
 use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
@@ -42,7 +42,7 @@ class KeepProperDefinitionTest extends SanitizerTestCase
     {
         parent::setUp();
 
-        $this->sanitizer = new WpCliCommands();
+        $this->sanitizer = new CliCommands();
     }
 
     public function definitions()
@@ -55,8 +55,8 @@ class KeepProperDefinitionTest extends SanitizerTestCase
                     'someService' => [
                         Services::CLASS_NAME => Mirror::class,
                         Services::ARGUMENTS => [42, 1337],
-                        \RmpUp\WpDi\Provider\WpCliCommands::KEY => [
-                            \RmpUp\WpDi\Provider\WpCliCommands::COMMAND => 'some command'
+                        \RmpUp\WpDi\Provider\WordPress\CliCommands::KEY => [
+                            \RmpUp\WpDi\Provider\WordPress\CliCommands::COMMAND => 'some command'
                         ],
                     ]
                 ]
@@ -66,8 +66,9 @@ class KeepProperDefinitionTest extends SanitizerTestCase
 
     /**
      * @dataProvider definitions
+     * @param array $definitions
      */
-    public function testKeepProperWpCliDefinitions($definitions)
+    public function testKeepProperWpCliDefinitions(array $definitions)
     {
         static::assertEquals($definitions, $this->sanitizer->sanitize($definitions));
     }

@@ -35,13 +35,14 @@ use RmpUp\WpDi\Provider\Services as ServicesProvider;
 class Services implements SanitizerInterface
 {
     /**
-     * @deprecated Use Provider\Services::CLASS_NAME instead.
+     * @deprecated 1.0.0 Use Provider\Services::CLASS_NAME instead.
      */
-    const CLASS_NAME = ServicesProvider::CLASS_NAME;
+    public const CLASS_NAME = ServicesProvider::CLASS_NAME;
+
     /**
-     * @deprecated Use Provider\Services::ARGUMENTS instead.
+     * @deprecated 1.0.0 Use Provider\Services::ARGUMENTS instead.
      */
-    const ARGUMENTS = ServicesProvider::ARGUMENTS;
+    public const ARGUMENTS = ServicesProvider::ARGUMENTS;
 
     /**
      * @param array $node

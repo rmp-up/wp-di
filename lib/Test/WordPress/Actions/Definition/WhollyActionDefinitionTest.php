@@ -24,8 +24,8 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress\Actions\Definition;
 
-use RmpUp\WpDi\Provider\WpActions as WpActionsProvider;
-use RmpUp\WpDi\Sanitizer\WpActions;
+use RmpUp\WpDi\Provider\WordPress\Actions as Provider;
+use RmpUp\WpDi\Sanitizer\WordPress\Actions as Sanitizer;
 use RmpUp\WpDi\Test\Mirror;
 use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
@@ -42,7 +42,7 @@ class WhollyActionDefinitionTest extends SanitizerTestCase
 
     protected function setUp()
     {
-        $this->sanitizer = new WpActions();
+        $this->sanitizer = new Sanitizer();
     }
 
     public function definitions(): array
@@ -53,14 +53,14 @@ class WhollyActionDefinitionTest extends SanitizerTestCase
                 [
                     'actionName' => [
                         Mirror::class => [
-                            WpActionsProvider::SERVICE => [
+	                        Provider::SERVICE   => [
                                 Mirror::class => [
-                                    WpActionsProvider::CLASS_NAME => Mirror::class,
-                                    WpActionsProvider::ARGUMENTS => [],
+	                                Provider::CLASS_NAME => Mirror::class,
+	                                Provider::ARGUMENTS  => [],
                                 ]
                             ],
-                            WpActionsProvider::PRIORITY => 10,
-                            WpActionsProvider::ARG_COUNT => 1,
+	                        Provider::PRIORITY  => 10,
+	                        Provider::ARG_COUNT => 1,
                         ]
                     ]
                 ],
@@ -70,17 +70,17 @@ class WhollyActionDefinitionTest extends SanitizerTestCase
                 [
                     'actionName' => [
                         Mirror::class => [
-                            WpActionsProvider::SERVICE => [
+	                        Provider::SERVICE   => [
                                 Mirror::class => [
-                                    WpActionsProvider::CLASS_NAME => Mirror::class,
-                                    WpActionsProvider::ARGUMENTS => [
+	                                Provider::CLASS_NAME => Mirror::class,
+	                                Provider::ARGUMENTS  => [
                                         42,
                                         1337
                                     ],
                                 ],
                             ],
-                            WpActionsProvider::PRIORITY => 10,
-                            WpActionsProvider::ARG_COUNT => 1,
+	                        Provider::PRIORITY  => 10,
+	                        Provider::ARG_COUNT => 1,
                         ]
                     ]
                 ],

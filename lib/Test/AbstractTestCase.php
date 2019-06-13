@@ -82,19 +82,19 @@ abstract class AbstractTestCase extends TestCase
     {
         static::assertInstanceOf(LazyService::class, $lazyServiceObject);
 
-        static::assertEquals($serviceName, static::getField($lazyServiceObject, 'serviceName'));
+        static::assertEquals($serviceName, self::getField($lazyServiceObject, 'serviceName'));
     }
 
     protected function assertServiceNotLoaded(string $serviceName)
     {
-        $values = static::getField($this->pimple, 'values');
+        $values = self::getField($this->pimple, 'values');
         static::assertArrayHasKey($serviceName, $values, 'Service unknown');
         static::assertInstanceOf(Closure::class, $values[$serviceName]);
     }
 
     protected function assertServiceLoaded(string $serviceName)
     {
-        $values = static::getField($this->pimple, 'values');
+        $values = self::getField($this->pimple, 'values');
         static::assertArrayHasKey($serviceName, $values, 'Service unknown');
         static::assertNotInstanceOf(Closure::class, $values[$serviceName]);
     }

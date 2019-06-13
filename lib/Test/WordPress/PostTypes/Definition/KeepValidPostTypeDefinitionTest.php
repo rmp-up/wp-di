@@ -25,7 +25,8 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Test\WordPress\PostTypes\Definition;
 
 use RmpUp\WpDi\Provider\Services;
-use RmpUp\WpDi\Sanitizer\WpPostTypes;
+use RmpUp\WpDi\Provider\WordPress\PostTypes as Provider;
+use RmpUp\WpDi\Sanitizer\WordPress\PostTypes;
 use RmpUp\WpDi\Test\Mirror;
 use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
@@ -42,7 +43,7 @@ class KeepValidPostTypeDefinitionTest extends SanitizerTestCase
     {
         parent::setUp();
 
-        $this->sanitizer = new WpPostTypes();
+        $this->sanitizer = new PostTypes();
     }
 
     public function testKeepsCompletePostTypeDefinition()
@@ -51,7 +52,7 @@ class KeepValidPostTypeDefinitionTest extends SanitizerTestCase
             'post_type_name' => [
                 Services::CLASS_NAME => Mirror::class,
                 Services::ARGUMENTS => [],
-                \RmpUp\WpDi\Provider\WpPostTypes::KEY => 'post_type_name',
+                Provider::KEY => 'post_type_name',
             ]
         ];
 

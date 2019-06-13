@@ -24,47 +24,27 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Provider;
 
-use Pimple\Container;
-use Pimple\ServiceProviderInterface;
-use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
+use RmpUp\WpDi\Provider\WordPress\PostTypes;
+use RmpUp\WpDi\Sanitizer\WordPress\Actions;
 
 /**
  * WpPostType
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-05-28
+ * @deprecated 1.0.0 Please use \RmpUp\WpDi\Provider\WordPress\PostTypes instead.
  */
-class WpPostTypes extends Services
+class WpPostTypes extends PostTypes
 {
-    const KEY = 'wp_post_types';
     /**
-     * @var array
+     * WpPostTypes constructor.
+     * @param array $services
+     * @deprecated
      */
-    private $definitions;
-
-    public function __construct(array $definitions)
+    public function __construct(array $services)
     {
-        $this->definitions = $definitions;
-    }
+        parent::__construct($services);
 
-    /**
-     * Registers services on the given container.
-     *
-     * This method should only be used to configure services and parameters.
-     * It should not get services.
-     *
-     * @param Container $pimple A container instance
-     */
-    public function register(Container $pimple)
-    {
-        $psr = new \Pimple\Psr11\Container($pimple);
-
-        foreach ($this->definitions as $serviceName => $definition) {
-            parent::compile($pimple, $serviceName, $definition);
-
-            if (array_key_exists(WpPostTypes::KEY, $definition)) {
-                add_action('init', new RegisterPostType($psr, $serviceName, $definition[WpPostTypes::KEY]));
-            }
-        }
+        trigger_error( 'Please use ' . Actions::class . ' instead', E_USER_DEPRECATED );
     }
 }
