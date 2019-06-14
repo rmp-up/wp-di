@@ -1,7 +1,7 @@
 {
   "name": "rmp-up/wp-di",
   "license": "proprietary",
-  "description": "Simple PHP Dependency Injection Container for WordPress",
+  "description": "Simple Dependency Injection / Service Container for more OOP in WordPress (PSR-11 compatible)",
   "autoload": {
     "psr-4": {
       "RmpUp\\WpDi\\": "lib"
