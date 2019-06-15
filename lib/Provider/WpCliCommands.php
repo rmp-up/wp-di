@@ -35,11 +35,4 @@ use RmpUp\WpDi\Provider\WordPress\CliCommands;
  */
 class WpCliCommands extends CliCommands
 {
-    public function __construct(array $services, string $wpCliClass = null)
-    {
-        parent::__construct($services, $wpCliClass);
-
-        trigger_error('Please use \RmpUp\WpDi\Provider\WordPress\CliCommands instead', E_USER_DEPRECATED);
-    }
-
 }
