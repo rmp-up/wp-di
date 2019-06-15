@@ -34,9 +34,4 @@ use RmpUp\WpDi\Provider\WordPress\Actions;
  * @deprecated 1.0.0 Please use RmpUp\WpDi\Provider\WordPress\Actions instead
  */
 class WpActions extends Actions {
-	public function __construct( array $services ) {
-		parent::__construct( $services );
-
-		trigger_error( 'Please use ' . Actions::class . ' instead', E_USER_DEPRECATED );
-	}
 }

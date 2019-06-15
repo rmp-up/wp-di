@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * WpCliCommands.php
+ * TemplateTest.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -17,22 +17,26 @@
  * @copyright  2019 Mike Pretzlaw
  * @license    https://mike-pretzlaw.de/license-generic.txt
  * @link       https://project.mike-pretzlaw.de/wp-di
- * @since      2019-04-29
+ * @since      2019-06-14
  */
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Provider;
+namespace RmpUp\WpDi\Test\WordPress;
 
-use RmpUp\WpDi\Provider\WordPress\CliCommands;
+use RmpUp\WpDi\Sanitizer\WordPress\Templates;
+use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
- * WpCliCommands
+ * Templates
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-04-29
- * @deprecated 1.0.0 Please use \RmpUp\WpDi\Provider\WordPress\CliCommands instead.
+ * @since      2019-06-14
  */
-class WpCliCommands extends CliCommands
+class TemplatesTest extends SanitizerTestCase
 {
+    public function testExists()
+    {
+        static::assertTrue(class_exists(Templates::class));
+    }
 }

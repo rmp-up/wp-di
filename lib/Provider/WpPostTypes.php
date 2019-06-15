@@ -25,7 +25,6 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Provider;
 
 use RmpUp\WpDi\Provider\WordPress\PostTypes;
-use RmpUp\WpDi\Sanitizer\WordPress\Actions;
 
 /**
  * WpPostType
@@ -36,15 +35,4 @@ use RmpUp\WpDi\Sanitizer\WordPress\Actions;
  */
 class WpPostTypes extends PostTypes
 {
-    /**
-     * WpPostTypes constructor.
-     * @param array $services
-     * @deprecated
-     */
-    public function __construct(array $services)
-    {
-        parent::__construct($services);
-
-        trigger_error( 'Please use ' . Actions::class . ' instead', E_USER_DEPRECATED );
-    }
 }
