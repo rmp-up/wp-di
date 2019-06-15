@@ -30,12 +30,13 @@
 
     <!-- Include some sniffs from other standards that don't conflict with PEAR -->
     <rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
-    <rule ref="Squiz.Arrays.ArrayDeclaration"/>
+    <rule ref="Squiz.Arrays.ArrayDeclaration">
+        <exclude name="Squiz.Arrays.ArrayDeclaration.DoubleArrowNotAligned" />
+    </rule>
     <rule ref="Squiz.ControlStructures.ControlSignature"/>
     <rule ref="Squiz.ControlStructures.ElseIfDeclaration"/>
     <rule ref="Squiz.Commenting.DocCommentAlignment"/>
     <rule ref="Squiz.Commenting.EmptyCatchComment"/>
-    <rule ref="Squiz.Commenting.LongConditionClosingComment"/>
     <rule ref="Squiz.Commenting.PostStatementComment"/>
     <rule ref="Squiz.Commenting.VariableComment"/>
     <rule ref="Squiz.Formatting.OperatorBracket"/>
@@ -74,9 +75,6 @@
     <rule ref="Squiz.Arrays.ArrayDeclaration.KeyNotAligned">
         <severity>0</severity>
     </rule>
-    <rule ref="Squiz.Arrays.ArrayDeclaration.ValueNotAligned">
-        <severity>0</severity>
-    </rule>
     <rule ref="Squiz.Arrays.ArrayDeclaration.CloseBraceNotAligned">
         <severity>0</severity>
     </rule>
@@ -95,6 +93,7 @@
         <properties>
             <property name="allowMultipleArguments" value="false"/>
         </properties>
+        <exclude name="PEAR.Functions.FunctionDeclaration.NewlineBeforeOpenBrace" />
     </rule>
 
     <!-- Ban some functions -->
