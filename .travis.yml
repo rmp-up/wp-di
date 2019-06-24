@@ -15,6 +15,7 @@ addons:
 env:
   global:
     - PHPUNIT_VERSION="~7|~8"
+    - COMPOSER_CACHE_DIR=/home/travis/.composer
   matrix:
     # see https://codex.wordpress.org/WordPress_Versions
     # see https://phpunit.de/supported-versions.html
@@ -37,6 +38,10 @@ matrix:
 
 services:
   - mysql
+
+cache:
+  directories:
+    - /home/travis/.composer
 
 before_install:
   - mysql -e 'CREATE DATABASE dev;'
