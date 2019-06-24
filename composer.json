@@ -8,6 +8,7 @@
     }
   },
   "require": {
+    "johnpbloch/wordpress": "5.2.*",
     "pimple/pimple": "^3.0",
     "psr/container": "1.*"
   },
@@ -25,5 +26,8 @@
   },
   "config": {
     "sort-packages": true
+  },
+  "extra": {
+    "wordpress-install-dir": "srv"
   }
 }

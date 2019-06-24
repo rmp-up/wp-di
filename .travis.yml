@@ -46,13 +46,12 @@ cache:
 before_install:
   - mysql -e 'CREATE DATABASE dev;'
   # Try supporting other versions
-  - composer require --update-with-dependencies phpunit/phpunit:$PHPUNIT_VERSION
+  - composer require --update-with-dependencies phpunit/phpunit:$PHPUNIT_VERSION johnpbloch/wordpress:$WP_VERSION
 
 install:
   - composer install
   # Using WP-CLI instead of Composer because this way we can use the env matrix (above).
-  - vendor/bin/wp --allow-root core download --version=$WP_VERSION --force
-  - vendor/bin/wp --allow-root config create --force --dbuser=travis --dbpass="" --dbhost="127.0.0.1"
+  - vendor/bin/wp --allow-root config create --force --dbuser=travis --dbpass="" --dbhost="127.0.0.1" --skip-check
   - vendor/bin/wp --allow-root core install --skip-email
   # We get the latest patch version here to have less maintenance on the env matrix above.
   - vendor/bin/wp --allow-root core update --minor
