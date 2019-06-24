@@ -21,6 +21,7 @@ env:
     # see https://phpunit.de/supported-versions.html
     - WP_VERSION=4.8.*
     - WP_VERSION=5.0.*
+    - WP_VERSION=5.2.*
     - WP_VERSION=nightly
 
 matrix:
