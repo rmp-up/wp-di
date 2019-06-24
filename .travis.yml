@@ -19,9 +19,8 @@ env:
   matrix:
     # see https://codex.wordpress.org/WordPress_Versions
     # see https://phpunit.de/supported-versions.html
-    - WP_VERSION=4.8
-    - WP_VERSION=5.0
-    - WP_VERSION=5.2
+    - WP_VERSION=4.8.*
+    - WP_VERSION=5.0.*
     - WP_VERSION=nightly
 
 matrix:
@@ -63,8 +62,7 @@ script:
 
 after_script:
   # upload coverage.xml file to Coveralls to analyze it
-  - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
-  - php coveralls.phar --verbose
+  - vendor/bin/coveralls --verbose
 
 after_failure:
   - cat srv/wp-content/debug.log || true
