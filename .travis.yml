@@ -34,7 +34,7 @@ matrix:
   # in the process to achieve support
   allow_failures:
     - php: '7.0'
-    - env: WP_VERSION=nightly
+    - env: WP_VERSION=dev-master
   # Do not wait for allowed failures
   fast_finish: true
 
