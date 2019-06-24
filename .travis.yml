@@ -22,7 +22,7 @@ env:
     - WP_VERSION=4.8.*
     - WP_VERSION=5.0.*
     - WP_VERSION=5.2.*
-    - WP_VERSION=nightly
+    - WP_VERSION=dev-master
 
 matrix:
   include:
