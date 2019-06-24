@@ -17,6 +17,15 @@ Hint: Now there is a ".docker" container containing the database files.
 
 Inside the container or on your dev-host:
 
+First Symlink configs to root dir for easier development.
+We do not want to pollute the root so they are under "etc/".
+
+```
+for L in etc/*; do ln -s $L; done
+```
+
+Then build up WordPress:
+
 ```bash
 composer install
 vendor/bin/wp --allow-root core download

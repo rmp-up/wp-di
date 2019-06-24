@@ -55,8 +55,8 @@ install:
   # Using WP-CLI instead of Composer because this way we can use the env matrix (above).
   - vendor/bin/wp --allow-root config create --force --dbuser=travis --dbpass="" --dbhost="127.0.0.1" --skip-check
   - vendor/bin/wp --allow-root core install --skip-email
-  # We get the latest patch version here to have less maintenance on the env matrix above.
-  - vendor/bin/wp --allow-root core update --minor
+  - for L in etc/*; do ln -s $L; done
+  - ln -s etc/.coveralls.yml
 
 script:
   - composer validate --strict --no-check-lock

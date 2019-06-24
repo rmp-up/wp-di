@@ -1,8 +1,13 @@
 /.idea
+/documentation.css
 /srv
+/tmp
 /var
 /vendor
 
+.coveralls.yml
 .docker
 .env
 composer.lock
+phpcs.xml.dist
+phpstan.neon.dist
