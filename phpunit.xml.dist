@@ -29,7 +29,7 @@
             <arguments>
                 <string>var/documentation.html</string>
                 <string>rmp-up/wp-di - Dependency injection magic for WordPress</string>
-                <string>documentation.css</string>
+                <string>etc/documentation.css</string>
             </arguments>
         </listener>
     </listeners>
