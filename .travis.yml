@@ -15,12 +15,13 @@ addons:
 env:
   global:
     - PHPUNIT_VERSION="~7|~8"
+    - COMPOSER_CACHE_DIR=/home/travis/.composer
   matrix:
     # see https://codex.wordpress.org/WordPress_Versions
     # see https://phpunit.de/supported-versions.html
-    - WP_VERSION=4.8
-    - WP_VERSION=5.0
-    - WP_VERSION=5.2
+    - WP_VERSION=4.8.*
+    - WP_VERSION=5.0.*
+    - WP_VERSION=5.2.*
     - WP_VERSION=nightly
 
 matrix:
@@ -34,20 +35,25 @@ matrix:
   allow_failures:
     - php: '7.0'
     - env: WP_VERSION=nightly
+  # Do not wait for allowed failures
+  fast_finish: true
 
 services:
   - mysql
 
+cache:
+  directories:
+    - /home/travis/.composer
+
 before_install:
   - mysql -e 'CREATE DATABASE dev;'
   # Try supporting other versions
-  - composer require --update-with-dependencies phpunit/phpunit:$PHPUNIT_VERSION
+  - composer require --update-with-dependencies phpunit/phpunit:$PHPUNIT_VERSION johnpbloch/wordpress:$WP_VERSION
 
 install:
   - composer install
   # Using WP-CLI instead of Composer because this way we can use the env matrix (above).
-  - vendor/bin/wp --allow-root core download --version=$WP_VERSION --force
-  - vendor/bin/wp --allow-root config create --force --dbuser=travis --dbpass="" --dbhost="127.0.0.1"
+  - vendor/bin/wp --allow-root config create --force --dbuser=travis --dbpass="" --dbhost="127.0.0.1" --skip-check
   - vendor/bin/wp --allow-root core install --skip-email
   # We get the latest patch version here to have less maintenance on the env matrix above.
   - vendor/bin/wp --allow-root core update --minor
@@ -59,8 +65,7 @@ script:
 
 after_script:
   # upload coverage.xml file to Coveralls to analyze it
-  - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
-  - php coveralls.phar --verbose
+  - vendor/bin/coveralls --verbose
 
 after_failure:
   - cat srv/wp-content/debug.log || true
