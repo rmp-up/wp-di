@@ -35,12 +35,12 @@ class Services implements SanitizerInterface
     /**
      * @deprecated 1.0.0 Use Provider\Services::CLASS_NAME instead.
      */
-    public const CLASS_NAME = ServicesProvider::CLASS_NAME;
+    const CLASS_NAME = ServicesProvider::CLASS_NAME;
 
     /**
      * @deprecated 1.0.0 Use Provider\Services::ARGUMENTS instead.
      */
-    public const ARGUMENTS = ServicesProvider::ARGUMENTS;
+    const ARGUMENTS = ServicesProvider::ARGUMENTS;
 
     /**
      * @param array $node

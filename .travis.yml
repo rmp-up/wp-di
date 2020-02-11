@@ -2,7 +2,7 @@ language: php
 
 php:
   # see http://php.net/supported-versions.php
-  - '7.1' # Until 1 Dec 2019
+  - '7.1' # deprecated
   - '7.2' # Until 30 Nov 2020
   - '7.3' # Until 6 Dec 2021
 
@@ -28,6 +28,7 @@ matrix:
   include:
     # additional combination among env (as above)
     - php: '7.0'
+      env: PHPUNIT_VERSION="~6" WP_VERSION=5.3.*
     # Intermediate version tests due to unstable SemVer
     #- php: '7.1'
     #  env: PHPUNIT_VERSION="~7" WP_VERSION=4.9
@@ -62,10 +63,6 @@ script:
   - composer validate --strict --no-check-lock
   - vendor/bin/phpunit --coverage-clover coverage.xml
   - vendor/bin/phpstan analyse lib/
-
-after_script:
-  # upload coverage.xml file to Coveralls to analyze it
-  - vendor/bin/coveralls --verbose
 
 after_failure:
   - cat srv/wp-content/debug.log || true
