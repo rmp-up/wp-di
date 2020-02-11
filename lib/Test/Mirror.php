@@ -36,18 +36,59 @@ class Mirror
      * @var array
      */
     public static $staticCalls = [];
+
     /**
      * @var array
      */
     private $construct;
 
+    /**
+     * Keep a history to reflect later on.
+     *
+     * @var array
+     */
+    private static $history = [];
+
     public function __construct(...$construct)
     {
         $this->construct = $construct;
+
+        self::record('__construct', $construct);
+    }
+
+    private static function record(string $method, array $arguments)
+    {
+        self::$history[] = [
+            'method' => $method,
+            'arguments' => $arguments,
+        ];
+    }
+
+    public static function _reset() {
+        self::$history = [];
+        self::$staticCalls = [];
+    }
+
+    public static function _history($method = null): array
+    {
+        if (null === $method) {
+            return self::$history;
+        }
+
+        $filtered = [];
+        foreach (self::$history as $item) {
+            if ($item['method'] === $method) {
+                $filtered[] = $item;
+            }
+        }
+
+        return $filtered;
     }
 
     public function __invoke(...$invoked)
     {
+        self::record('__invoke', $invoked);
+
         return [
             'constructor' => $this->getConstructorArgs(),
             'invoked' => $invoked,
@@ -56,10 +97,17 @@ class Mirror
 
     public static function __callStatic($method, $arguments)
     {
+        self::record($method, $arguments);
+
         static::$staticCalls[] = [
             'method' => $method,
             'arguments' => $arguments,
         ];
+    }
+
+    public function __call($name, $arguments)
+    {
+        self::record($name, $arguments);
     }
 
     /**

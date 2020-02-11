@@ -105,6 +105,6 @@ abstract class AbstractTestCase extends TestCase
 
         static::$calls = [];
         static::$actions = [];
-        Mirror::$staticCalls = [];
+        Mirror::_reset();
     }
 }
