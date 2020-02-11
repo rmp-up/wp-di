@@ -4,10 +4,16 @@
 
     <exclude-pattern>*/lib/Test/*</exclude-pattern>
 
+    <config name="installed_paths" value="vendor/phpcompatibility/php-compatibility" />
+
     <arg name="basepath" value="."/>
     <arg name="colors"/>
     <arg name="parallel" value="75"/>
     <arg value="np"/>
+
+    <!-- Run against the PHPCompatibility ruleset -->
+    <rule ref="PHPCompatibility"/>
+    <config name="testVersion" value="7.0-"/>
 
     <!-- Don't hide tokenizer exceptions -->
     <rule ref="Internal.Tokenizer.Exception">

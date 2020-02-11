@@ -149,7 +149,7 @@ class Provider implements ServiceProviderInterface
      *
      * @return SanitizerInterface
      */
-    private function sanitizer(string $provider): ?SanitizerInterface
+    private function sanitizer(string $provider)
     {
         if (false === array_key_exists($provider, $this->sanitizer)) {
             $this->sanitizer[$provider] = null;
