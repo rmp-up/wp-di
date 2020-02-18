@@ -59,18 +59,20 @@ class CliCommands extends Services
 
     public function register(Container $pimple): void
     {
-        if (!class_exists($this->wpCliClass)) {
+        if ('cli' !== PHP_SAPI || !class_exists($this->wpCliClass)) {
             // Wrong context.
             return;
         }
-
-        parent::register($pimple);
 
         $container = new \Pimple\Psr11\Container($pimple);
 
         foreach ($this->services as $serviceName => $service) {
             if (!array_key_exists(static::KEY, $service) || !is_string($serviceName)) {
                 continue;
+            }
+
+            if (!$container->has($serviceName)) {
+                $this->compile($pimple, $serviceName, $service);
             }
 
             if (array_key_exists(static::COMMAND, $service[static::KEY])) {
@@ -83,6 +85,12 @@ class CliCommands extends Services
     {
         $command = $definition[static::KEY][static::COMMAND];
         $class = $this->wpCliClass;
+
+        if ($container->has($serviceName)) {
+            // Command is wired to existing service.
+            $class::add_command($command, $container->get($serviceName));
+            return;
+        }
 
         if (!$definition[Services::ARGUMENTS]) {
             /** @noinspection PhpUndefinedMethodInspection */

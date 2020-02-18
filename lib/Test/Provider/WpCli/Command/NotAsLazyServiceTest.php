@@ -36,7 +36,7 @@ use RmpUp\WpDi\Test\Mirror;
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-29
  */
-class AsLazyServiceTest extends AbstractTestCase
+class NotAsLazyServiceTest extends AbstractTestCase
 {
     private const SERVICE_NAME = 'someService';
     /**
@@ -47,9 +47,6 @@ class AsLazyServiceTest extends AbstractTestCase
     protected function setUp()
     {
         parent::setUp();
-
-        require_once __DIR__ . '/../../../../../vendor/wp-cli/wp-cli/tests/bootstrap.php';
-        require_once __DIR__ . '/../../../../../vendor/wp-cli/wp-cli/php/bootstrap.php';
 
         $this->definitions = [
             self::SERVICE_NAME => [
@@ -66,7 +63,7 @@ class AsLazyServiceTest extends AbstractTestCase
 
     public function testIsLazyService()
     {
-        static::assertLazyService(self::SERVICE_NAME, Mirror::$staticCalls[0]['arguments'][1]);
+        static::assertInstanceOf(Mirror::class, Mirror::$staticCalls[0]['arguments'][1]);
     }
 
     public function testAddsCommand()
