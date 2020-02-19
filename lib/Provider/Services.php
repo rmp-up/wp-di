@@ -27,6 +27,7 @@ namespace RmpUp\WpDi\Provider;
 use Closure;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use RmpUp\WpDi\ServiceDefinition;
 
 /**
  * Setting "services" and "parameters".
@@ -83,26 +84,6 @@ class Services implements ServiceProviderInterface
             return;
         }
 
-        $this->compileArray($pimple, $serviceName, $definition);
-    }
-
-    /**
-     * @param Container $pimple
-     * @param string $serviceName
-     * @param array $definition
-     */
-    protected function compileArray(Container $pimple, string $serviceName, array $definition): void
-    {
-        $pimple[$serviceName] = static function ($pimple) use ($definition) {
-            $className = $definition[static::CLASS_NAME];
-
-            foreach ($definition[static::ARGUMENTS] as $key => $argument) {
-                if (is_string($argument) && isset($pimple[$argument])) {
-                    $definition[static::ARGUMENTS][$key] = $pimple[$argument];
-                }
-            }
-
-            return new $className(...array_values($definition[static::ARGUMENTS]));
-        };
+        $pimple[$serviceName] = new ServiceDefinition($definition);
     }
 }
