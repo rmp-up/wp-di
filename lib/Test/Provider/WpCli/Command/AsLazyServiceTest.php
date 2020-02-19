@@ -36,7 +36,7 @@ use RmpUp\WpDi\Test\Mirror;
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-29
  */
-class NotAsLazyServiceTest extends AbstractTestCase
+class AsLazyServiceTest extends AbstractTestCase
 {
     private const SERVICE_NAME = 'someService';
     /**
@@ -63,7 +63,7 @@ class NotAsLazyServiceTest extends AbstractTestCase
 
     public function testIsLazyService()
     {
-        static::assertInstanceOf(Mirror::class, Mirror::$staticCalls[0]['arguments'][1]);
+        static::assertLazyService(self::SERVICE_NAME, Mirror::$staticCalls[0]['arguments'][1]);
     }
 
     public function testAddsCommand()
