@@ -36,6 +36,8 @@ use WP_CLI;
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-06-12
+ *
+ * @deprecated 0.7.0 Define cli commands in the service directly.
  */
 class CliCommands extends Services
 {
@@ -49,6 +51,8 @@ class CliCommands extends Services
 
     public function __construct(array $services, string $wpCliClass = null)
     {
+        trigger_error('Use of ' . __CLASS__ . ' is deprecated', E_USER_DEPRECATED);
+
         parent::__construct($services);
 
         if (null === $wpCliClass) {
