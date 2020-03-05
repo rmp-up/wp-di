@@ -27,6 +27,7 @@ namespace RmpUp\WpDi;
 use InvalidArgumentException;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use RmpUp\WpDi\Compiler\Filter;
 use RmpUp\WpDi\Compiler\WpCli;
 use RmpUp\WpDi\Provider\Services;
 use RmpUp\WpDi\Sanitizer\SanitizerInterface;
@@ -77,7 +78,15 @@ class Provider implements ServiceProviderInterface
         $this->sanitizer = $sanitizer;
 
         if ([] === $keyToCompiler) {
-            $keyToCompiler['wp_cli'] = [new WpCli()];
+            $filter = [new Filter()];
+
+            $keyToCompiler = [
+                'add_filter' => $filter,
+                'filter' => $filter,
+                'add_action' => $filter,
+                'action' => $filter,
+                'wp_cli' => [new WpCli()]
+            ];
         }
 
         $this->keyToCompiler = $keyToCompiler;
@@ -134,7 +143,6 @@ class Provider implements ServiceProviderInterface
                         $extension($serviceDefinition[$key], $serviceName, $pimple);
                     }
                 }
-
             }
         }
     }

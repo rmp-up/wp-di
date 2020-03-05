@@ -30,8 +30,8 @@ use RmpUp\WpDi\Provider\WordPress\Actions as Provider;
 /**
  * Sanitize action definitions
  *
- * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-04-26
+ * @copyright  2020 Pretzlaw (https://rmp-up.de)
+ * @deprecated 0.7.0 Use \RmpUp\WpDi\Compiler\Filter instead.
  */
 class Actions extends Services
 {

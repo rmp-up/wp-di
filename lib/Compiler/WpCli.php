@@ -31,7 +31,7 @@ use RmpUp\WpDi\Provider\Services;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class WpCli
+class WpCli implements CompilerInterface
 {
     /**
      * @var string
