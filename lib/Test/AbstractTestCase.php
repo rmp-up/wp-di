@@ -31,6 +31,7 @@ use Pretzlaw\PHPUnit\DocGen\DocComment\Parser;
 use ReflectionException;
 use ReflectionObject;
 use RmpUp\WpDi\LazyService;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * AbstractTestCase
@@ -106,5 +107,35 @@ abstract class AbstractTestCase extends TestCase
         static::$calls = [];
         static::$actions = [];
         Mirror::_reset();
+    }
+
+    protected function yaml($index = 0, ...$keys)
+    {
+        $allNodes = $this->classComment()->xpath('//code[@class="yaml"]');
+
+        if (!isset($allNodes[$index])) {
+            throw new \DomainException('Yaml example missing: ' . $index);
+        }
+
+        $data = Yaml::parse((string) $allNodes[$index]);
+
+        $path = [];
+        foreach ($keys as $key) {
+            $path[] = $key;
+
+            if (!array_key_exists($key, $data)) {
+                throw new \DomainException(
+                    sprintf(
+                        'Path "%s" does not exist in %d. Yaml example',
+                        implode('.', $path),
+                        $index
+                    )
+                );
+            }
+
+            $data = $data[$key];
+        }
+
+        return $data;
     }
 }

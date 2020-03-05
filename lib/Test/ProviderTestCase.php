@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test;
 
+use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
@@ -34,5 +35,8 @@ use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
  */
 abstract class ProviderTestCase extends SanitizerTestCase
 {
+    /**
+     * @var Provider
+     */
     protected $provider;
 }

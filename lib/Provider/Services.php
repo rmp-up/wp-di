@@ -41,13 +41,25 @@ class Services implements ServiceProviderInterface
     public const ARGUMENTS = 'arguments';
 
     /**
+     * @var callable[][]
+     */
+    private $keywordToHandler;
+
+    /**
      * @var array
      */
     protected $services;
 
-    public function __construct(array $services)
+    /**
+     * Services constructor.
+     *
+     * @param array      $services
+     * @param callable[][] $keywordToHandler Mapping of keys delegating to other handler.
+     */
+    public function __construct(array $services, array $keywordToHandler = [])
     {
         $this->services = $services;
+        $this->keywordToHandler = $keywordToHandler;
     }
 
     /**

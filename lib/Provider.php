@@ -27,6 +27,8 @@ namespace RmpUp\WpDi;
 use InvalidArgumentException;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use RmpUp\WpDi\Compiler\WpCli;
+use RmpUp\WpDi\Provider\Services;
 use RmpUp\WpDi\Sanitizer\SanitizerInterface;
 
 /**
@@ -37,6 +39,10 @@ use RmpUp\WpDi\Sanitizer\SanitizerInterface;
  */
 class Provider implements ServiceProviderInterface
 {
+    /**
+     * @var array
+     */
+    private $keyToCompiler;
     /**
      * (Un-)Normalized definition of the services
      *
@@ -52,15 +58,54 @@ class Provider implements ServiceProviderInterface
     private $sanitizer;
 
     /**
+     * Specific provider.
+     *
+     * @var array
+     */
+    private $provider;
+
+    /**
      * Create generic provider
      *
      * @param array $serviceDefinition (Un-)normalized service definitions
      * @param array $sanitizer         Pre-Mapping provider to sanitizer instanced
+     * @param array $keyToCompiler
      */
-    public function __construct(array $serviceDefinition, array $sanitizer = [])
+    public function __construct(array $serviceDefinition, array $sanitizer = [], array $keyToCompiler = [])
     {
         $this->serviceDefinition = $serviceDefinition;
         $this->sanitizer = $sanitizer;
+
+        if ([] === $keyToCompiler) {
+            $keyToCompiler['wp_cli'] = [new WpCli()];
+        }
+
+        $this->keyToCompiler = $keyToCompiler;
+    }
+
+    public function addCompiler($key, $compiler)
+    {
+        if (!array_key_exists($key, $this->keyToCompiler)) {
+            $this->keyToCompiler[$key] = [];
+        }
+
+        $this->keyToCompiler[$key][] = $compiler;
+    }
+
+    /**
+     * @param Container $pimple
+     * @param string    $provider
+     * @param array     $definition
+     *
+     * @deprecated Please make use of a compiler / handler (see constructor).
+     */
+    private function providerDelegation(Container $pimple, string $provider, array $definition)
+    {
+        if (false === class_exists($provider)) {
+            throw new InvalidArgumentException('Unknown provider: ' . $provider);
+        }
+
+        $pimple->register(new $provider($definition));
     }
 
     /**
@@ -74,13 +119,23 @@ class Provider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         foreach ($this->serviceDefinition as $provider => $definition) {
-            if (false === class_exists($provider)) {
-                throw new InvalidArgumentException('Unknown provider: ' . $provider);
+            $this->providerDelegation($pimple, $provider, $this->sanitize($provider, $definition));
+
+            if ($provider !== Services::class) {
+                continue;
             }
 
-            $pimple->register(
-                new $provider($this->sanitize($provider, $definition))
-            );
+            foreach ($definition as $serviceName => $serviceDefinition) {
+                foreach (array_intersect_key($this->keyToCompiler, (array) $serviceDefinition) as $key => $extensions) {
+                    // Found keywords will be forwarded to their handler.
+                    // Cast to array in case one key maps directly to one compiler (instead of an array of compiler).
+                    foreach ((array) $extensions as $extension) {
+                        // Handler receive the specific config but also the general container for further processing.
+                        $extension($serviceDefinition[$key], $serviceName, $pimple);
+                    }
+                }
+
+            }
         }
     }
 
