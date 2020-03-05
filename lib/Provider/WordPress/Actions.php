@@ -34,8 +34,8 @@ use RmpUp\WpDi\Provider\Services;
 /**
  * Providing action hooks to pimple
  *
- * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-04-25
+ * @copyright  2020 Pretzlaw (https://rmp-up.de)
+ * @deprecated 0.7.0 Use \RmpUp\WpDi\Compiler\Filter instead.
  */
 class Actions extends Services
 {

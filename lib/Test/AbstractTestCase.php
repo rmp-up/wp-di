@@ -28,6 +28,7 @@ use Closure;
 use PHPUnit\Framework\TestCase;
 use Pimple\Container;
 use Pretzlaw\PHPUnit\DocGen\DocComment\Parser;
+use Pretzlaw\WPInt\Traits\WordPressTests;
 use ReflectionException;
 use ReflectionObject;
 use RmpUp\WpDi\LazyService;
@@ -42,6 +43,7 @@ use Symfony\Component\Yaml\Yaml;
 abstract class AbstractTestCase extends TestCase
 {
     use Parser;
+    use WordPressTests;
 
     /**
      * @var Container
@@ -77,6 +79,18 @@ abstract class AbstractTestCase extends TestCase
         }
 
         return null;
+    }
+
+    /**
+     * @param string $filterName
+     *
+     * @return \WP_Hook|null
+     */
+    protected function getFilter(string $filterName)
+    {
+        global $wp_filter;
+
+        return $wp_filter[$filterName] ?? null;
     }
 
     protected static function assertLazyService(string $serviceName, $lazyServiceObject)
