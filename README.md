@@ -60,14 +60,14 @@ return [
     Parameters::class => [
         'some' => 'primitives',
         'like' => 42,
-    ]
+    ],
     
     Services::class => [
         Something::class => [
             'like' // injecting the parameter here
         ]
-    ]
-]
+    ],
+];
 ```
 
 
@@ -81,7 +81,7 @@ return [
         'company' => \My\PostType\Company::class,
         'wolves' => \My\PostType\Wolves::class,
     ]
-]
+];
 ```
 
 Such classes will be cast to array
@@ -90,18 +90,16 @@ and used for `register_post_type()`.
 
 ### Actions
 
-Registering actions can be kept that simple too
-and gets tricky if you need argument count and priorities:
+Registering actions can be kept that simple too. Write ...
 
-```php
-return [
-    'init' => [
-        InitPlugin::class,
-    ],
-]
+```yaml
+services:
+  Tribute\BestPluginInTheWorld\Rock:
+    add_action: init
 ```
 
-Add a service "InitPlugin" which is invoked when the init-action occurs.
+... to add a service for the class `\Tribute\BestPluginInTheWorld\Rock`
+which is invoked when the "init"-action occurs.
 
 
 ### And more

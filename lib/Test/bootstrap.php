@@ -6,6 +6,8 @@ const MY_PLUGIN_DIR = __DIR__;
 
 class_alias(Mirror::class, '\\SomeThing');
 class_alias(Mirror::class, '\\MyOwnCliCommand');
+class_alias(Mirror::class, '\\MyOwnFilterHandler');
+class_alias(Mirror::class, '\\MyOwnActionListener');
 class_alias(Mirror::class, '\\WP_CLI');
 
 // Tell wp-integration-test where to find WP
