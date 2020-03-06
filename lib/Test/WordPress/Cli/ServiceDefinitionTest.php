@@ -22,13 +22,9 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress\Cli;
 
-use Pimple\Container;
+use MyOwnCliCommand;
 use RmpUp\WpDi\Provider;
-use RmpUp\WpDi\Provider\WordPress\CliCommands;
-use RmpUp\WpDi\Test\AbstractTestCase;
-use RmpUp\WpDi\Test\Mirror;
 use RmpUp\WpDi\Test\ProviderTestCase;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * WP-CLI commands in service definition
@@ -92,24 +88,52 @@ class ServiceDefinitionTest extends ProviderTestCase
         static::assertSame($method, $arguments[1][1]);
     }
 
-    public function testShortCliCommandSyntax()
+    public function getLongCliCommandSyntax()
     {
-        $this->config = [Provider\Services::class => $this->yaml(0, 'services')];
+        return [
+            '0.6' => [ // DEPRECATED
+                [Provider\Services::class => $this->yaml(1, 'services')]
+            ],
+            '0.7' => [
+                $this->yaml(1)
+            ],
+        ];
+    }
 
-        $this->provider = new Provider($this->config);
+    public function getShortCliCommandSyntax()
+    {
+        return [
+            '0.6' => [ // DEPRECATED
+                [Provider\Services::class => $this->yaml(0, 'services')]
+            ],
+            '0.7' => [
+                $this->yaml(0)
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider getShortCliCommandSyntax
+     */
+    public function testShortCliCommandSyntax($config)
+    {
+        $this->provider = new Provider($config);
         $this->provider->register($this->pimple);
 
         $history = \WP_CLI::_history('add_command');
 
         $this->assertCount(1, $history);
-        $this->assertCommandRegistered('hello neighbour', '__invoke', $history[0]['arguments']);
+        $this->assertEquals('hello neighbour', $history[0]['arguments'][0]);
+        $this->assertEquals(MyOwnCliCommand::class, $history[0]['arguments'][1]);
     }
 
-    public function testLongCliCommandSyntax()
+    /**
+     * @param array $config
+     * @dataProvider getLongCliCommandSyntax
+     */
+    public function testLongCliCommandSyntax($config)
     {
-        $this->config = [Provider\Services::class => $this->yaml(1, 'services')];
-
-        $this->provider = new Provider($this->config);
+        $this->provider = new Provider($config);
         $this->provider->register($this->pimple);
 
         $history = \WP_CLI::_history('add_command');

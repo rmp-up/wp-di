@@ -27,6 +27,8 @@ namespace RmpUp\WpDi\Provider;
 use Closure;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use RmpUp\WpDi\Compiler\Filter;
+use RmpUp\WpDi\Compiler\WpCli;
 use RmpUp\WpDi\ServiceDefinition;
 
 /**
@@ -53,13 +55,36 @@ class Services implements ServiceProviderInterface
     /**
      * Services constructor.
      *
-     * @param array      $services
+     * @param array        $services
      * @param callable[][] $keywordToHandler Mapping of keys delegating to other handler.
      */
     public function __construct(array $services, array $keywordToHandler = [])
     {
         $this->services = $services;
-        $this->keywordToHandler = $keywordToHandler;
+        $this->keywordToHandler = $keywordToHandler ?: $this->defaultHandler();
+    }
+
+    /**
+     * Default handler for predefined keywords
+     *
+     * Mostly here as forward compatibility
+     * until handler can be properly injected.
+     *
+     * @return array
+     */
+    private function defaultHandler(): array
+    {
+        $filter = [new Filter()];
+
+        return [
+            Filter::FILTER_KEY => $filter,
+            'add_filter' => $filter, // alias
+
+            Filter::ACTION_KEY => $filter,
+            'add_action' => $filter, // alias
+
+            'wp_cli' => [new WpCli()]
+        ];
     }
 
     /**
@@ -78,8 +103,8 @@ class Services implements ServiceProviderInterface
     }
 
     /**
-     * @param Container $pimple
-     * @param string $serviceName
+     * @param Container             $pimple
+     * @param string                $serviceName
      * @param array|string|callable $definition
      */
     protected function compile(Container $pimple, string $serviceName, $definition): void
@@ -97,5 +122,15 @@ class Services implements ServiceProviderInterface
         }
 
         $pimple[$serviceName] = new ServiceDefinition($definition);
+
+        // Delegate to extensions
+        foreach (array_intersect_key($this->keywordToHandler, (array) $definition) as $key => $extensions) {
+            // Found keywords will be forwarded to their handler.
+            // Cast to array in case one key maps directly to one compiler (instead of an array of compiler).
+            foreach ((array) $extensions as $extension) {
+                // Handler receive the specific config but also the general container for further processing.
+                $extension($definition[$key], $serviceName, $pimple);
+            }
+        }
     }
 }

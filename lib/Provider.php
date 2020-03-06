@@ -49,7 +49,7 @@ class Provider implements ServiceProviderInterface
      *
      * @var array
      */
-    private $serviceDefinition;
+    private $definition;
 
     /**
      * Provider to sanitizer mapping.
@@ -59,37 +59,28 @@ class Provider implements ServiceProviderInterface
     private $sanitizer;
 
     /**
-     * Specific provider.
+     * Create provider
      *
-     * @var array
-     */
-    private $provider;
-
-    /**
-     * Create generic provider
+     * This provider delegates sections of a service definition to several other provider.
      *
-     * @param array $serviceDefinition (Un-)normalized service definitions
-     * @param array $sanitizer         Pre-Mapping provider to sanitizer instanced
-     * @param array $keyToCompiler
+     * @param array $definition    (Un-)normalized definitions of services, parameter or other
+     * @param array $sanitizer     Pre-Mapping provider to sanitizer instanced (DEPRECATED)
+     * @param array $keyToProvider Map a root-level key to a specific provider.
      */
-    public function __construct(array $serviceDefinition, array $sanitizer = [], array $keyToCompiler = [])
+    public function __construct(array $definition, array $sanitizer = [], array $keyToProvider = [])
     {
-        $this->serviceDefinition = $serviceDefinition;
+        $this->definition = $definition;
         $this->sanitizer = $sanitizer;
 
-        if ([] === $keyToCompiler) {
-            $filter = [new Filter()];
-
-            $keyToCompiler = [
-                'add_filter' => $filter,
-                'filter' => $filter,
-                'add_action' => $filter,
-                'action' => $filter,
-                'wp_cli' => [new WpCli()]
-            ];
+        if ([] !== $sanitizer) {
+            trigger_error('Using sanitizer here is deprecated. Please sanitize within the compiler.', E_USER_DEPRECATED);
         }
 
-        $this->keyToCompiler = $keyToCompiler;
+        if ([] === $keyToProvider) {
+            $keyToProvider['services'] = Services::class;
+        }
+
+        $this->keyToCompiler = $keyToProvider;
     }
 
     public function addCompiler($key, $compiler)
@@ -102,22 +93,6 @@ class Provider implements ServiceProviderInterface
     }
 
     /**
-     * @param Container $pimple
-     * @param string    $provider
-     * @param array     $definition
-     *
-     * @deprecated Please make use of a compiler / handler (see constructor).
-     */
-    private function providerDelegation(Container $pimple, string $provider, array $definition)
-    {
-        if (false === class_exists($provider)) {
-            throw new InvalidArgumentException('Unknown provider: ' . $provider);
-        }
-
-        $pimple->register(new $provider($definition));
-    }
-
-    /**
      * Registers services on the given container.
      *
      * This method should only be used to configure services and parameters.
@@ -127,23 +102,23 @@ class Provider implements ServiceProviderInterface
      */
     public function register(Container $pimple): void
     {
-        foreach ($this->serviceDefinition as $provider => $definition) {
-            $this->providerDelegation($pimple, $provider, $this->sanitize($provider, $definition));
+        foreach ($this->definition as $provider => $definition) {
+            $sectionProvider = $this->keyToCompiler[$provider] ?? $provider;
 
-            if ($provider !== Services::class) {
-                continue;
+            if (is_callable($sectionProvider)) {
+                // Keeping provider lazy in case they are not used at all.
+                $sectionProvider = $sectionProvider($pimple);
             }
 
-            foreach ($definition as $serviceName => $serviceDefinition) {
-                foreach (array_intersect_key($this->keyToCompiler, (array) $serviceDefinition) as $key => $extensions) {
-                    // Found keywords will be forwarded to their handler.
-                    // Cast to array in case one key maps directly to one compiler (instead of an array of compiler).
-                    foreach ((array) $extensions as $extension) {
-                        // Handler receive the specific config but also the general container for further processing.
-                        $extension($serviceDefinition[$key], $serviceName, $pimple);
-                    }
-                }
+            if (false === class_exists($sectionProvider)) {
+                throw new InvalidArgumentException('Unknown provider: ' . $sectionProvider);
             }
+
+            $pimple->register(
+                new $sectionProvider(
+                    $this->sanitize($sectionProvider, $definition)
+                )
+            );
         }
     }
 
