@@ -27,8 +27,7 @@ namespace RmpUp\WpDi;
 use InvalidArgumentException;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use RmpUp\WpDi\Compiler\Filter;
-use RmpUp\WpDi\Compiler\WpCli;
+use RmpUp\WpDi\Provider\Parameters;
 use RmpUp\WpDi\Provider\Services;
 use RmpUp\WpDi\Sanitizer\SanitizerInterface;
 
@@ -76,11 +75,7 @@ class Provider implements ServiceProviderInterface
             trigger_error('Using sanitizer here is deprecated. Please sanitize within the compiler.', E_USER_DEPRECATED);
         }
 
-        if ([] === $keyToProvider) {
-            $keyToProvider['services'] = Services::class;
-        }
-
-        $this->keyToCompiler = $keyToProvider;
+        $this->keyToCompiler = $keyToProvider ?: $this->defaultCompiler();
     }
 
     public function addCompiler($key, $compiler)
@@ -90,6 +85,14 @@ class Provider implements ServiceProviderInterface
         }
 
         $this->keyToCompiler[$key][] = $compiler;
+    }
+
+    private function defaultCompiler(): array
+    {
+        return [
+            'services' => Services::class,
+            'parameters' => Parameters::class,
+        ];
     }
 
     /**

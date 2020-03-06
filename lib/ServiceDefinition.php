@@ -48,6 +48,10 @@ class ServiceDefinition extends ArrayObject
     {
         $className = $this[Services::CLASS_NAME];
 
+        if (!$this->offsetExists(Services::ARGUMENTS)) {
+            return new $className();
+        }
+
         foreach ($this[Services::ARGUMENTS] as $key => $argument) {
             if (is_string($argument) && isset($pimple[$argument])) {
                 $this[Services::ARGUMENTS][$key] = $pimple[$argument];

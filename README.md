@@ -8,7 +8,7 @@
 This is nothing new but we added some magic:
 
 * Compatible with every project using Pimple already
-* Configuration via plain arrays (or other)
+* Configuration via plain arrays, Yaml or other
 * "Less WordPress more OOP"
 
 And still searching for other magic to apply.
@@ -50,24 +50,16 @@ See how simple it is with the following examples.
 
 ### Services and parameters
 
-Each thing is nested using the class-name of its provider:
+Common structure for defining services:
 
-```php
-use \RmpUp\WpDi\Provider\Parameters;
-use \RmpUp\WpDi\Provider\Services;
+```yaml
+parameters:
+  some: "primitives"
+  like: 42
 
-return [
-    Parameters::class => [
-        'some' => 'primitives',
-        'like' => 42,
-    ],
-    
-    Services::class => [
-        Something::class => [
-            'like' // injecting the parameter here
-        ]
-    ],
-];
+services:
+  Something:
+    arguments: "%like%" # injecting the parameter here
 ```
 
 
