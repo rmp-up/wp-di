@@ -130,6 +130,34 @@ class ServiceDefinitionTest extends SanitizerTestCase
         self::assertSame($method, $filter['function'][1]);
     }
 
+    public function getCompleteDefinition(): array
+    {
+        return [
+            'v0.6' => [ // DEPRECATED
+                [
+                    Services::class => $this->yaml(2, 'services')
+                ]
+            ],
+            'v0.7' => [
+                $this->yaml(2)
+            ],
+        ];
+    }
+
+    public function getMultipleFilterDefinition(): array
+    {
+        return [
+            '0.6' => [
+                [
+                    Services::class => $this->yaml(1, 'services')
+                ]
+            ],
+            '0.7' => [
+                $this->yaml(1)
+            ]
+        ];
+    }
+
     protected function setUp()
     {
         parent::setUp();
@@ -187,29 +215,25 @@ class ServiceDefinitionTest extends SanitizerTestCase
         $this->assertLazyFilterRegistered('the_content', MyOwnFilterHandler::class);
     }
 
-    public function testMultipleFilterDefinition()
+    /**
+     * @dataProvider getMultipleFilterDefinition
+     */
+    public function testMultipleFilterDefinition($config)
     {
-        $this->pimple->register(
-            new \RmpUp\WpDi\Provider(
-                [
-                    Services::class => $this->yaml(1, 'services')
-                ]
-            )
-        );
+        $this->pimple->register(new \RmpUp\WpDi\Provider($config));
 
         $this->assertLazyFilterRegistered('personal_options_update', MyOwnActionListener::class);
         $this->assertLazyFilterRegistered('edit_user_profile_update', MyOwnActionListener::class);
         $this->assertLazyFilterRegistered('user_edit_form_tag', MyOwnActionListener::class, 'editFormTag');
     }
 
-    public function testCompleteFilterDefinition()
+    /**
+     * @dataProvider getCompleteDefinition
+     */
+    public function testCompleteFilterDefinition($definition)
     {
         $this->pimple->register(
-            new \RmpUp\WpDi\Provider(
-                [
-                    Services::class => $this->yaml(2, 'services')
-                ]
-            )
+            new \RmpUp\WpDi\Provider($definition)
         );
 
         $this->assertLazyFilterRegistered('personal_options_update', MyOwnActionListener::class);
