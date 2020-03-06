@@ -62,11 +62,6 @@ use RmpUp\WpDi\Test\Mirror;
  */
 class RegistersActionTest extends AbstractActionsTest
 {
-    /**
-     * @var MockObject|Actions
-     */
-    private $provider;
-
     protected function setUp()
     {
         parent::setUp();

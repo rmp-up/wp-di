@@ -31,12 +31,8 @@ use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
  * ProviderTestCase
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-06-09
+ * @deprecated 0.8.0 - all tests will use the provider
  */
 abstract class ProviderTestCase extends SanitizerTestCase
 {
-    /**
-     * @var Provider
-     */
-    protected $provider;
 }
