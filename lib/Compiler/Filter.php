@@ -26,13 +26,18 @@ use Pimple\Container;
 use RmpUp\WpDi\LazyService;
 
 /**
- * Filter
+ * Filter or action
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
 class Filter implements CompilerInterface
 {
-    const DEFAULT_PRIORITY = 10;
+    /** @var string Key to use in service definitions (to indicate a filter) */
+    const FILTER_KEY = 'filter';
+
+    /** @var string Key to use in service definitions (to indicate an action)  */
+    const ACTION_KEY = 'action';
+
     /**
      * @var string
      */
