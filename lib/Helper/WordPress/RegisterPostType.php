@@ -42,11 +42,28 @@ class RegisterPostType
     private $serviceName;
     private $postType;
 
-    public function __construct(ContainerInterface $container, $serviceName, $postType)
+    public function __construct($container, $serviceName, $postType)
     {
+        if ($container instanceof ContainerInterface) {
+            trigger_error('Using PSR-11 container is deprecated. Please provide Pimple', E_USER_DEPRECATED);
+        }
+
+        if ($container instanceof \Pimple\Container) {
+            // DEPRECATED 0.7 - we totally want Pimple here
+            $container = new Container($container);
+        }
+
         $this->container = $container;
         $this->serviceName = $serviceName;
         $this->postType = $postType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPostType(): string
+    {
+        return $this->postType;
     }
 
     public function __invoke()
