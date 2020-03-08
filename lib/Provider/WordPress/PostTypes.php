@@ -31,8 +31,8 @@ use RmpUp\WpDi\Provider\Services;
 /**
  * PostTypes
  *
- * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-06-12
+ * @copyright  2020 Pretzlaw (https://rmp-up.de)
+ * @deprecated 0.7.0
  */
 class PostTypes extends Services
 {

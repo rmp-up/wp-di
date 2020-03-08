@@ -35,7 +35,7 @@ use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
  *
  * @internal
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-05-28
+ * @deprecated 0.7
  */
 class KeepValidPostTypeDefinitionTest extends SanitizerTestCase
 {

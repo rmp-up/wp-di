@@ -8,6 +8,7 @@ class_alias(Mirror::class, '\\SomeThing');
 class_alias(Mirror::class, '\\MyOwnCliCommand');
 class_alias(Mirror::class, '\\MyOwnFilterHandler');
 class_alias(Mirror::class, '\\MyOwnActionListener');
+class_alias(Mirror::class, '\\MyOwnPostType');
 class_alias(Mirror::class, '\\WP_CLI');
 
 // Tell wp-integration-test where to find WP
