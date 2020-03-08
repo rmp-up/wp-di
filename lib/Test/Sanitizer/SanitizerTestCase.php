@@ -24,14 +24,14 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\Sanitizer;
 
+use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Sanitizer\SanitizerInterface;
 use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**
  * SanitizerTestCase
  *
- * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-04-27
+ * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
 abstract class SanitizerTestCase extends AbstractTestCase
 {
@@ -39,4 +39,9 @@ abstract class SanitizerTestCase extends AbstractTestCase
      * @var SanitizerInterface
      */
     protected $sanitizer;
+
+    /**
+     * @var Provider
+     */
+    protected $provider;
 }

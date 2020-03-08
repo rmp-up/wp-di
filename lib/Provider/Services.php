@@ -28,6 +28,7 @@ use Closure;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use RmpUp\WpDi\Compiler\Filter;
+use RmpUp\WpDi\Compiler\PostType;
 use RmpUp\WpDi\Compiler\WpCli;
 use RmpUp\WpDi\ServiceDefinition;
 
@@ -82,6 +83,8 @@ class Services implements ServiceProviderInterface
 
             Filter::ACTION_KEY => $filter,
             'add_action' => $filter, // alias
+
+            'post_type' => [new PostType()],
 
             'wp_cli' => [new WpCli()]
         ];

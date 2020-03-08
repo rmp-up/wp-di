@@ -24,15 +24,30 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\Services;
 
+use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Provider\Parameters;
 use RmpUp\WpDi\Provider\Services;
-use RmpUp\WpDi\Test\AbstractTestCase;
 use RmpUp\WpDi\Test\Mirror;
+use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
  * Parameters
  *
  * Primitives values that shall remain as they are can be added as parameters:
+ *
+ * ```yaml
+ * parameters:
+ *   dates: 50
+ *
+ * services:
+ *   SomeThing:
+ *     arguments: '%dates%'
+ * ```
+ *
+ * The first argument of the class `SomeThing` is a reference
+ * to the parameter, so in the end it is the same as a `new SomeThing(50)` call.
+ *
+ * The deprecated way of defining parameters was like this:
  *
  * ```php
  * <?php
@@ -40,16 +55,8 @@ use RmpUp\WpDi\Test\Mirror;
  * return [
  *   Provider\Parameters::class => [
  *     'answer' => 'XLII',
- *   ]
- * ];
- * ```
+ *   ],
  *
- * Such key-value-data can be injected in other services:
- *
- * ```php
- * <?php
- *
- * return [
  *   Provider\Services::class => [
  *     Question::class => [
  *       'answer',
@@ -62,22 +69,27 @@ use RmpUp\WpDi\Test\Mirror;
  * (like `new Question('XLII')`).
  *
  *
- * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-04-27
+ * @copyright  2020 Pretzlaw (https://rmp-up.de)
  */
-class DefineParametersTest extends AbstractTestCase
+class DefineParametersTest extends SanitizerTestCase
 {
     protected function setUp()
     {
         parent::setUp();
 
+        // DEPRECATED 0.7.0 - using the documented example instead
         $this->pimple->register(new Parameters([
             'foo' => 'bar',
             'bar' => 'baz',
             'qux' => 'quxx',
         ]));
+
+        $this->pimple->register(new Provider($this->yaml(0)));
     }
 
+    /**
+     * @deprecated 0.7.0
+     */
     public function testStringsStayAsTheyAre()
     {
         static::assertEquals('bar', $this->container->get('foo'));
@@ -85,6 +97,9 @@ class DefineParametersTest extends AbstractTestCase
         static::assertEquals('quxx', $this->container->get('qux'));
     }
 
+    /**
+     * @deprecated 0.7.0
+     */
     public function testStringsUsedAsArgument()
     {
         $this->pimple->register(new Services([
@@ -101,5 +116,11 @@ class DefineParametersTest extends AbstractTestCase
         $mirror = $this->container->get(Mirror::class);
 
         static::assertEquals(['bar', 'quxx'], $mirror->getConstructorArgs());
+    }
+
+    public function testParameterDefinition()
+    {
+        static::assertSame(50, $this->pimple['dates']);
+        static::assertSame(50, $this->pimple['%dates%']);
     }
 }
