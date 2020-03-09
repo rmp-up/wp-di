@@ -29,6 +29,7 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use RmpUp\WpDi\Provider\Parameters;
 use RmpUp\WpDi\Provider\Services;
+use RmpUp\WpDi\Provider\WordPress\Templates;
 use RmpUp\WpDi\Sanitizer\SanitizerInterface;
 
 /**
@@ -92,6 +93,7 @@ class Provider implements ServiceProviderInterface
         return [
             'services' => Services::class,
             'parameters' => Parameters::class,
+            'templates' => Templates::class,
         ];
     }
 

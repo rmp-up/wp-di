@@ -27,6 +27,7 @@ namespace RmpUp\WpDi\Provider\WordPress;
 use Closure;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use RmpUp\WpDi\ServiceDefinition\TemplateNode;
 
 /**
  * Templates
@@ -70,24 +71,7 @@ class Templates implements ServiceProviderInterface
                 continue;
             }
 
-            $pimple[$serviceName] = static function () use ($templates) {
-                $templatePath = '';
-
-                foreach ($templates as $templatePath) {
-                    $located = locate_template($templatePath, false, false);
-
-                    if ('' !== $located) {
-                        return $located;
-                    }
-
-                    if (file_exists($templatePath)) {
-                        return $templatePath;
-                    }
-                }
-
-                // In doubt return the very last entry
-                return $templatePath;
-            };
+            $pimple[$serviceName] = new TemplateNode($templates);
         }
     }
 }
