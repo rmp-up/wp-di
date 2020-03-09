@@ -11,6 +11,7 @@ class_alias(Mirror::class, '\\MyOwnPostType');
 class_alias(Mirror::class, '\\MyOwnShortcode');
 
 class_alias(Mirror::class, '\\SomeThing');
+class_alias(Mirror::class, '\\SomeThingElse');
 class_alias(Mirror::class, '\\WP_CLI');
 
 // Tell wp-integration-test where to find WP
