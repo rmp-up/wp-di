@@ -89,4 +89,16 @@ class PostTypeDefinitionAsArrayTest extends AbstractTestCase
             new IsEqual(new RegisterPostType($this->container, 'some_type', 'some_type'))
         );
     }
+
+
+    public function testPostTypeIsRegistered()
+    {
+        $this->pimple->register($this->provider);
+
+        $postType = 'some_type';
+
+        static::assertFalse(post_type_exists($postType));
+        (new RegisterPostType($this->container, 'some_type', 'some_type'))();
+        static::assertTrue(post_type_exists($postType));
+    }
 }

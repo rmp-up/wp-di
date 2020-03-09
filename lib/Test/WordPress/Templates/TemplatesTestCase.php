@@ -63,9 +63,9 @@ abstract class TemplatesTestCase extends ProviderTestCase
         static::assertEquals(ABSPATH . WPINC . '/theme-compat/' . trim($expectedWithoutWpinc, '/'), $current);
     }
 
-    protected function stubTemplateFile(string $fileName): void
+    protected function stubTemplateFile(string $fileName): string
     {
-        $fullPath = ABSPATH . WPINC . '/theme-compat/' . trim($fileName, '/');
+        $fullPath = ABSPATH . '/wp-includes/theme-compat/' . trim($fileName, '/');
         $dir = dirname($fullPath);
 
         if (!is_dir($dir)) {
@@ -75,6 +75,8 @@ abstract class TemplatesTestCase extends ProviderTestCase
         touch($fullPath);
 
         $this->stubFiles[] = $fullPath;
+
+        return realpath($fullPath);
     }
 
     protected function tearDown()

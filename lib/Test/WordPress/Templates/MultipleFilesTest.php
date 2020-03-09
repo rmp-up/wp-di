@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress\Templates\Definition;
 
+use Pimple\Container;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Sanitizer\WordPress\Templates;
 use const RmpUp\WpDi\Test\MY_PLUGIN_DIR;
@@ -37,6 +38,24 @@ use RmpUp\WpDi\Test\WordPress\Templates\TemplatesTestCase;
  * in your plugin or theme.
  * To use it you can simply add it as a string:
  *
+ * ```yaml
+ * templates:
+ *   some-feature.php:
+ *     - template-parts/my-plugin/some-feature.php
+ *     - other-plugin/template-parts/some-feature.php
+ *     - my-plugin/template-parts/some-feature.php
+ *
+ * services:
+ *   SomeThing:
+ *     arguments: [ 'some-feature.php' ]
+ * ```
+ *
+ * Now we have a service named "some-feature.php" that tries each file
+ * (using `locate_template`) and stops with the first found.
+ * In doubt it returns the very last entry even when not found.
+ *
+ * In PHP it can be defined like this:
+ *
  * ```php
  * <?php
  *
@@ -48,8 +67,8 @@ use RmpUp\WpDi\Test\WordPress\Templates\TemplatesTestCase;
  *
  *     'some-feature.php' => [
  *       'template-parts/my-plugin/some-feature.php',
+ *       'other-plugin/template-parts/some-feature.php',
  *       'my-plugin/template-parts/some-feature.php',
- *       MY_PLUGIN_DIR . '/template-parts/some-feature.php',
  *     ],
  *
  *   ],
@@ -62,41 +81,73 @@ use RmpUp\WpDi\Test\WordPress\Templates\TemplatesTestCase;
  * ];
  * ```
  *
- * Now we have a service named "some-feature.php" that tries each file
- * (using `locate_template`) and stops with the first found.
- * In doubt it returns the very last entry even when not found.
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-06-15
  */
 class MultipleFilesTest extends TemplatesTestCase
 {
-    public function testExtendsToArray()
+    protected function setUp()
+    {
+        $this->pimple = new Container();
+        $this->sanitizer = new Templates();
+
+        // Disabled default setup
+    }
+
+    public function getDefinitions(): array
+    {
+        return [
+            'php' => [
+                $this->classComment()->execute(1),
+                \RmpUp\WpDi\Provider\WordPress\Templates::class
+            ],
+            'yaml' => [
+                $this->yaml(0),
+                'templates'
+            ]
+        ];
+    }
+
+    /**
+     * @param $services
+     *
+     * @dataProvider getDefinitions
+     */
+    public function testExtendsToArray($services, $index)
     {
         static::assertEquals(
             [
                 'some-feature.php' => [
                     'template-parts/my-plugin/some-feature.php',
+                    'other-plugin/template-parts/some-feature.php',
                     'my-plugin/template-parts/some-feature.php',
-                    \MY_PLUGIN_DIR . '/template-parts/some-feature.php',
                 ]
             ],
-            $this->sanitizer->sanitize($this->services[\RmpUp\WpDi\Provider\WordPress\Templates::class])
+            $this->sanitizer->sanitize($services[$index])
         );
     }
 
-    public function testRegisteredAsService()
+    /**
+     * @dataProvider getDefinitions
+     */
+    public function testRegisteredAsService($definition)
     {
-        static::assertEquals(\MY_PLUGIN_DIR . '/template-parts/some-feature.php', $this->pimple['some-feature.php']);
+        $this->pimple->register(new Provider($definition));
+
+        static::assertEquals('my-plugin/template-parts/some-feature.php', $this->pimple['some-feature.php']);
     }
 
-    public function testSecondOneExists()
+    /**
+     * @dataProvider getDefinitions
+     */
+    public function testSecondOneExists($config)
     {
-        $this->stubTemplateFile('my-plugin/template-parts/some-feature.php');
+        $this->pimple->register(new Provider($config));
 
-        self::assertTemplatePathCorrect(
-            'my-plugin/template-parts/some-feature.php',
-            $this->pimple['some-feature.php']
-        );
+        $fullPath = $this->stubTemplateFile('other-plugin/template-parts/some-feature.php');
+
+        self::assertNotEmpty($fullPath);
+        self::assertEquals($fullPath, $this->pimple['some-feature.php']);
     }
 }

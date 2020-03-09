@@ -24,6 +24,8 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress\Templates\Definition;
 
+use Pimple\Container;
+use Prophecy\Doubler\Generator\Node\ArgumentNode;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Sanitizer\WordPress\Templates;
 use RmpUp\WpDi\Test\ProviderTestCase;
@@ -34,7 +36,29 @@ use RmpUp\WpDi\Test\WordPress\Templates\TemplatesTestCase;
  *
  * Most common way may be that you have a template file for front- or backend
  * in your plugin or theme.
- * To use it you can simply add it as a string:
+ * To use it you can simply add
+ * and use it like a parameter:
+ *
+ * ```yaml
+ * templates:
+ *   - my-own-plugin/template-parts/fester.php
+ *   - my-own-plugin/public/coogan.jpg
+ *
+ * services:
+ *   MyOwnShortcode:
+ *     arguments:
+ *       - my-own-plugin/template-parts/fester.php
+ *       - my-own-plugin/public/coogan.jpg
+ *     shortcode: uncle
+ * ```
+ *
+ * As you can see the template does not necessarily need to be a PHP file
+ * but can also be any other file.
+ * This way you have a service "some-path/my-plugin-file.php"
+ * which uses `locate_template` to resolve the path to the template.
+ * The result will be injected into the SomeThing service/class.
+ *
+ * Defining this in PHP would look like this:
  *
  * ```php
  * <?php
@@ -44,20 +68,19 @@ use RmpUp\WpDi\Test\WordPress\Templates\TemplatesTestCase;
  *
  * return [
  *   WordPress\Templates::class => [
- *     'some-path/my-plugin-file.php'
+ *     'my-own-plugin/template-parts/fester.php',
+ *     'my-own-plugin/public/coogan.jpg',
  *   ],
  *
  *   Services::class => [
  *     SomeThing::class => [
- *       'some-path/my-plugin-file.php'
+ *       'my-own-plugin/template-parts/fester.php',
+ *       'my-own-plugin/public/coogan.jpg',
  *     ]
  *   ]
  * ];
  * ```
  *
- * This way you have a service "some-path/my-plugin-file.php"
- * which uses `locate_template` to resolve the path to the template.
- * The result will be injected into the SomeThing service/class.
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-06-15
@@ -66,39 +89,68 @@ class FileTest extends TemplatesTestCase
 {
     protected function setUp()
     {
-        parent::setUp();
-
-        $this->sanitizer = new Templates();
-
-        $this->services = $this->classComment()->execute(0);
-        $this->provider = new Provider($this->services);
-
-        $this->pimple->register($this->provider);
+        $this->pimple = new Container();
+        $this->pimple->register(new Provider($this->yaml(0)));
     }
 
-    public function testExtendsToArray()
+    public function getDefinition(): array
     {
+        return [
+            '0.6' => [
+                $this->classComment()->execute(1),
+            ],
+            '0.7' => [
+                $this->yaml(0),
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider getDefinition
+     *
+     * @param array $services
+     */
+    public function testExtendsToArray(array $services)
+    {
+        $this->pimple->register(new Provider($services));
+
         static::assertEquals(
             [
-                'some-path/my-plugin-file.php' => [
-                    'some-path/my-plugin-file.php',
+                'my-own-plugin/template-parts/fester.php' => [
+                    'my-own-plugin/template-parts/fester.php',
+                ],
+                'my-own-plugin/public/coogan.jpg' => [
+                    'my-own-plugin/public/coogan.jpg',
                 ]
             ],
-            $this->sanitizer->sanitize($this->services[\RmpUp\WpDi\Provider\WordPress\Templates::class])
+            (new Templates())->sanitize(
+                $services[\RmpUp\WpDi\Provider\WordPress\Templates::class]
+                ?? $services['templates']
+            )
         );
     }
 
-    public function testRegisteredAsService()
+    /**
+     * @dataProvider getDefinition
+     */
+    public function testRegisteredAsService(array $services)
     {
-        static::assertEquals('some-path/my-plugin-file.php', $this->pimple['some-path/my-plugin-file.php']);
+        $this->pimple->register(new Provider($services));
+
+        static::assertEquals('my-own-plugin/template-parts/fester.php', $this->pimple['my-own-plugin/template-parts/fester.php']);
     }
 
-    public function testFileExists()
+    /**
+     * @dataProvider getDefinition
+     */
+    public function testFileExists($services)
     {
-        $this->stubTemplateFile('some-path/my-plugin-file.php');
+        $this->pimple->register(new Provider($services));
 
-        $current = $this->pimple['some-path/my-plugin-file.php'];
+        $this->stubTemplateFile('my-own-plugin/template-parts/fester.php');
 
-        static::assertTemplatePathCorrect('some-path/my-plugin-file.php', $current);
+        $current = $this->pimple['my-own-plugin/template-parts/fester.php'];
+
+        static::assertTemplatePathCorrect('my-own-plugin/template-parts/fester.php', $current);
     }
 }
