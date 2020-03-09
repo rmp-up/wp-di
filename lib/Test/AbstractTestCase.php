@@ -152,4 +152,9 @@ abstract class AbstractTestCase extends TestCase
 
         return $data;
     }
+
+    protected function mockOption($name)
+    {
+        return $this->mockFilter('pre_option_' . $name);
+    }
 }
