@@ -47,6 +47,11 @@ function register_post_type()
     _rmp_record_call(__FUNCTION__, func_get_args());
 }
 
+function register_widget()
+{
+    _rmp_record_call(__FUNCTION__, func_get_args());
+}
+
 function locate_template()
 {
     _rmp_record_call(__FUNCTION__, func_get_args());

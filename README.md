@@ -7,11 +7,11 @@
 
 This is nothing new but we added some magic:
 
-* Compatible with every project using Pimple already
+* Compatible with projects using Pimple already
 * Configuration via plain arrays, Yaml or other
 * "Less WordPress more OOP"
 
-And still searching for other magic to apply.
+and still searching for other magic to apply.
 
 
 ## Getting started
@@ -32,7 +32,7 @@ $container->register(
 ```
 
 with as much config files as you like.
-Those shall return an array like the following.
+Those could return an array like the following.
 
 
 ## Features
@@ -65,15 +65,12 @@ services:
 
 ### Post-Types
 
-Just needs the post-type name and the class that defines it:
+Just needs the post-type name and the class which defines it:
 
-```php
-return [
-    WpPostTypes::class => [
-        'company' => \My\PostType\Company::class,
-        'wolves' => \My\PostType\Wolves::class,
-    ]
-];
+```yaml
+services:
+  MyOwnPostType:
+    post_type: animals
 ```
 
 Such classes will be cast to array
@@ -82,7 +79,8 @@ and used for `register_post_type()`.
 
 ### Actions
 
-Registering actions can be kept that simple too. Write ...
+Registering actions can be kept that simple too.
+Write ...
 
 ```yaml
 services:
@@ -98,13 +96,15 @@ which is invoked when the "init"-action occurs.
 
 * Options
 * wp-cli commands
+* Widgets
 
 Read how this works in the official documentation of every release.
 
 
 ## Contributing
 
-We used this in older projects but still maintain this use this for my own projects,
+We used this in older projects
+and still maintain it,
 so please [open an issue](https://github.com/rmp-up/wp-di/issues/new)
 if there is anything we can help with.
 

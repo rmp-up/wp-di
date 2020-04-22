@@ -29,6 +29,7 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use RmpUp\WpDi\Compiler\Filter;
 use RmpUp\WpDi\Compiler\PostType;
+use RmpUp\WpDi\Compiler\Widgets;
 use RmpUp\WpDi\Compiler\WpCli;
 use RmpUp\WpDi\ServiceDefinition;
 
@@ -86,7 +87,8 @@ class Services implements ServiceProviderInterface
 
             'post_type' => [new PostType()],
 
-            'wp_cli' => [new WpCli()]
+            'widgets' => [new Widgets()],
+            'wp_cli' => [new WpCli()],
         ];
     }
 

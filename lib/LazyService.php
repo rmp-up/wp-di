@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi;
 
 use Psr\Container\ContainerInterface;
+use RmpUp\WpDi\Helper\LazyInstantiating;
 
 /**
  * LazyService
@@ -34,12 +35,13 @@ use Psr\Container\ContainerInterface;
  */
 class LazyService
 {
+    use LazyInstantiating;
+
     /**
      * @var ContainerInterface
      */
     private $container;
     private $serviceName;
-    private $service;
 
     public function __construct(ContainerInterface $container, $serviceName)
     {
@@ -47,22 +49,8 @@ class LazyService
         $this->serviceName = $serviceName;
     }
 
-    public function __call($name, $arguments)
+    protected function createProxyObject()
     {
-        return $this->getService()->$name(...$arguments);
-    }
-
-    public function __invoke(...$arguments)
-    {
-        return ($this->getService())(...$arguments);
-    }
-
-    private function getService()
-    {
-        if (null === $this->service) {
-            $this->service = $this->container->get($this->serviceName);
-        }
-
-        return $this->service;
+        return $this->container->get($this->serviceName);
     }
 }
