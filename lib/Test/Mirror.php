@@ -24,13 +24,15 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test;
 
+use stdClass;
+
 /**
  * Helper for testing that mirrors things it gets called with.
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-04-25
  */
-class Mirror
+class Mirror extends stdClass
 {
     /**
      * @var array
