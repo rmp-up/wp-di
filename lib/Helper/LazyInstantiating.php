@@ -56,6 +56,11 @@ trait LazyInstantiating
         $this->proxyObject()->$name = $value;
     }
 
+    public function __toString()
+    {
+        return (string) $this->proxyObject();
+    }
+
     /**
      * @return object
      */

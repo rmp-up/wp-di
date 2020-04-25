@@ -112,6 +112,13 @@ class Mirror extends stdClass
         self::record($name, $arguments);
     }
 
+    public function __toString()
+    {
+        self::record('__toString', []);
+
+        return (string) (get_class($this) ?: 'Mirror');
+    }
+
     /**
      * @return array
      */
