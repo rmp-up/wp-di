@@ -24,6 +24,7 @@ namespace RmpUp\WpDi;
 
 use ArrayObject;
 use Pimple\Container;
+use RmpUp\WpDi\Helper\LazyPimple;
 use RmpUp\WpDi\Provider\Services;
 
 /**
@@ -53,11 +54,34 @@ class ServiceDefinition extends ArrayObject
         }
 
         foreach ($this[Services::ARGUMENTS] as $key => $argument) {
-            if (is_string($argument) && isset($pimple[$argument])) {
-                $this[Services::ARGUMENTS][$key] = $pimple[$argument];
+            if (is_string($argument)) {
+                $this[Services::ARGUMENTS][$key] = $this->resolveArgument($pimple, $argument);
             }
         }
 
         return new $className(...array_values($this[Services::ARGUMENTS]));
+    }
+
+    private function resolveArgument(Container $pimple, string $argument)
+    {
+        switch ($argument[0]) {
+            case '@':
+                $argument = substr($argument, 1);
+
+                if (!empty($this[Services::LAZY_ARGS])) {
+                    return new LazyPimple($pimple, $argument);
+                }
+
+                return $pimple[$argument];
+
+                break;
+            case '%':
+            default:
+                if (!isset($pimple[$argument])) {
+                    return $argument;
+                }
+
+                return $pimple[$argument];
+        }
     }
 }

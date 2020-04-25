@@ -127,6 +127,8 @@ class AutoResolvingProviderTest extends AbstractTestCase
 
     protected function setUp()
     {
+        remove_all_actions('template_redirect'); // TODO use ::truncateActions instead as soon as available
+
         $this->definition = [
             Services::class => [
                 ArrayObject::class,
@@ -153,6 +155,14 @@ class AutoResolvingProviderTest extends AbstractTestCase
         );
     }
 
+    public function testActionsRegistered()
+    {
+        self::assertFilterHasCallback('template_redirect', new IsInstanceOf(LazyService::class));
+        self::assertFilterHasCallback('template_redirect', new IsEqual(
+            new LazyService($this->container, Mirror::class)
+        ));
+    }
+
     public function testServicesRegistered()
     {
         static::assertInstanceOf(ArrayObject::class, $this->container->get(ArrayObject::class));
@@ -162,14 +172,6 @@ class AutoResolvingProviderTest extends AbstractTestCase
         static::assertInstanceOf(Mirror::class, $mirror);
 
         static::assertEquals(['foo'], $mirror->getConstructorArgs());
-    }
-
-    public function testActionsRegistered()
-    {
-        self::assertFilterHasCallback('template_redirect', new IsInstanceOf(LazyService::class));
-        self::assertFilterHasCallback('template_redirect', new IsEqual(
-            new LazyService($this->container, Mirror::class)
-        ));
     }
 
     public function testPostTypeRegistered()

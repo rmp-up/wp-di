@@ -114,6 +114,17 @@ abstract class AbstractTestCase extends TestCase
         static::assertNotInstanceOf(Closure::class, $values[$serviceName]);
     }
 
+    protected function isServiceFrozen(Container $pimple, string $serviceName)
+    {
+        $property = (new ReflectionObject($pimple))->getProperty('frozen');
+
+        $property->setAccessible(true);
+        $list = $property->getValue($pimple);
+        $property->setAccessible(false);
+
+        return $list[$serviceName] ?? false;
+    }
+
     protected function tearDown()
     {
         parent::tearDown();

@@ -43,6 +43,7 @@ class Services implements ServiceProviderInterface
 {
     public const CLASS_NAME = 'class';
     public const ARGUMENTS = 'arguments';
+    const LAZY_ARGS = 'lazy_arguments';
 
     /**
      * @var callable[][]
@@ -108,9 +109,9 @@ class Services implements ServiceProviderInterface
     }
 
     /**
-     * @param Container             $pimple
-     * @param string                $serviceName
-     * @param array|string|callable $definition
+     * @param Container                  $pimple
+     * @param string                     $serviceName
+     * @param array|string|callable|null $definition
      */
     protected function compile(Container $pimple, string $serviceName, $definition): void
     {
@@ -124,6 +125,12 @@ class Services implements ServiceProviderInterface
             // Remain scalar as they are.
             $pimple[$serviceName] = $definition;
             return;
+        }
+
+        if (null === $definition) {
+            $definition = [
+                Services::CLASS_NAME => $serviceName
+            ];
         }
 
         $pimple[$serviceName] = new ServiceDefinition($definition);

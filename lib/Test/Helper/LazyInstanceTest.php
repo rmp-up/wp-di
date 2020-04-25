@@ -30,6 +30,7 @@ use stdClass;
 /**
  * LazyInstanceTest
  *
+ * @internal
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
 class LazyInstanceTest extends AbstractTestCase
