@@ -111,4 +111,13 @@ class PostTypeDefinitionAsCallableTest extends AbstractTestCase
             new IsEqual(new RegisterPostType($this->container, 'callable_type', 'callable_type'))
         );
     }
+
+    public function testPostTypeIsRegistered()
+    {
+        $this->pimple->register($this->provider);
+
+        static::assertFalse(post_type_exists('callable_type'));
+        (new RegisterPostType($this->container, 'callable_type', 'callable_type'))('callable_type');
+        static::assertTrue(post_type_exists('callable_type'));
+    }
 }

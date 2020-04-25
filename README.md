@@ -7,11 +7,11 @@
 
 This is nothing new but we added some magic:
 
-* Compatible with every project using Pimple already
-* Configuration via plain arrays (or other)
+* Compatible with projects using Pimple already
+* Configuration via plain arrays, Yaml or other
 * "Less WordPress more OOP"
 
-And still searching for other magic to apply.
+and still searching for other magic to apply.
 
 
 ## Getting started
@@ -32,7 +32,7 @@ $container->register(
 ```
 
 with as much config files as you like.
-Those shall return an array like the following.
+Those could return an array like the following.
 
 
 ## Features
@@ -50,38 +50,27 @@ See how simple it is with the following examples.
 
 ### Services and parameters
 
-Each thing is nested using the class-name of its provider:
+Common structure for defining services:
 
-```php
-use \RmpUp\WpDi\Provider\Parameters;
-use \RmpUp\WpDi\Provider\Services;
+```yaml
+parameters:
+  some: "primitives"
+  like: 42
 
-return [
-    Parameters::class => [
-        'some' => 'primitives',
-        'like' => 42,
-    ]
-    
-    Services::class => [
-        Something::class => [
-            'like' // injecting the parameter here
-        ]
-    ]
-]
+services:
+  Something:
+    arguments: "%like%" # injecting the parameter here
 ```
 
 
 ### Post-Types
 
-Just needs the post-type name and the class that defines it:
+Just needs the post-type name and the class which defines it:
 
-```php
-return [
-    WpPostTypes::class => [
-        'company' => \My\PostType\Company::class,
-        'wolves' => \My\PostType\Wolves::class,
-    ]
-]
+```yaml
+services:
+  MyOwnPostType:
+    post_type: animals
 ```
 
 Such classes will be cast to array
@@ -90,31 +79,32 @@ and used for `register_post_type()`.
 
 ### Actions
 
-Registering actions can be kept that simple too
-and gets tricky if you need argument count and priorities:
+Registering actions can be kept that simple too.
+Write ...
 
-```php
-return [
-    'init' => [
-        InitPlugin::class,
-    ],
-]
+```yaml
+services:
+  Tribute\BestPluginInTheWorld\Rock:
+    add_action: init
 ```
 
-Add a service "InitPlugin" which is invoked when the init-action occurs.
+... to add a service for the class `\Tribute\BestPluginInTheWorld\Rock`
+which is invoked when the "init"-action occurs.
 
 
 ### And more
 
 * Options
 * wp-cli commands
+* Widgets
 
 Read how this works in the official documentation of every release.
 
 
 ## Contributing
 
-We used this in older projects but still maintain this use this for my own projects,
+We used this in older projects
+and still maintain it,
 so please [open an issue](https://github.com/rmp-up/wp-di/issues/new)
 if there is anything we can help with.
 

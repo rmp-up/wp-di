@@ -25,8 +25,9 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Provider\WordPress;
 
 use Pimple\Container;
-use Psr\Container\ContainerInterface;
+use ReflectionClass;
 use RmpUp\WpDi\LazyService;
+use RmpUp\WpDi\Provider\MissingServiceDefinitionException;
 use RmpUp\WpDi\Provider\Services;
 use WP_CLI;
 
@@ -35,6 +36,8 @@ use WP_CLI;
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-06-12
+ *
+ * @deprecated 0.7.0 Define cli commands in the service directly.
  */
 class CliCommands extends Services
 {
@@ -48,6 +51,8 @@ class CliCommands extends Services
 
     public function __construct(array $services, string $wpCliClass = null)
     {
+        trigger_error('Use of ' . __CLASS__ . ' is deprecated', E_USER_DEPRECATED);
+
         parent::__construct($services);
 
         if (null === $wpCliClass) {
@@ -57,6 +62,38 @@ class CliCommands extends Services
         $this->wpCliClass = $wpCliClass;
     }
 
+    /**
+     * @param array $definition
+     *
+     * @return mixed[]
+     * @throws \ReflectionException
+     */
+    private function createWpCliConfig($definition): array
+    {
+        $callable = (new ReflectionClass($definition[Services::CLASS_NAME]))->getMethod('__invoke');
+        $comment = (string) $callable->getDocComment();
+
+        if ('' === $comment) {
+            // There is no doc comment
+            return [];
+        }
+
+        $docParser = new WP_CLI\DocParser($comment);
+
+        $config = [
+            'shortdesc' => $docParser->get_shortdesc(),
+            'longdesc' => $docParser->get_longdesc(),
+            'synopsis' => $docParser->get_synopsis()
+        ];
+
+        $when = $docParser->get_tag('when');
+        if ($when) {
+            $config['when'] = $when;
+        }
+
+        return $config;
+    }
+
     public function register(Container $pimple): void
     {
         if ('cli' !== PHP_SAPI || !class_exists($this->wpCliClass)) {
@@ -64,41 +101,48 @@ class CliCommands extends Services
             return;
         }
 
-        $container = new \Pimple\Psr11\Container($pimple);
-
         foreach ($this->services as $serviceName => $service) {
             if (!array_key_exists(static::KEY, $service) || !is_string($serviceName)) {
                 continue;
             }
 
-            if (!$container->has($serviceName)) {
+            if (!$pimple->offsetExists($serviceName)) {
+                // Service config has not been loaded yet for this part.
                 $this->compile($pimple, $serviceName, $service);
             }
 
             if (array_key_exists(static::COMMAND, $service[static::KEY])) {
-                $this->addCommand($container, $serviceName, $service);
+                $this->addCommand($pimple, $serviceName, $service);
             }
         }
     }
 
-    private function addCommand(ContainerInterface $container, string $serviceName, array $definition): void
+    private function addCommand(Container $pimple, string $serviceName, array $definition): void
     {
+        $container = new \Pimple\Psr11\Container($pimple);
+
         $command = $definition[static::KEY][static::COMMAND];
         $class = $this->wpCliClass;
 
+        // Command points to a service
         if ($container->has($serviceName)) {
-            // Command is wired to existing service.
-            $class::add_command($command, $container->get($serviceName));
+            /** @noinspection PhpUndefinedMethodInspection */
+            $class::add_command(
+                $command,
+                new LazyService($container, $serviceName),
+                $this->createWpCliConfig($pimple->raw($serviceName))
+            );
+
             return;
         }
 
-        if (!$definition[Services::ARGUMENTS]) {
+        // Command points to a class
+        if (!$definition[Services::ARGUMENTS] && class_exists($definition[Services::CLASS_NAME])) {
             /** @noinspection PhpUndefinedMethodInspection */
             $class::add_command($command, $definition[Services::CLASS_NAME]);
             return;
         }
 
-        /** @noinspection PhpUndefinedMethodInspection */
-        $class::add_command($command, new LazyService($container, $serviceName));
+        throw new MissingServiceDefinitionException('Unknown service or class: ' . $serviceName);
     }
 }

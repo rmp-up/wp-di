@@ -31,11 +31,15 @@ use RmpUp\WpDi\Sanitizer\Services;
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-06-12
+ *
+ * @deprecated 0.7.0 Define cli commands in the service directly.
  */
 class CliCommands extends Services
 {
     public function sanitize($node): array
     {
+        trigger_error('Use of ' . __CLASS__ . ' is deprecated', E_USER_DEPRECATED);
+
         $sanitized = [];
 
         foreach ($node as $serviceName => $serviceDefinition) {

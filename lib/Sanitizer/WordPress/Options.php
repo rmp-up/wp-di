@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Sanitizer\WordPress;
 
 use RmpUp\WpDi\Sanitizer\SanitizerInterface;
+use RmpUp\WpDi\ServiceDefinition\OptionNode;
 
 /**
  * Options
@@ -41,9 +42,7 @@ class Options implements SanitizerInterface
         foreach ($node as $optionKey => $optionsValue) {
             if (is_int($optionKey)) {
                 $optionKey = $optionsValue;
-                $optionsValue = static function () use ($optionKey) {
-                    return get_option($optionKey);
-                };
+                $optionsValue = OptionNode::DEFAULT;
             }
 
             $sanitized[$optionKey] = $optionsValue;

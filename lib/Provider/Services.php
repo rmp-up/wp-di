@@ -27,6 +27,11 @@ namespace RmpUp\WpDi\Provider;
 use Closure;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use RmpUp\WpDi\Compiler\Filter;
+use RmpUp\WpDi\Compiler\PostType;
+use RmpUp\WpDi\Compiler\Widgets;
+use RmpUp\WpDi\Compiler\WpCli;
+use RmpUp\WpDi\ServiceDefinition;
 
 /**
  * Setting "services" and "parameters".
@@ -38,15 +43,54 @@ class Services implements ServiceProviderInterface
 {
     public const CLASS_NAME = 'class';
     public const ARGUMENTS = 'arguments';
+    const LAZY_ARGS = 'lazy_arguments';
+
+    /**
+     * @var callable[][]
+     */
+    private $keywordToHandler;
 
     /**
      * @var array
      */
     protected $services;
 
-    public function __construct(array $services)
+    /**
+     * Services constructor.
+     *
+     * @param array        $services
+     * @param callable[][] $keywordToHandler Mapping of keys delegating to other handler.
+     */
+    public function __construct(array $services, array $keywordToHandler = [])
     {
         $this->services = $services;
+        $this->keywordToHandler = $keywordToHandler ?: $this->defaultHandler();
+    }
+
+    /**
+     * Default handler for predefined keywords
+     *
+     * Mostly here as forward compatibility
+     * until handler can be properly injected.
+     *
+     * @return array
+     */
+    private function defaultHandler(): array
+    {
+        $filter = [new Filter()];
+
+        return [
+            Filter::FILTER_KEY => $filter,
+            'add_filter' => $filter, // alias
+
+            Filter::ACTION_KEY => $filter,
+            'add_action' => $filter, // alias
+
+            'post_type' => [new PostType()],
+
+            'widgets' => [new Widgets()],
+            'wp_cli' => [new WpCli()],
+        ];
     }
 
     /**
@@ -65,9 +109,9 @@ class Services implements ServiceProviderInterface
     }
 
     /**
-     * @param Container $pimple
-     * @param string $serviceName
-     * @param array|string|callable $definition
+     * @param Container                  $pimple
+     * @param string                     $serviceName
+     * @param array|string|callable|null $definition
      */
     protected function compile(Container $pimple, string $serviceName, $definition): void
     {
@@ -83,26 +127,22 @@ class Services implements ServiceProviderInterface
             return;
         }
 
-        $this->compileArray($pimple, $serviceName, $definition);
-    }
+        if (null === $definition) {
+            $definition = [
+                Services::CLASS_NAME => $serviceName
+            ];
+        }
 
-    /**
-     * @param Container $pimple
-     * @param string $serviceName
-     * @param array $definition
-     */
-    protected function compileArray(Container $pimple, string $serviceName, array $definition): void
-    {
-        $pimple[$serviceName] = static function ($pimple) use ($definition) {
-            $className = $definition[static::CLASS_NAME];
+        $pimple[$serviceName] = new ServiceDefinition($definition);
 
-            foreach ($definition[static::ARGUMENTS] as $key => $argument) {
-                if (is_string($argument) && isset($pimple[$argument])) {
-                    $definition[static::ARGUMENTS][$key] = $pimple[$argument];
-                }
+        // Delegate to extensions
+        foreach (array_intersect_key($this->keywordToHandler, (array) $definition) as $key => $extensions) {
+            // Found keywords will be forwarded to their handler.
+            // Cast to array in case one key maps directly to one compiler (instead of an array of compiler).
+            foreach ((array) $extensions as $extension) {
+                // Handler receive the specific config but also the general container for further processing.
+                $extension($definition[$key], $serviceName, $pimple);
             }
-
-            return new $className(...array_values($definition[static::ARGUMENTS]));
-        };
+        }
     }
 }

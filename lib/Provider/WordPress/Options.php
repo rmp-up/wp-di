@@ -27,6 +27,7 @@ namespace RmpUp\WpDi\Provider\WordPress;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use RmpUp\WpDi\Helper\WordPress\OptionsResolver;
+use RmpUp\WpDi\ServiceDefinition\OptionNode;
 
 /**
  * Options
@@ -60,14 +61,11 @@ class Options implements ServiceProviderInterface
 
         foreach ($this->serviceDefinition as $optionKey => $value) {
             if (!is_callable($value)) {
-                $optionResolver->addDefault($optionKey, $value);
-
-                $value = static function () use ($optionKey) {
-                    return get_option($optionKey);
-                };
+                $value = new OptionNode($optionKey, $value);
             }
 
-            $pimple[$optionKey] = $value;
+            $pimple[(string) $optionKey] = $value; // DEPRECATED 0.7
+            $pimple['%' . $optionKey . '%'] = $value;
 
             add_filter('default_option_' . $optionKey, $optionResolver, 10, 3);
         }

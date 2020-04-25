@@ -31,7 +31,7 @@ use RmpUp\WpDi\Provider\WordPress\PostTypes;
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
  * @since      2019-05-28
- * @deprecated 1.0.0 Please use \RmpUp\WpDi\Provider\WordPress\PostTypes instead.
+ * @deprecated 0.7.0 Please use \RmpUp\WpDi\Provider\WordPress\PostTypes instead.
  */
 class WpPostTypes extends PostTypes
 {

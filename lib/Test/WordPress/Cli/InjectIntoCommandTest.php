@@ -20,7 +20,10 @@
 
 namespace RmpUp\WpDi\Test\WordPress\Cli;
 
-use MyOwnCliCommand;
+require_once __DIR__ . '/SomeCliCommandHere.php';
+
+use SomeCliCommandHere;
+use RmpUp\WpDi\LazyService;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Test\Mirror;
 use RmpUp\WpDi\Test\ProviderTestCase;
@@ -44,7 +47,7 @@ use WP_CLI;
  *   Services::class => [
  *     // The actual service
  *     'cli_migrate_party' => [
- *       'class' => MyOwnCliCommand::class,
+ *       'class' => SomeCliCommandHere::class,
  *       'arguments' => [
  *         // Other service gets injected here
  *         SomeThing::class
@@ -60,10 +63,10 @@ use WP_CLI;
  * ];
  * ```
  *
- * This way an instance of `SomeThing` is injected in `MyOwnCliCommand`
+ * This way an instance of `SomeThing` is injected in `SomeCliCommandHere`
  * which is stored as the "cli_migrate_party" service.
  * For WP-CLI we just reference to this service.
- * So running `wp beer 13` will execute `MyOwnCliCommand::__invoke`.
+ * So running `wp beer 13` will execute `SomeCliCommandHere::__invoke`.
  *
  * Note: When registering things for WP-CLI they won't be lazy anymore!
  * When WordPress is used from console then a full instance of the service is
@@ -84,19 +87,34 @@ class InjectIntoCommandTest extends ProviderTestCase
 
     public function testFoo()
     {
-        /** @var MyOwnCliCommand $cliCommand */
+        /** @var SomeCliCommandHere $cliCommand */
         $cliCommand = $this->container->get('cli_migrate_party');
 
         $injectedVar = $cliCommand->getConstructorArgs()[0];
         static::assertInstanceOf(SomeThing::class, $injectedVar);
 
-        static::assertNotEmpty(\WP_CLI::_history('add_command'), 'Add command has not been called');
+        static::assertNotEmpty(WP_CLI::_history('add_command'), 'Add command has not been called');
 
-        /** @var Mirror $myOwn */
-        $myOwn = \WP_CLI::_history('add_command')[0]['arguments'][1];
-        static::assertInstanceOf('MyOwnCliCommand', $myOwn);
+        /** @var LazyService|Mirror $lazyAdded */
+        $lazyAdded = WP_CLI::_history('add_command')[0]['arguments'][1];
+        static::assertInstanceOf(LazyService::class, $lazyAdded);
 
-        static::assertInstanceOf('SomeThing', $myOwn->getConstructorArgs()[0], 'SomeThing class has not been injected');
-        static::assertSame($injectedVar, $myOwn->getConstructorArgs()[0]);
+        $this->assertLazyService('cli_migrate_party', $lazyAdded);
+
+        static::assertInstanceOf('SomeThing', $lazyAdded->getConstructorArgs()[0], 'SomeThing class has not been injected');
+        static::assertSame($injectedVar, $lazyAdded->getConstructorArgs()[0]);
+    }
+
+    public function testForwardsConfig()
+    {
+        $history = \WP_CLI::_history('add_command');
+        $recent = end($history);
+
+        static::assertArrayHasKey(2, $recent['arguments'], 'No config provided');
+
+        $config = $recent['arguments'][2];
+        static::assertSame('Prints a greeting.', $config['shortdesc']);
+        static::assertContains('## EXAMPLES', $config['longdesc']);
+        static::assertContains('    wp example hello Jerry', $config['longdesc']);
     }
 }

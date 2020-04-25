@@ -28,9 +28,11 @@ use Closure;
 use PHPUnit\Framework\TestCase;
 use Pimple\Container;
 use Pretzlaw\PHPUnit\DocGen\DocComment\Parser;
+use Pretzlaw\WPInt\Traits\WordPressTests;
 use ReflectionException;
 use ReflectionObject;
 use RmpUp\WpDi\LazyService;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * AbstractTestCase
@@ -41,6 +43,7 @@ use RmpUp\WpDi\LazyService;
 abstract class AbstractTestCase extends TestCase
 {
     use Parser;
+    use WordPressTests;
 
     /**
      * @var Container
@@ -78,6 +81,18 @@ abstract class AbstractTestCase extends TestCase
         return null;
     }
 
+    /**
+     * @param string $filterName
+     *
+     * @return \WP_Hook|null
+     */
+    protected function getFilter(string $filterName)
+    {
+        global $wp_filter;
+
+        return $wp_filter[$filterName] ?? null;
+    }
+
     protected static function assertLazyService(string $serviceName, $lazyServiceObject)
     {
         static::assertInstanceOf(LazyService::class, $lazyServiceObject);
@@ -99,6 +114,17 @@ abstract class AbstractTestCase extends TestCase
         static::assertNotInstanceOf(Closure::class, $values[$serviceName]);
     }
 
+    protected function isServiceFrozen(Container $pimple, string $serviceName)
+    {
+        $property = (new ReflectionObject($pimple))->getProperty('frozen');
+
+        $property->setAccessible(true);
+        $list = $property->getValue($pimple);
+        $property->setAccessible(false);
+
+        return $list[$serviceName] ?? false;
+    }
+
     protected function tearDown()
     {
         parent::tearDown();
@@ -106,5 +132,40 @@ abstract class AbstractTestCase extends TestCase
         static::$calls = [];
         static::$actions = [];
         Mirror::_reset();
+    }
+
+    protected function yaml($index = 0, ...$keys)
+    {
+        $allNodes = $this->classComment()->xpath('//code[@class="yaml"]');
+
+        if (!isset($allNodes[$index])) {
+            throw new \DomainException('Yaml example missing: ' . $index);
+        }
+
+        $data = Yaml::parse((string) $allNodes[$index]);
+
+        $path = [];
+        foreach ($keys as $key) {
+            $path[] = $key;
+
+            if (!array_key_exists($key, $data)) {
+                throw new \DomainException(
+                    sprintf(
+                        'Path "%s" does not exist in %d. Yaml example',
+                        implode('.', $path),
+                        $index
+                    )
+                );
+            }
+
+            $data = $data[$key];
+        }
+
+        return $data;
+    }
+
+    protected function mockOption($name)
+    {
+        return $this->mockFilter('pre_option_' . $name);
     }
 }

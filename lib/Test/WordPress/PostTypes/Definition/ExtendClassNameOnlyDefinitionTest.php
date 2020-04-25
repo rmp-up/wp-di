@@ -52,7 +52,7 @@ use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
  * and inject it elsewhere.
  *
  * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-05-28
+ * @deprecated 0.7
  */
 class ExtendClassNameOnlyDefinitionTest extends SanitizerTestCase
 {

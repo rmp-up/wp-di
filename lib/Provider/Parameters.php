@@ -56,7 +56,8 @@ class Parameters implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         foreach ($this->parameters as $parameterName => $value) {
-            $pimple[$parameterName] = $value;
+            $pimple->offsetSet($parameterName, $value); // DEPRECATED way of injecting parameters
+            $pimple->offsetSet('%' . $parameterName . '%', $value);
         }
     }
 }

@@ -27,6 +27,10 @@ namespace RmpUp\WpDi;
 use InvalidArgumentException;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use RmpUp\WpDi\Provider\Parameters;
+use RmpUp\WpDi\Provider\Services;
+use RmpUp\WpDi\Provider\WordPress\Options;
+use RmpUp\WpDi\Provider\WordPress\Templates;
 use RmpUp\WpDi\Sanitizer\SanitizerInterface;
 
 /**
@@ -38,11 +42,15 @@ use RmpUp\WpDi\Sanitizer\SanitizerInterface;
 class Provider implements ServiceProviderInterface
 {
     /**
+     * @var array
+     */
+    private $keyToCompiler;
+    /**
      * (Un-)Normalized definition of the services
      *
      * @var array
      */
-    private $serviceDefinition;
+    private $definition;
 
     /**
      * Provider to sanitizer mapping.
@@ -52,15 +60,43 @@ class Provider implements ServiceProviderInterface
     private $sanitizer;
 
     /**
-     * Create generic provider
+     * Create provider
      *
-     * @param array $serviceDefinition (Un-)normalized service definitions
-     * @param array $sanitizer         Pre-Mapping provider to sanitizer instanced
+     * This provider delegates sections of a service definition to several other provider.
+     *
+     * @param array $definition    (Un-)normalized definitions of services, parameter or other
+     * @param array $sanitizer     Pre-Mapping provider to sanitizer instanced (DEPRECATED)
+     * @param array $keyToProvider Map a root-level key to a specific provider.
      */
-    public function __construct(array $serviceDefinition, array $sanitizer = [])
+    public function __construct(array $definition, array $sanitizer = [], array $keyToProvider = [])
     {
-        $this->serviceDefinition = $serviceDefinition;
+        $this->definition = $definition;
         $this->sanitizer = $sanitizer;
+
+        if ([] !== $sanitizer) {
+            trigger_error('Using sanitizer here is deprecated. Please sanitize within the compiler.', E_USER_DEPRECATED);
+        }
+
+        $this->keyToCompiler = $keyToProvider ?: $this->defaultCompiler();
+    }
+
+    public function addCompiler($key, $compiler)
+    {
+        if (!array_key_exists($key, $this->keyToCompiler)) {
+            $this->keyToCompiler[$key] = [];
+        }
+
+        $this->keyToCompiler[$key][] = $compiler;
+    }
+
+    private function defaultCompiler(): array
+    {
+        return [
+            'services' => Services::class,
+            'options' => Options::class,
+            'parameters' => Parameters::class,
+            'templates' => Templates::class,
+        ];
     }
 
     /**
@@ -73,13 +109,22 @@ class Provider implements ServiceProviderInterface
      */
     public function register(Container $pimple): void
     {
-        foreach ($this->serviceDefinition as $provider => $definition) {
-            if (false === class_exists($provider)) {
-                throw new InvalidArgumentException('Unknown provider: ' . $provider);
+        foreach ($this->definition as $provider => $definition) {
+            $sectionProvider = $this->keyToCompiler[$provider] ?? $provider;
+
+            if (is_callable($sectionProvider)) {
+                // Keeping provider lazy in case they are not used at all.
+                $sectionProvider = $sectionProvider($pimple);
+            }
+
+            if (false === class_exists($sectionProvider)) {
+                throw new InvalidArgumentException('Unknown provider: ' . $sectionProvider);
             }
 
             $pimple->register(
-                new $provider($this->sanitize($provider, $definition))
+                new $sectionProvider(
+                    $this->sanitize($sectionProvider, $definition)
+                )
             );
         }
     }
