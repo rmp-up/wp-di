@@ -44,6 +44,16 @@ class Actions extends Services
     public const PRIORITY = 'priority';
     public const ARG_COUNT = 'arg_count';
 
+    public function __construct(array $services, array $keywordToHandler = [])
+    {
+        trigger_error(
+            'Using ' . __CLASS__ . ' is deprecated, please use RmpUp\\WpDi\\Compiler\\Filter instead',
+            E_USER_DEPRECATED
+        );
+
+        parent::__construct($services, $keywordToHandler);
+    }
+
     public function register(Container $pimple): void
     {
         $psr = new PsrContainer($pimple);
