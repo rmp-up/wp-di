@@ -91,9 +91,6 @@ class ServiceDefinitionTest extends ProviderTestCase
     public function getLongCliCommandSyntax()
     {
         return [
-            '0.6' => [ // DEPRECATED
-                [Provider\Services::class => $this->yaml(1, 'services')]
-            ],
             '0.7' => [
                 $this->yaml(1)
             ],
@@ -103,9 +100,6 @@ class ServiceDefinitionTest extends ProviderTestCase
     public function getShortCliCommandSyntax()
     {
         return [
-            '0.6' => [ // DEPRECATED
-                [Provider\Services::class => $this->yaml(0, 'services')]
-            ],
             '0.7' => [
                 $this->yaml(0)
             ]

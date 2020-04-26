@@ -50,11 +50,6 @@ class WpCli implements CompilerInterface
 
     public function __invoke($commandToMethod, string $serviceName, Container $pimple)
     {
-        if (is_array($commandToMethod) && array_key_exists(CliCommands::COMMAND, $commandToMethod)) {
-            // DEPRECATED 0.6 structure will be ignored
-            return;
-        }
-
         if (is_scalar($commandToMethod)) {
             $commandToMethod = [$commandToMethod => null];
         }
