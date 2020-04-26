@@ -35,4 +35,13 @@ use RmpUp\WpDi\Provider\WordPress\PostTypes;
  */
 class WpPostTypes extends PostTypes
 {
+    public function __construct(array $services, array $keywordToHandler = [])
+    {
+        trigger_error(
+            'Using ' . __CLASS__ . ' is deprecated, please use RmpUp\\WpDi\\Provider\\WordPress\\PostTypes instead',
+            E_USER_DEPRECATED
+        );
+
+        parent::__construct($services, $keywordToHandler);
+    }
 }
