@@ -116,8 +116,7 @@ use RmpUp\WpDi\Provider\WordPress\PostTypes;
  * );
  * ```
  *
- * @copyright  2019 Mike Pretzlaw (https://mike-pretzlawWordPress.de)
- * @since      2019-05-30
+ * @copyright  2020 Mike Pretzlaw (https://mike-pretzlawWordPress.de)
  */
 class AutoResolvingProviderTest extends AbstractTestCase
 {
@@ -177,7 +176,7 @@ class AutoResolvingProviderTest extends AbstractTestCase
     public function testPostTypeRegistered()
     {
         static::assertFilterHasCallback('init', new IsInstanceOf(RegisterPostType::class));
-        static::assertFilterHasCallback('init', new IsEqual(new RegisterPostType($this->container, 'qux', 'qux')));
+        static::assertFilterHasCallback('init', new IsEqual(new RegisterPostType($this->pimple, 'qux', 'qux')));
     }
 
     public function testThrowsExceptionWhenProviderInvalid()

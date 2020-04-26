@@ -54,7 +54,7 @@ class PostTypes extends Services
             $this->compile($pimple, $serviceName, $definition);
 
             if (array_key_exists(static::KEY, $definition)) {
-                add_action('init', new RegisterPostType($psr, $serviceName, $definition[static::KEY]));
+                add_action('init', new RegisterPostType($pimple, $serviceName, $definition[static::KEY]));
             }
         }
     }
