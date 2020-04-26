@@ -24,36 +24,32 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Helper\WordPress;
 
-use Pimple\Psr11\Container;
-use Psr\Container\ContainerInterface;
+use Pimple\Container;
 
 /**
  * RegisterPostType
  *
- * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-05-29
+ * @copyright  2020 Mike Pretzlaw (https://mike-pretzlaw.de)
  */
 class RegisterPostType
 {
     /**
-     * @var ContainerInterface
+     * @var Container
      */
-    private $container;
+    private $pimple;
     private $serviceName;
     private $postType;
 
-    public function __construct($container, $serviceName, $postType)
+    /**
+     * RegisterPostType constructor.
+     *
+     * @param Container $pimple
+     * @param string            $serviceName
+     * @param string            $postType
+     */
+    public function __construct(Container $pimple, string $serviceName, string $postType)
     {
-        if ($container instanceof ContainerInterface) {
-            trigger_error('Using PSR-11 container is deprecated. Please provide Pimple', E_USER_DEPRECATED);
-        }
-
-        if ($container instanceof \Pimple\Container) {
-            // DEPRECATED 0.7 - we totally want Pimple here
-            $container = new Container($container);
-        }
-
-        $this->container = $container;
+        $this->pimple = $pimple;
         $this->serviceName = $serviceName;
         $this->postType = $postType;
     }
@@ -68,7 +64,7 @@ class RegisterPostType
 
     public function __invoke()
     {
-        $postTypeService = $this->container->get($this->serviceName);
+        $postTypeService = $this->pimple[$this->serviceName];
 
         if (is_callable($postTypeService) || method_exists($postTypeService, '__invoke')) {
             $postTypeService($this->postType);

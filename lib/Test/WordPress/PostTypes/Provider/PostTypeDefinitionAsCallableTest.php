@@ -59,8 +59,7 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  * As you can see the name of the post type will be provided
  * to let the object know which one shall be registered.
  *
- * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-05-29
+ * @copyright  2020 Mike Pretzlaw (https://mike-pretzlaw.de)
  */
 class PostTypeDefinitionAsCallableTest extends AbstractTestCase
 {
@@ -108,7 +107,7 @@ class PostTypeDefinitionAsCallableTest extends AbstractTestCase
 
         static::assertFilterHasCallback(
             'init',
-            new IsEqual(new RegisterPostType($this->container, 'callable_type', 'callable_type'))
+            new IsEqual(new RegisterPostType($this->pimple, 'callable_type', 'callable_type'))
         );
     }
 
@@ -117,7 +116,7 @@ class PostTypeDefinitionAsCallableTest extends AbstractTestCase
         $this->pimple->register($this->provider);
 
         static::assertFalse(post_type_exists('callable_type'));
-        (new RegisterPostType($this->container, 'callable_type', 'callable_type'))('callable_type');
+        (new RegisterPostType($this->pimple, 'callable_type', 'callable_type'))('callable_type');
         static::assertTrue(post_type_exists('callable_type'));
     }
 }
