@@ -55,8 +55,9 @@ class Options implements ServiceProviderInterface
      *
      * @param Container $pimple A container instance
      */
-    public function register(Container $pimple): void
+    public function register(Container $pimple)
     {
+        // DEPRECATED - the options resolver should be injected instead
         $optionResolver = new OptionsResolver(new \Pimple\Psr11\Container($pimple));
 
         foreach ($this->serviceDefinition as $optionKey => $value) {
@@ -64,7 +65,6 @@ class Options implements ServiceProviderInterface
                 $value = new OptionNode($optionKey, $value);
             }
 
-            $pimple[(string) $optionKey] = $value; // DEPRECATED 0.7
             $pimple['%' . $optionKey . '%'] = $value;
 
             add_filter('default_option_' . $optionKey, $optionResolver, 10, 3);

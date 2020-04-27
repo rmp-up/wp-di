@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress\Options\Provider;
 
+use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Provider\WordPress\Options;
 use RmpUp\WpDi\Test\WordPress\Options\OptionsTestCase;
 
@@ -33,14 +34,9 @@ use RmpUp\WpDi\Test\WordPress\Options\OptionsTestCase;
  *
  * As shown default options can be easily added like this:
  *
- * ```php
- * <?php
- *
- * return [
- *   WordPress\Options::class => [
- *     'my_fav_isni' => 423379498,
- *   ]
- * ];
+ * ```yaml
+ * options:
+ *   my_fav_isni: 423379498
  * ```
  *
  * Such configuration will make the `get_option( 'my_fav_isni' )` return the
@@ -54,21 +50,16 @@ class DefaultOptionTest extends OptionsTestCase
     protected function setUp()
     {
         parent::setUp();
-
-        $this->sanitizer = new \RmpUp\WpDi\Sanitizer\WordPress\Options();
     }
 
     public function testUseDefaultOption()
     {
         static::assertFalse(get_option('my_fav_isni'));
 
-        $this->pimple->register(
-            new Options($this->sanitizer->sanitize(['my_fav_isni' => 423379498]))
-        );
+        $this->pimple->register(new Provider($this->yaml(0)));
 
         $optionValue = get_option('my_fav_isni');
 
-        static::assertIsInt($optionValue);
         static::assertEquals(423379498, $optionValue);
     }
 
