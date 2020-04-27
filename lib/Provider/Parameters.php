@@ -53,10 +53,9 @@ class Parameters implements ServiceProviderInterface
      *
      * @param Container $pimple A container instance
      */
-    public function register(Container $pimple): void
+    public function register(Container $pimple)
     {
         foreach ($this->parameters as $parameterName => $value) {
-            $pimple->offsetSet($parameterName, $value); // DEPRECATED way of injecting parameters
             $pimple->offsetSet('%' . $parameterName . '%', $value);
         }
     }

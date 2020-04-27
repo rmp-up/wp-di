@@ -73,8 +73,8 @@ use RmpUp\WpDi\Test\ProviderTestCase;
  *     'more_random_things' => function ($container) {
  *
  *       return new ArrayObject([
- *         'int' => $container['some_int'] * 42,
- *         'string' => 'xoxo' . $container['some_string'] . '<3',
+ *         'int' => $container['%some_int%'] * 42,
+ *         'string' => 'xoxo' . $container['%some_string%'] . '<3',
  *       ]);
  *
  *     }
@@ -82,8 +82,7 @@ use RmpUp\WpDi\Test\ProviderTestCase;
  * ];
  * ```
  *
- * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-06-11
+ * @copyright  2020 Pretzlaw (https://rmp-up.de)
  */
 class UsingCallbacksTest extends ProviderTestCase
 {
@@ -93,11 +92,14 @@ class UsingCallbacksTest extends ProviderTestCase
 
         $this->sanitizer = new Services();
 
-        $first = $this->classComment()->execute(0);
-        $second = $this->classComment()->execute(1);
-        $this->provider = new Provider(array_merge_recursive($first, $second));
-
-        $this->pimple->register($this->provider);
+        $this->pimple->register(
+            new Provider(
+                array_merge_recursive(
+                    $this->classComment()->execute(0),
+                    $this->classComment()->execute(1)
+                )
+            )
+        );
     }
 
     public function testSimpleClosure()
@@ -109,9 +111,9 @@ class UsingCallbacksTest extends ProviderTestCase
     {
         $this->assertRandomThing($this->pimple['random_things']);
 
-        static::assertIsInt($this->pimple['some_int']);
-        static::assertSame($this->pimple['some_int'] * 42, $this->pimple['more_random_things']['int']);
-        static::assertSame('xoxo' . $this->pimple['some_string'] . '<3', $this->pimple['more_random_things']['string']);
+        static::assertIsInt($this->pimple['%some_int%']);
+        static::assertSame($this->pimple['%some_int%'] * 42, $this->pimple['more_random_things']['int']);
+        static::assertSame('xoxo' . $this->pimple['%some_string%'] . '<3', $this->pimple['more_random_things']['string']);
     }
 
     /**
