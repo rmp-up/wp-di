@@ -136,12 +136,6 @@ class AutoResolvingProviderTest extends AbstractTestCase
                 ]
             ],
 
-            Actions::class => [
-                'template_redirect' => [
-                    Mirror::class,
-                ]
-            ],
-
             PostTypes::class => [
                 'qux' => ArrayObject::class
             ]

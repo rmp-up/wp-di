@@ -35,14 +35,11 @@ use RmpUp\WpDi\Test\ProviderTestCase;
  *
  * To just use an option without a default value you need to add it as a simple entry:
  *
- * ```php
- * return [
- *   WordPress\Options::class => [
- *     'this_has_a' => 'default value',
- *     'blog_public',
- *     'admin_email',
- *   ]
- * ]
+ * ```yaml
+ * options:
+ *   this_has_a: default value
+ *   blog_public: ~
+ *   admin_email: ~
  * ```
  *
  * Compared to the defaults of an option the second
@@ -55,49 +52,21 @@ use RmpUp\WpDi\Test\ProviderTestCase;
  */
 class IncludesTest extends ProviderTestCase
 {
-    use FilterAssertions;
-
     protected function setUp()
     {
         parent::setUp();
 
         $this->sanitizer = new Options();
-        $this->provider = new Provider(
-            [
-                Provider\WordPress\Actions::class => [
-                    __CLASS__ => [
-                        Mirror::class => [
-                            'blog_public',
-                            'ping_sites',
-                        ],
-                    ]
-                ],
-
-                Provider\Services::class => [
-                    'service_with_default' => [
-                        Provider\Services::CLASS_NAME => Mirror::class,
-                        Provider\Services::ARGUMENTS => [
-                            'with_default',
-                        ]
-                    ]
-                ],
-
-                Provider\WordPress\Options::class => [
-                    'blog_public',
-                    'ping_sites',
-                    'with_default' => 'D-FAULT'
-                ],
-            ]
-        );
+        $this->provider = new Provider($this->yaml());
 
         $this->pimple->register($this->provider);
     }
 
     public function testOptionsExistAsService()
     {
-        static::assertEquals('D-FAULT', $this->pimple['with_default']);
-        static::assertNotNull($this->pimple['blog_public']);
-        static::assertNotNull($this->pimple['ping_sites']);
+        static::assertEquals('default value', $this->pimple['%this_has_a%']);
+        static::assertNotNull($this->pimple['%blog_public%']);
+        static::assertNotNull($this->pimple['%admin_email%']);
     }
 }
 

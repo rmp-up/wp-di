@@ -24,33 +24,28 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress\Options\Provider;
 
-use Pretzlaw\WPInt\Filter\FilterAssertions;
 use RmpUp\WpDi\Provider;
-use RmpUp\WpDi\Sanitizer\WordPress\Options;
 use RmpUp\WpDi\Test\Mirror;
 use RmpUp\WpDi\Test\WordPress\Options\OptionsTestCase;
+use SomeThing;
 
 /**
  * Using options in services
  *
  * Options can be used like parameters:
  *
- * ```php
- * return [
- *   WordPress\Options::class => [
- *     'blog_public',
- *     'ping_sites',
- *   ],
+ * ```yaml
+ * options:
+ *   blog_public: ~
+ *   ping_sites: ~
+ *   my_own_new_one: 'Hello, hello, hello, how low'
  *
- *   WordPress\Actions::class => [
- *     'publish_report' => [
- *       TellOtherAboutNewReport::class => [
- *         'blog_public',
- *         'ping_sites',
- *       ],
- *     ]
- *   ]
- * ]
+ * services:
+ *   SomeThing:
+ *     arguments:
+ *       - '%blog_public%'
+ *       - '%ping_sites%'
+ *       - '%my_own_new_one%'
  * ```
  *
  * So we injected the options via constructor
@@ -62,42 +57,13 @@ use RmpUp\WpDi\Test\WordPress\Options\OptionsTestCase;
  */
 class UseInServiceTest extends OptionsTestCase
 {
-    use FilterAssertions;
+    private $customOptionValue = 'Hello, hello, hello, how low';
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->sanitizer = new Options();
-        $this->provider = new Provider(
-            [
-                Provider\WordPress\Actions::class => [
-                    IncludesTest::class => [
-                        Mirror::class => [
-                            'blog_public',
-                            'ping_sites',
-                        ],
-                    ]
-                ],
-
-                Provider\Services::class => [
-                    'service_with_default' => [
-                        Provider\Services::CLASS_NAME => Mirror::class,
-                        Provider\Services::ARGUMENTS => [
-                            'with_default',
-                        ]
-                    ]
-                ],
-
-                Provider\WordPress\Options::class => [
-                    'blog_public',
-                    'ping_sites',
-                    'with_default' => 'D-FAULT'
-                ],
-            ]
-        );
-
-        $this->pimple->register($this->provider);
+        $this->pimple->register(new Provider($this->yaml()));
 
         $this->mockFilter('pre_option_blog_public')->expects($this->any())->willReturn(0);
         $this->mockFilter('pre_option_ping_sites')->expects($this->any())->willReturn(['example.org', 'rmp-up.de']);
@@ -105,32 +71,22 @@ class UseInServiceTest extends OptionsTestCase
 
     public function testInjectOptions()
     {
-        do_action(IncludesTest::class);
-
         /** @var Mirror $mirror */
-        $mirror = $this->pimple[Mirror::class];
+        $mirror = $this->pimple[SomeThing::class];
 
         static::assertEquals(
-            [0, ['example.org', 'rmp-up.de']],
+            [0, ['example.org', 'rmp-up.de'], $this->customOptionValue],
             $mirror->getConstructorArgs()
         );
     }
 
-    public function testInjectOptionsDefault()
-    {
-        /** @var Mirror $mirror */
-        $mirror = $this->pimple['service_with_default'];
-
-        static::assertEquals(['D-FAULT'], $mirror->getConstructorArgs());
-    }
-
     public function testInjectExistingOptionsInsteadOfDefault()
     {
-        $this->mockFilter('pre_option_with_default')->expects($this->once())->willReturn('Ta Hun Kwai');
+        $this->mockFilter('pre_option_my_own_new_one')->expects($this->once())->willReturn('Ta Hun Kwai');
         /** @var Mirror $mirror */
-        $mirror = $this->pimple['service_with_default'];
+        $mirror = $this->pimple[SomeThing::class];
 
-        static::assertEquals(['Ta Hun Kwai'], $mirror->getConstructorArgs());
+        static::assertEquals('Ta Hun Kwai', $mirror->getConstructorArgs()[2]);
     }
 
     public function tearDown()
