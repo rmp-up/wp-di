@@ -27,6 +27,7 @@ namespace RmpUp\WpDi\Test\WordPress\PostTypes\Provider;
 use PHPUnit\Framework\Constraint\IsEqual;
 use Pretzlaw\WPInt\Filter\FilterAssertions;
 use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
+use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Provider\WordPress\PostTypes as PostTypesProvider;
 use RmpUp\WpDi\Sanitizer\WordPress\PostTypes;
 use RmpUp\WpDi\Test\AbstractTestCase;
@@ -41,63 +42,61 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  * ```php
  * <?php
  *
- * class PostTypeDefinition {
- *   public $label = 'Foo';
+ * class TypeBox {
+ *   public $label = 'Heart Shaped Objects';
  *   public $public = false;
  * }
  * ```
  *
- * In this case the post-type won't be public but occur using the label "Foo".
+ * In this case the post-type won't be public
+ * but occur using the label "Heart Shaped Objects"
+ * if registered using ...
+ *
+ * ```yaml
+ * services:
+ *   TypeBox:
+ *     post_type: albini
+ * ```
  *
  * @copyright  2020 Mike Pretzlaw (https://mike-pretzlaw.de)
  */
 class PostTypeDefinitionAsArrayTest extends AbstractTestCase
 {
-    use FilterAssertions;
-
-    public $public = false;
-    public $description = 'Yayyyyy';
-    public $capability_type = 'custom_stuff';
-    /**
-     * @var PostTypesProvider
-     */
-    private $provider;
-
     protected function setUp()
     {
         parent::setUp();
 
-        $sanitizer = new PostTypes();
-        $this->provider = new PostTypesProvider(
-            $sanitizer->sanitize(
-                [
-                    'some_type' => __CLASS__,
-                ]
-            )
-        );
+        if (!class_exists('TypeBox')) {
+            $this->classComment()->execute(0);
+        }
+
+        remove_all_actions('init');
+    }
+
+    protected function tearDown()
+    {
+        if (post_type_exists('albini')) {
+            static::assertTrue(unregister_post_type('albini'));
+        }
+
+        parent::tearDown();
     }
 
     public function testServiceConvertedToArray()
     {
-        static::assertEmpty(static::$calls);
-
-        $this->pimple->register($this->provider);
+        $this->pimple->register(new Provider($this->yaml(0)));
 
         static::assertFilterHasCallback(
             'init',
-            new IsEqual(new RegisterPostType($this->pimple, 'some_type', 'some_type'))
+            new IsEqual(new RegisterPostType($this->pimple, 'TypeBox', 'albini'))
         );
     }
 
-
     public function testPostTypeIsRegistered()
     {
-        $this->pimple->register($this->provider);
-
-        $postType = 'some_type';
-
-        static::assertFalse(post_type_exists($postType));
-        (new RegisterPostType($this->pimple, 'some_type', 'some_type'))();
-        static::assertTrue(post_type_exists($postType));
+        static::assertFalse(post_type_exists('albini'));
+        $this->pimple->register(new Provider($this->yaml(0)));
+        do_action('init');
+        static::assertTrue(post_type_exists('albini'));
     }
 }
