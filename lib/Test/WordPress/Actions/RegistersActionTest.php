@@ -94,9 +94,7 @@ class RegistersActionTest extends AbstractTestCase
     {
         static::assertFilterHasCallback(
             'template_redirect',
-            new IsEqual(
-                [new LazyService($this->container, MyOwnFilterHandler::class), '__invoke']
-            )
+            new IsEqual(new LazyService($this->container, MyOwnFilterHandler::class))
         );
     }
 

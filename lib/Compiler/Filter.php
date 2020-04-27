@@ -81,17 +81,12 @@ class Filter implements CompilerInterface
         $methodNames = (array) $methodNames; // could be still just a method name
 
         foreach ($methodNames as $methodName) {
-            if (null === $methodName) {
-                // DEPRECATED 0.7 - we want to get rid of such redundant information ("__invoke")
-                $methodName = '__invoke';
+            $lazyCallback = new LazyService($container, $serviceName);
+            if (null !== $methodName) {
+                $lazyCallback = [$lazyCallback, $methodName];
             }
 
-            add_filter(
-                $filterName,
-                [new LazyService($container, $serviceName), $methodName],
-                $priority,
-                PHP_INT_MAX
-            );
+            add_filter($filterName, $lazyCallback, $priority, PHP_INT_MAX);
         }
     }
 
