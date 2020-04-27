@@ -42,9 +42,11 @@ use RmpUp\WpDi\Test\Mirror;
  *   Provider\Services::class => [
  *
  *     AnotherThing::class => [
- *       '1st argument',
- *       Second::class,
- *       3
+ *       'arguments' => [
+ *         '1st argument',
+ *         Second::class,
+ *         3
+ *       ]
  *     ]
  *
  *   ]
@@ -83,8 +85,10 @@ class WithPrimitiveArgumentsTest extends AbstractTestCase
             $this->sanitizer->sanitize(
                 [
                     Mirror::class => [
-                        42,
-                        1337,
+                        'arguments' => [
+                            42,
+                            1337,
+                        ]
                     ],
                 ]
             )
