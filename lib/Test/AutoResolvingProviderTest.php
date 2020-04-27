@@ -135,17 +135,11 @@ class AutoResolvingProviderTest extends AbstractTestCase
                     'foo',
                 ]
             ],
-
-            PostTypes::class => [
-                'qux' => ArrayObject::class
-            ]
         ];
 
         parent::setUp();
 
-        $this->pimple->register(
-            new Provider($this->definition)
-        );
+        $this->pimple->register(new Provider($this->definition));
     }
 
     public function testActionsRegistered()
@@ -165,12 +159,6 @@ class AutoResolvingProviderTest extends AbstractTestCase
         static::assertInstanceOf(Mirror::class, $mirror);
 
         static::assertEquals(['foo'], $mirror->getConstructorArgs());
-    }
-
-    public function testPostTypeRegistered()
-    {
-        static::assertFilterHasCallback('init', new IsInstanceOf(RegisterPostType::class));
-        static::assertFilterHasCallback('init', new IsEqual(new RegisterPostType($this->pimple, 'qux', 'qux')));
     }
 
     public function testThrowsExceptionWhenProviderInvalid()
