@@ -59,8 +59,10 @@ use RmpUp\WpDi\Provider\WordPress\PostTypes;
  *     AnRepository::class,
  *
  *     SomeSeoStuff::class => [
- *       AnRepository::class,
- *       'some_foo'
+ *       'arguments' => [
+ *         AnRepository::class,
+ *         'some_foo'
+ *       ]
  *     ]
  *   ],
  *
@@ -132,7 +134,7 @@ class AutoResolvingProviderTest extends AbstractTestCase
             Services::class => [
                 ArrayObject::class,
                 Mirror::class => [
-                    'foo',
+                    'arguments' => ['foo'],
                 ]
             ],
         ];

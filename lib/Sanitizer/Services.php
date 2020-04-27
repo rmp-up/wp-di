@@ -69,13 +69,6 @@ class Services implements SanitizerInterface
             }
 
             if (is_array($definition) && !array_key_exists(ServicesProvider::CLASS_NAME, $definition)) {
-                // DEPRECATED 0.7 - following IF is BC for very abbreviated service definitions via PHP
-                if (!array_key_exists(ServicesProvider::ARGUMENTS, $definition)) {
-                    $arguments = array_filter($definition, 'is_int', ARRAY_FILTER_USE_KEY);
-                    $definition = array_filter($definition, 'is_string', ARRAY_FILTER_USE_KEY);
-                    $definition[ServicesProvider::ARGUMENTS] = $arguments;
-                }
-
                 $definition[ServicesProvider::CLASS_NAME] = $id;
             }
 
