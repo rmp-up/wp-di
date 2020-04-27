@@ -134,12 +134,6 @@ class AutoResolvingProviderTest extends AbstractTestCase
                 ]
             ],
 
-            Actions::class => [
-                'template_redirect' => [
-                    Mirror::class,
-                ]
-            ],
-
             PostTypes::class => [
                 'qux' => ArrayObject::class
             ]
@@ -161,14 +155,6 @@ class AutoResolvingProviderTest extends AbstractTestCase
         static::assertInstanceOf(Mirror::class, $mirror);
 
         static::assertEquals(['foo'], $mirror->getConstructorArgs());
-    }
-
-    public function testActionsRegistered()
-    {
-        self::assertFilterHasCallback('template_redirect', new IsInstanceOf(LazyService::class));
-        self::assertFilterHasCallback('template_redirect', new IsEqual(
-            new LazyService($this->container, Mirror::class)
-        ));
     }
 
     public function testPostTypeRegistered()

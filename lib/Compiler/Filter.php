@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Actions.php
+ * Filter.php
  *
  * LICENSE: This source file is created by the company around M. Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -59,14 +59,39 @@ class Filter implements CompilerInterface
 
         $container = new \Pimple\Psr11\Container($pimple);
         foreach ($definition as $filterName => $prioToCallback) {
-            foreach ($prioToCallback as $priority => $methodName) {
-                add_filter(
-                    $filterName,
-                    [new LazyService($container, $serviceName), $methodName],
-                    $priority,
-                    PHP_INT_MAX
-                );
+            foreach ($prioToCallback as $priority => $methodNames) {
+                $this->register($filterName, $container, $serviceName, $methodNames, $priority);
             }
+        }
+    }
+
+    /**
+     * @param string                  $filterName
+     * @param \Pimple\Psr11\Container $container
+     * @param string                  $serviceName
+     * @param string[]|null           $methodNames
+     * @param int                     $priority
+     */
+    protected function register($filterName, \Pimple\Psr11\Container $container, string $serviceName, $methodNames, $priority): void
+    {
+        if (null === $methodNames) {
+            $methodNames = [null];
+        }
+
+        $methodNames = (array) $methodNames; // could be still just a method name
+
+        foreach ($methodNames as $methodName) {
+            if (null === $methodName) {
+                // DEPRECATED 0.7 - we want to get rid of such redundant information ("__invoke")
+                $methodName = '__invoke';
+            }
+
+            add_filter(
+                $filterName,
+                [new LazyService($container, $serviceName), $methodName],
+                $priority,
+                PHP_INT_MAX
+            );
         }
     }
 

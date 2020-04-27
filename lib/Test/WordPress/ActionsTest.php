@@ -36,10 +36,6 @@ class ActionsTest extends WpDi\Test\AbstractTestCase
 {
     public function testBasicsExist()
     {
-        static::assertTrue(class_exists(WpDi\Provider\WordPress\Actions::class));
-        static::assertTrue(class_exists(WpDi\Sanitizer\WordPress\Actions::class));
-
-        static::assertTrue(class_exists(WpDi\Provider\WpActions::class));
-        static::assertTrue(class_exists(WpDi\Sanitizer\WpActions::class));
+        static::assertTrue(class_exists(WpDi\Compiler\Filter::class));
     }
 }

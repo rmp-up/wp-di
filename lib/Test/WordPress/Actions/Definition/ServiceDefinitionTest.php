@@ -94,31 +94,7 @@ use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
  * The DI will take care of this as it just passes any given argument
  * and leaves the correct handling to PHP.
  *
- * A more deprecated way to bind a service to the action is
- * to directly define it within the actions part:
- *
- * ```php
- * <?php
- *
- * use \RmpUp\WpDi\Provider\WordPress;
- *
- * return [
- *   WordPress\Actions::class => [
- *     'plugin_loaded' => [
- *       Foo::class,
- *     ]
- *   ]
- * ];
- * ```
- *
- * This does not only create a service named "Foo"
- * but also registers it (via `add_action`)
- * to watch for the "plugin_loaded"-action.
- * All arguments (just like the one for "plugin_loaded")
- * will be passed to the service like `$service( $plugin_name )` in this example.
- *
- * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-04-27
+ * @copyright  2020 Pretzlaw (https://rmp-up.de)
  */
 class ServiceDefinitionTest extends SanitizerTestCase
 {
@@ -133,11 +109,6 @@ class ServiceDefinitionTest extends SanitizerTestCase
     public function getCompleteDefinition(): array
     {
         return [
-            'v0.6' => [ // DEPRECATED
-                [
-                    Services::class => $this->yaml(2, 'services')
-                ]
-            ],
             'v0.7' => [
                 $this->yaml(2)
             ],
@@ -162,8 +133,6 @@ class ServiceDefinitionTest extends SanitizerTestCase
     {
         parent::setUp();
 
-        $this->sanitizer = new Actions();
-
         remove_all_filters('the_content');
         $this->assertActionEmpty('the_content');
 
@@ -175,31 +144,6 @@ class ServiceDefinitionTest extends SanitizerTestCase
 
         remove_all_actions('user_edit_form_tag');
         $this->assertActionEmpty('user_edit_form_tag');
-    }
-
-    public function testExtendsClassNameToAction()
-    {
-        static::assertEquals(
-            [
-                'foo' => [
-                    [
-                        Provider::SERVICE => [
-                            Mirror::class => [
-                                Provider::CLASS_NAME => Mirror::class,
-                                Provider::ARGUMENTS => [],
-                            ]
-                        ],
-                        Provider::PRIORITY => 10,
-                        Provider::ARG_COUNT => 1,
-                    ]
-                ]
-            ],
-            $this->sanitizer->sanitize([
-                'foo' => [
-                    Mirror::class
-                ]
-            ])
-        );
     }
 
     public function testShortFilterDefinition()
