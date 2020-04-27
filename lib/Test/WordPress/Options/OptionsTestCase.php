@@ -27,9 +27,7 @@ namespace RmpUp\WpDi\Test\WordPress\Options;
 use RmpUp\WpDi\Helper\WordPress\OptionsResolver;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Provider\WordPress\Options;
-use RmpUp\WpDi\Test\AbstractTestCase;
 use RmpUp\WpDi\Test\ProviderTestCase;
-use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
  * OptionsTestCase
@@ -46,6 +44,9 @@ abstract class OptionsTestCase extends ProviderTestCase
 
     protected $optionsDefinition = [];
 
+    /**
+     * @deprecated 0.x We want to use documentation notes instead of hard scripted arrays.
+     */
     protected function setUp()
     {
         parent::setUp();
