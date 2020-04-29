@@ -9,15 +9,14 @@
  * and under german copyright law. Consider this file as closed source and/or
  * without the permission to reuse or modify its contents.
  * This license is available through the world-wide-web at the following URI:
- * https://mike-pretzlaw.de/license-generic.txt . If you did not receive a copy
+ * https://rmp-up.de/license-generic.txt . If you did not receive a copy
  * of the license and are unable to obtain it through the web, please send a
- * note to mail@mike-pretzlaw.de so we can mail you a copy.
+ * note to mail@rmp-up.de so we can mail you a copy.
  *
  * @package   WpDi
- * @copyright 2019 Mike Pretzlaw
- * @license   https://mike-pretzlaw.de/license-generic.txt proprietary
- * @link      https://project.mike-pretzlaw.de/wp-di
- * @since     2019-06-15
+ * @copyright 2020 Pretzlaw
+ * @license   https://rmp-up.de/license-generic.txt proprietary
+ * @link      https://project.rmp-up.de/wp-di
  */
 
 declare(strict_types=1);
@@ -32,8 +31,7 @@ use RmpUp\WpDi\ServiceDefinition\TemplateNode;
 /**
  * Templates
  *
- * @copyright 2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since     2019-06-15
+ * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
 class Templates implements ServiceProviderInterface
 {
@@ -49,7 +47,7 @@ class Templates implements ServiceProviderInterface
      *
      * @param array $definition Mapping of service name to array of possible templates.
      */
-    public function __construct(array $definition)
+    public function __construct($definition)
     {
         $this->definition = $definition;
     }
@@ -62,9 +60,14 @@ class Templates implements ServiceProviderInterface
      *
      * @param Container $pimple A container instance
      */
-    public function register(Container $pimple): void
+    public function register(Container $pimple)
     {
         foreach ($this->definition as $serviceName => $templates) {
+            if (is_int($serviceName) && is_string($templates)) {
+                $serviceName = $templates;
+                $templates = (array) $templates;
+            }
+
             if ($templates instanceof Closure) {
                 // Already a function so we reuse this instead.
                 $pimple[$serviceName] = $templates;
