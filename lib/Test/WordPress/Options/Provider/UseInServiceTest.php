@@ -9,14 +9,14 @@
  * and under german copyright law. Consider this file as closed source and/or
  * without the permission to reuse or modify its contents.
  * This license is available through the world-wide-web at the following URI:
- * https://mike-pretzlaw.de/license-generic.txt . If you did not receive a copy
+ * https://rmp-up.de/license-generic.txt . If you did not receive a copy
  * of the license and are unable to obtain it through the web, please send a
- * note to mail@mike-pretzlaw.de so we can mail you a copy.
+ * note to mail@rmp-up.de so we can mail you a copy.
  *
  * @package    wp-di
- * @copyright  2019 Mike Pretzlaw
- * @license    https://mike-pretzlaw.de/license-generic.txt
- * @link       https://project.mike-pretzlaw.de/wp-di
+ * @copyright 2020 Pretzlaw
+ * @license    https://rmp-up.de/license-generic.txt
+ * @link       https://project.rmp-up.de/wp-di
  * @since      2019-06-09
  */
 
@@ -52,7 +52,7 @@ use SomeThing;
  * instead of writing `get_option( 'ping_sites' )` somewhere in the class body.
  * Now it can make use of `$this->pingSites` which is easier to test and maintain.
  *
- * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
+ * @copyright 2020 Pretzlaw (https://rmp-up.de)
  * @since      2019-06-09
  */
 class UseInServiceTest extends OptionsTestCase

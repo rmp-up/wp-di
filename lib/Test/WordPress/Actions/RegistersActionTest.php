@@ -9,14 +9,14 @@
  * and under german copyright law. Consider this file as closed source and/or
  * without the permission to reuse or modify its contents.
  * This license is available through the world-wide-web at the following URI:
- * https://mike-pretzlaw.de/license-generic.txt . If you did not receive a copy
+ * https://rmp-up.de/license-generic.txt . If you did not receive a copy
  * of the license and are unable to obtain it through the web, please send a
- * note to mail@mike-pretzlaw.de so we can mail you a copy.
+ * note to mail@rmp-up.de so we can mail you a copy.
  *
  * @package    wp-di
- * @copyright  2019 Mike Pretzlaw
- * @license    https://mike-pretzlaw.de/license-generic.txt
- * @link       https://project.mike-pretzlaw.de/wp-di
+ * @copyright 2020 Pretzlaw
+ * @license    https://rmp-up.de/license-generic.txt
+ * @link       https://project.rmp-up.de/wp-di
  * @since      2019-05-28
  */
 
@@ -75,7 +75,7 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  * * register `MyOwnFilterHandler::writeCache` on priority 13
  *
  *
- * @copyright  2020 Pretzlaw (https://rmp-up.de)
+ * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
 class RegistersActionTest extends AbstractTestCase
 {
@@ -94,7 +94,8 @@ class RegistersActionTest extends AbstractTestCase
     {
         static::assertFilterHasCallback(
             'template_redirect',
-            new IsEqual(new LazyService($this->container, MyOwnFilterHandler::class))
+            new IsEqual(new LazyService($this->container, MyOwnFilterHandler::class)),
+            1
         );
     }
 
@@ -104,25 +105,25 @@ class RegistersActionTest extends AbstractTestCase
             'posts_pre_query',
             new IsEqual(
                 [new LazyService($this->container, MyOwnFilterHandler::class), 'warmUpCache']
-            )
+            ),
+            4
         );
 
         static::assertFilterHasCallback(
             'posts_pre_query',
             new IsEqual(
                 [new LazyService($this->container, MyOwnFilterHandler::class), 'applyCache']
-            )
+            ),
+            4
         );
 
         static::assertFilterHasCallback(
             'posts_pre_query',
             new IsEqual(
                 [new LazyService($this->container, MyOwnFilterHandler::class), 'writeCache']
-            )
+            ),
+            13
         );
-
-        // This needs to be covered by rmp-up/wp-integration-test
-        $this->markTestIncomplete('Did not check for the correct priority.');
     }
 
     protected function tearDown()

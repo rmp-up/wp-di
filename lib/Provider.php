@@ -9,15 +9,14 @@
  * and under german copyright law. Consider this file as closed source and/or
  * without the permission to reuse or modify its contents.
  * This license is available through the world-wide-web at the following URI:
- * https://mike-pretzlaw.de/license-generic.txt . If you did not receive a copy
+ * https://rmp-up.de/license-generic.txt . If you did not receive a copy
  * of the license and are unable to obtain it through the web, please send a
- * note to mail@mike-pretzlaw.de so we can mail you a copy.
+ * note to mail@rmp-up.de so we can mail you a copy.
  *
  * @package   WpDi
- * @copyright 2019 Mike Pretzlaw
- * @license   https://mike-pretzlaw.de/license-generic.txt proprietary
- * @link      https://project.mike-pretzlaw.de/wp-di
- * @since     2019-05-30
+ * @copyright 2020 Pretzlaw
+ * @license   https://rmp-up.de/license-generic.txt proprietary
+ * @link      https://project.rmp-up.de/wp-di
  */
 
 declare(strict_types=1);
@@ -36,8 +35,7 @@ use RmpUp\WpDi\Sanitizer\SanitizerInterface;
 /**
  * Provider
  *
- * @copyright 2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since     2019-05-30
+ * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
 class Provider implements ServiceProviderInterface
 {
@@ -65,17 +63,13 @@ class Provider implements ServiceProviderInterface
      * This provider delegates sections of a service definition to several other provider.
      *
      * @param array $definition    (Un-)normalized definitions of services, parameter or other
-     * @param array $sanitizer     Pre-Mapping provider to sanitizer instanced (DEPRECATED)
+     * @param array $sanitizer     Pre-Mapping provider to sanitizer instanced
      * @param array $keyToProvider Map a root-level key to a specific provider.
      */
     public function __construct(array $definition, array $sanitizer = [], array $keyToProvider = [])
     {
         $this->definition = $definition;
         $this->sanitizer = $sanitizer;
-
-        if ([] !== $sanitizer) {
-            trigger_error('Using sanitizer here is deprecated. Please sanitize within the compiler.', E_USER_DEPRECATED);
-        }
 
         $this->keyToCompiler = $keyToProvider ?: $this->defaultCompiler();
     }
@@ -107,7 +101,7 @@ class Provider implements ServiceProviderInterface
      *
      * @param Container $pimple A container instance
      */
-    public function register(Container $pimple): void
+    public function register(Container $pimple)
     {
         foreach ($this->definition as $provider => $definition) {
             $sectionProvider = $this->keyToCompiler[$provider] ?? $provider;

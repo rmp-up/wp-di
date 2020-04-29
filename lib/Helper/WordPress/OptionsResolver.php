@@ -9,15 +9,14 @@
  * and under german copyright law. Consider this file as closed source and/or
  * without the permission to reuse or modify its contents.
  * This license is available through the world-wide-web at the following URI:
- * https://mike-pretzlaw.de/license-generic.txt . If you did not receive a copy
+ * https://rmp-up.de/license-generic.txt . If you did not receive a copy
  * of the license and are unable to obtain it through the web, please send a
- * note to mail@mike-pretzlaw.de so we can mail you a copy.
+ * note to mail@rmp-up.de so we can mail you a copy.
  *
  * @package    wp-di
- * @copyright  2019 Mike Pretzlaw
- * @license    https://mike-pretzlaw.de/license-generic.txt
- * @link       https://project.mike-pretzlaw.de/wp-di
- * @since      2019-06-09
+ * @copyright 2020 Pretzlaw
+ * @license    https://rmp-up.de/license-generic.txt
+ * @link       https://project.rmp-up.de/wp-di
  */
 
 declare(strict_types=1);
@@ -35,8 +34,7 @@ use Psr\Container\NotFoundExceptionInterface;
  * It looks up if the container has a equally named parameter
  * and returns it.
  *
- * @copyright  2019 Mike Pretzlaw (https://mike-pretzlaw.de)
- * @since      2019-06-09
+ * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
 class OptionsResolver
 {
