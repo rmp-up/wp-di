@@ -31,7 +31,7 @@ use Pretzlaw\WPInt\Traits\WordPressTests;
 use ReflectionException;
 use ReflectionObject;
 use RmpUp\WpDi\LazyService;
-use Symfony\Component\Yaml\Yaml;
+use RmpUp\WpDi\Yaml;
 
 /**
  * AbstractTestCase
