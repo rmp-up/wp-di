@@ -24,6 +24,7 @@ namespace RmpUp\WpDi;
 
 use ArrayObject;
 use Pimple\Container;
+use RmpUp\WpDi\Helper\Check;
 use RmpUp\WpDi\Provider\Services;
 
 /**
@@ -44,6 +45,8 @@ use RmpUp\WpDi\Provider\Services;
  */
 class ServiceDefinition extends ArrayObject
 {
+    private static $referenceCache = [];
+
     public function __invoke(Container $pimple)
     {
         $className = $this[Services::CLASS_NAME];
@@ -53,11 +56,45 @@ class ServiceDefinition extends ArrayObject
         }
 
         foreach ($this[Services::ARGUMENTS] as $key => $argument) {
-            if (is_string($argument) && isset($pimple[$argument])) {
-                $this[Services::ARGUMENTS][$key] = $pimple[$argument];
+            if (!$argument) {
+                // Skip empty
+                continue;
+            }
+
+            if (is_string($argument)) {
+                $this[Services::ARGUMENTS][$key] = $this->resolveParameter($pimple, $argument);
             }
         }
 
         return new $className(...array_values($this[Services::ARGUMENTS]));
+    }
+
+    /**
+     * @param Container $pimple The container to lookup.
+     * @param string    $parameter
+     *
+     * @return mixed
+     */
+    private function resolveParameter(Container $pimple, string $parameter)
+    {
+        if (isset($pimple[$parameter])) {
+            return $pimple[$parameter];
+        }
+
+        if (Check::isReferenceToParameter($parameter)) {
+            // Not found in Pimple so we fallback to options
+            return $this->resolveReference($parameter);
+        }
+
+        return $parameter;
+    }
+
+    private function resolveReference(string $parameter)
+    {
+        if (false === array_key_exists($parameter, self::$referenceCache)) {
+            self::$referenceCache[$parameter] = get_option(trim($parameter, '%'), $parameter);
+        }
+
+        return self::$referenceCache[$parameter];
     }
 }
