@@ -24,6 +24,7 @@ namespace RmpUp\WpDi;
 
 use ArrayObject;
 use Pimple\Container;
+use RmpUp\WpDi\Helper\Check;
 use RmpUp\WpDi\Helper\LazyPimple;
 use RmpUp\WpDi\Provider\Services;
 
@@ -45,6 +46,8 @@ use RmpUp\WpDi\Provider\Services;
  */
 class ServiceDefinition extends ArrayObject
 {
+    private static $referenceCache = [];
+
     public function __invoke(Container $pimple)
     {
         $className = $this[Services::CLASS_NAME];
@@ -54,19 +57,34 @@ class ServiceDefinition extends ArrayObject
         }
 
         foreach ($this[Services::ARGUMENTS] as $key => $argument) {
+            if (!$argument) {
+                // Skip empty
+                continue;
+            }
+
             if (is_string($argument)) {
-                $this[Services::ARGUMENTS][$key] = $this->resolveArgument($pimple, $argument);
+                $this[Services::ARGUMENTS][$key] = $this->resolveParameter($pimple, $argument);
             }
         }
 
         return new $className(...array_values($this[Services::ARGUMENTS]));
     }
 
-    private function resolveArgument(Container $pimple, string $argument)
+    /**
+     * @param Container $pimple The container to lookup.
+     * @param string    $parameter
+     *
+     * @return mixed
+     */
+    private function resolveParameter(Container $pimple, string $parameter)
     {
-        switch ($argument[0]) {
+        if (isset($pimple[$parameter])) {
+            return $pimple[$parameter];
+        }
+
+        switch ($parameter[0]) {
             case '@':
-                $argument = substr($argument, 1);
+                $argument = substr($parameter, 1);
 
                 if (!empty($this[Services::LAZY_ARGS])) {
                     return new LazyPimple($pimple, $argument);
@@ -74,14 +92,22 @@ class ServiceDefinition extends ArrayObject
 
                 return $pimple[$argument];
 
-                break;
             case '%':
-            default:
-                if (!isset($pimple[$argument])) {
-                    return $argument;
+                if (Check::isReferenceToParameter($parameter)) {
+                    // Not found in Pimple so we fallback to options
+                    return $this->resolveReference($parameter);
                 }
-
-                return $pimple[$argument];
+            default:
+                return $parameter;
         }
+    }
+
+    private function resolveReference(string $parameter)
+    {
+        if (false === array_key_exists($parameter, self::$referenceCache)) {
+            self::$referenceCache[$parameter] = get_option(trim($parameter, '%'), $parameter);
+        }
+
+        return self::$referenceCache[$parameter];
     }
 }
