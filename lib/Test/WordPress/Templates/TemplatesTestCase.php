@@ -46,6 +46,7 @@ abstract class TemplatesTestCase extends ProviderTestCase
 
         $this->sanitizer = new Templates();
 
+        // @deprecated This is magic that will introduce bugs some day
         $this->definition = $this->classComment()->execute(0);
         $this->services = $this->sanitizer->sanitize($this->definition);
         $this->provider = new Provider($this->services);

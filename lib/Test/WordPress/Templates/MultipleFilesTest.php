@@ -116,13 +116,16 @@ class MultipleFilesTest extends TemplatesTestCase
      */
     public function testExtendsToArray($services, $index)
     {
+        $templates = [
+            'template-parts/my-plugin/some-feature.php',
+            'other-plugin/template-parts/some-feature.php',
+            'my-plugin/template-parts/some-feature.php',
+        ];
+
         static::assertEquals(
             [
-                'some-feature.php' => [
-                    'template-parts/my-plugin/some-feature.php',
-                    'other-plugin/template-parts/some-feature.php',
-                    'my-plugin/template-parts/some-feature.php',
-                ]
+                'some-feature.php' => $templates,
+                '%some-feature.php%' => $templates,
             ],
             $this->sanitizer->sanitize($services[$index])
         );

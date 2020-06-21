@@ -74,8 +74,8 @@ use RmpUp\WpDi\Test\WordPress\Templates\TemplatesTestCase;
  *
  *   Services::class => [
  *     SomeThing::class => [
- *       'my-own-plugin/template-parts/fester.php',
- *       'my-own-plugin/public/coogan.jpg',
+ *       '%my-own-plugin/template-parts/fester.php%',
+ *       '%my-own-plugin/public/coogan.jpg%',
  *     ]
  *   ]
  * ];
@@ -119,7 +119,13 @@ class FileTest extends TemplatesTestCase
                 'my-own-plugin/template-parts/fester.php' => [
                     'my-own-plugin/template-parts/fester.php',
                 ],
+                '%my-own-plugin/template-parts/fester.php%' => [
+                    'my-own-plugin/template-parts/fester.php',
+                ],
                 'my-own-plugin/public/coogan.jpg' => [
+                    'my-own-plugin/public/coogan.jpg',
+                ],
+                '%my-own-plugin/public/coogan.jpg%' => [
                     'my-own-plugin/public/coogan.jpg',
                 ]
             ],
