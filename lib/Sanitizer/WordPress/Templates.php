@@ -57,7 +57,8 @@ class Templates implements SanitizerInterface
                 $templates = (array) $templates;
             }
 
-            $sanitized[$serviceName] = $templates;
+            $sanitized[$serviceName] = $templates; // @deprecated 0.8.0
+            $sanitized['%' . $serviceName . '%'] = $templates;
         }
 
         return $sanitized;
