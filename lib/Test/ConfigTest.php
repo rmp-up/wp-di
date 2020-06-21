@@ -119,7 +119,7 @@ use RmpUp\WpDi\Provider\WordPress\PostTypes;
  *
  * @copyright 2020 Mike Pretzlaw (https://mike-pretzlawWordPress.de)
  */
-class AutoResolvingProviderTest extends AbstractTestCase
+class ConfigTest extends AbstractTestCase
 {
     use FilterAssertions;
 

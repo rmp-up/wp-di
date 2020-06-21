@@ -96,7 +96,7 @@ class Services implements ServiceProviderInterface
      *
      * @param Container $pimple A container instance
      */
-    public function register(Container $pimple): void
+    public function register(Container $pimple)
     {
         foreach ($this->services as $key => $value) {
             $this->compile($pimple, $key, $value);
@@ -106,9 +106,9 @@ class Services implements ServiceProviderInterface
     /**
      * @param Container             $pimple
      * @param string                $serviceName
-     * @param array|string|callable $definition
+     * @param array|object   $definition
      */
-    protected function compile(Container $pimple, string $serviceName, $definition): void
+    protected function compile(Container $pimple, string $serviceName, $definition)
     {
         if ($definition instanceof Closure || is_callable($definition)) {
             // Already lazy
@@ -116,16 +116,11 @@ class Services implements ServiceProviderInterface
             return;
         }
 
-        if (is_scalar($definition)) {
-            // Remain scalar as they are.
-            $pimple[$serviceName] = $definition;
-            return;
-        }
-
         $pimple[$serviceName] = new ServiceDefinition($definition);
 
         // Delegate to extensions
-        foreach (array_intersect_key($this->keywordToHandler, (array) $definition) as $key => $extensions) {
+        $definition = (array) $definition;
+        foreach (array_intersect_key($this->keywordToHandler, $definition) as $key => $extensions) {
             // Found keywords will be forwarded to their handler.
             // Cast to array in case one key maps directly to one compiler (instead of an array of compiler).
             foreach ((array) $extensions as $extension) {

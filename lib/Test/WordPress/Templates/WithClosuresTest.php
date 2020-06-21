@@ -23,8 +23,9 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress\Templates;
 
+use Pimple\Container;
+use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Provider\WordPress\Templates;
-use RmpUp\WpDi\Test\ProviderTestCase;
 
 /**
  * Custom resolver using callback
@@ -63,11 +64,27 @@ use RmpUp\WpDi\Test\ProviderTestCase;
  */
 class WithClosuresTest extends TemplatesTestCase
 {
+    protected function setUp()
+    {
+        $this->sanitizer = new \RmpUp\WpDi\Sanitizer\WordPress\Templates();
+
+        $this->definition = $this->classComment()->execute(0);
+        $this->services[Templates::class] = $this->sanitizer->sanitize($this->definition[Templates::class]);
+
+        $this->pimple = new Container();
+        $this->pimple->register(new Provider($this->services));
+    }
+
     public function testClosureUnchanged()
     {
         static::assertSame(
             $this->definition[Templates::class]['my-footer.php'],
             $this->services[Templates::class]['my-footer.php']
+        );
+
+        static::assertSame(
+            $this->definition[Templates::class]['my-footer.php'],
+            $this->pimple->raw('%my-footer.php%')
         );
     }
 }
