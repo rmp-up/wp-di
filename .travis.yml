@@ -27,7 +27,7 @@ matrix:
   include:
     # additional combination among env (as above)
     - php: '7.0'
-      env: PHPUNIT_VERSION="~6" WP_VERSION=5.3.*
+      env: WP_VERSION=5.3.*
     # Intermediate version tests due to unstable SemVer
     #- php: '7.1'
     #  env: WP_VERSION=4.9
@@ -47,6 +47,8 @@ cache:
 
 before_install:
   - mysql -e 'CREATE DATABASE dev;'
+  # Disable PHPStan because it gives false-positives PHP < 7.1
+  - php -r 'if ( PHP_VERSION_ID < 70100 ) passthru("composer remove --dev phpstan/phpstan");'
   # Try supporting other versions
   - composer require --update-with-dependencies johnpbloch/wordpress:$WP_VERSION
 
@@ -61,7 +63,8 @@ install:
 script:
   - composer validate --strict --no-check-lock
   - vendor/bin/phpunit --coverage-clover coverage.xml
-  - vendor/bin/phpstan analyse lib/
+  # phpstan on PHP 7.0 does not work correctly
+  - "[[ $TRAVIS_PHP_VERSION == 7.0 ]] || vendor/bin/phpstan analyse lib/"
 
 after_failure:
   - cat srv/wp-content/debug.log || true
