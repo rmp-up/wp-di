@@ -110,7 +110,7 @@ class UsingCallbacksTest extends ProviderTestCase
     {
         $this->assertRandomThing($this->pimple['random_things']);
 
-        static::assertIsInt($this->pimple['%some_int%']);
+        static::assertInternalType('int', $this->pimple['%some_int%']);
         static::assertSame($this->pimple['%some_int%'] * 42, $this->pimple['more_random_things']['int']);
         static::assertSame('xoxo' . $this->pimple['%some_string%'] . '<3', $this->pimple['more_random_things']['string']);
     }
@@ -118,14 +118,14 @@ class UsingCallbacksTest extends ProviderTestCase
     /**
      * @param $things
      */
-    private function assertRandomThing($things): void
+    private function assertRandomThing($things)
     {
         static::assertInstanceOf(ArrayObject::class, $things);
 
-        static::assertIsString($things['string']);
+        static::assertInternalType('string', $things['string']);
         static::assertRegExp('/[anis]{4}/', $things['string']);
 
-        static::assertIsInt($things['int']);
+        static::assertInternalType('int', $things['int']);
         static::assertLessThan(10, $things['int']);
         static::assertGreaterThan(0, $things['int']);
     }

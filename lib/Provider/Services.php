@@ -38,8 +38,8 @@ use RmpUp\WpDi\ServiceDefinition;
  */
 class Services implements ServiceProviderInterface
 {
-    public const CLASS_NAME = 'class';
-    public const ARGUMENTS = 'arguments';
+    const CLASS_NAME = 'class';
+    const ARGUMENTS = 'arguments';
 
     /**
      * @var callable[][]

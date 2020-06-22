@@ -83,7 +83,7 @@ class ServiceDefinitionTest extends ProviderTestCase
     private function assertCommandRegistered($name, $method, $arguments)
     {
         static::assertEquals($name, $arguments[0]);
-        static::assertIsArray($arguments[1]);
+        static::assertInternalType('array', $arguments[1]);
         static::assertLazyService('MyOwnCliCommand', $arguments[1][0]);
         static::assertSame($method, $arguments[1][1]);
     }
