@@ -16,6 +16,7 @@
     "php": ">=7.0",
     "johnpbloch/wordpress": "5.2.*",
     "php-coveralls/php-coveralls": "1.1.*",
+    "phpcompatibility/php-compatibility": "^9.3",
     "phpstan/phpstan": "0.11.*",
     "phpunit/phpunit": "7.5.*|8.2.*|6.5.*",
     "pretzlaw/wp-integration-test": "0.3.*",

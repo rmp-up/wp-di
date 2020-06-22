@@ -1,3 +1,6 @@
+![](https://img.shields.io/badge/PHP-7.0%20--%207.4-blue?style=for-the-badge&logo=php)
+![](https://img.shields.io/badge/WordPress-4.8%20--%205.4-blue?style=for-the-badge&logo=wordpress)
+
 [![Build Status](https://travis-ci.org/rmp-up/wp-di.svg?branch=master)](https://travis-ci.org/rmp-up/wp-di)
 [![Coverage Status](https://coveralls.io/repos/github/rmp-up/wp-di/badge.svg?branch=master)](https://coveralls.io/github/rmp-up/wp-di?branch=master)
 
