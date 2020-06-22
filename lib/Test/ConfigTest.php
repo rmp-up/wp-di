@@ -47,56 +47,45 @@ use RmpUp\WpDi\Provider\WordPress\PostTypes;
  * We solve all of this by a simple service definition like this:
  *
  *
- * ```php
- * <?php // my-plugin-services.php
+ * ```yaml
+ * options:
+ *   some_foo: The default value of this as long as does not exist
  *
- * use \RmpUp\WpDi\Provider;
- * use \RmpUp\WpDi\Provider\WordPress;
+ * services:
+ *   AnRepository: ~
  *
- * return [
- *   Provider\Services::class => [
- *     AnRepository::class,
+ *   SomeSeoStuff:
+ *     arguments:
+ *       - AnRepository
+ *       - '%some_foo%'
+ *     add_action: template_redirect
  *
- *     SomeSeoStuff::class => [
- *       'arguments' => [
- *         AnRepository::class,
- *         'some_foo'
- *       ]
- *     ]
- *   ],
- *
- *   WordPress\Options::class => [
- *     'some_foo' => 'The default value of this as long as not given',
- *   ]
- *
- *   WordPress\Actions::class => [
- *     'template_redirect' => [
- *       RejectUnauthorizedThings::class,
- *       SomeSeoStuff::class,
- *     ]
- *   ]
- * ];
+ *   RejectUnauthorizedThings:
+ *     add_action:
+ *       template_redirect:
+ *         69: __invoke
  * ```
  *
  * Step after step this does:
  *
- * 1. Register the "AnRepository"-service
- * 2. Register the "SomeSeoStuff"-service
+ * 1. "Register" a "some_foo"-option with a default value.
+ * 2. Register the "AnRepository"-service
+ * 3. Register the "SomeSeoStuff"-service
  *    * Use the "AnRepository"-service as first `__constructor` argument.
  *    * Use the "some_foo"-option as second argument.
- * 3. "Register" a "some_foo"-option with a default value.
- * 4. Add services to the `template_redirect` action:
- *    * A new "RejectUnauthorizedThings"-service
- *    * The existing "SomeSeoStuff"-service
+ *    * Binds `SomeSeoStuff::__invoke` to the action "template_redirect"
+ * 4. Register the "RejectUnauthorizedThings"-service
+ *    * Binds `RejectUnauthorizedThings::__invoke`
+ *      to the action "template_redirect"
+ *      with priority 69.
  *
  * So in case the `template_redirect` action is fired the services
  * "RejectUnauthorizedThings" and "SomeSeoStuff" will be lazy loaded
- * and invoked (e.g. using `__invoke`).
+ * and invoked.
  *
  *   This is the very short syntax.
  * Read on to know more about the complete syntax
  * and other possibilities like ...
- *
  *
  * * `WordPress\Filter` to register filter,
  * * `WordPress\PostTypes` to register post-types,
@@ -141,14 +130,6 @@ class ConfigTest extends AbstractTestCase
         parent::setUp();
 
         $this->pimple->register(new Provider($this->definition));
-    }
-
-    public function testActionsRegistered()
-    {
-        self::assertFilterHasCallback('template_redirect', new IsInstanceOf(LazyService::class));
-        self::assertFilterHasCallback('template_redirect', new IsEqual(
-            new LazyService($this->container, Mirror::class)
-        ));
     }
 
     public function testServicesRegistered()

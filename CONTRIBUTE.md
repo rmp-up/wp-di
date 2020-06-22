@@ -39,3 +39,28 @@ vendor/bin/wp --allow-root core update --minor
 ```bash
 vendor/bin/phpunit
 ```
+
+### Documetation
+
+The documentation is done while testing using
+`composer require --dev --update-with-all-dependencies pretzlaw/phpunit-docgen`.
+Do NOT commit this package or the changed composer.json
+because it would break testing under PHP 7.0 .
+
+For phpunit.xml.dist add:
+
+```xml
+<listeners>
+    <listener class="Pretzlaw\PHPUnit\DocGen\TestCaseListener">
+        <arguments>
+            <string>var/documentation.html</string>
+            <string>rmp-up/wp-di</string>
+            <string>etc/documentation.css</string>
+        </arguments>
+    </listener>
+</listeners>
+```
+
+And export the HTML to PDF using Chromium.
+Firefox is not able to properly move images/text to the next page
+without cutting them in half.

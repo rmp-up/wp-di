@@ -97,6 +97,7 @@ class ServiceDefinition extends ArrayObject
                     // Not found in Pimple so we fallback to options
                     return $this->resolveReference($parameter);
                 }
+
             default:
                 return $parameter;
         }

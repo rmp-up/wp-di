@@ -17,7 +17,6 @@
  * @copyright 2020 Pretzlaw
  * @license    https://rmp-up.de/license-generic.txt
  * @link       https://project.rmp-up.de/wp-di
- * @since      2019-04-27
  */
 
 declare(strict_types=1);

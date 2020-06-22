@@ -17,7 +17,6 @@
  * @copyright 2020 Pretzlaw
  * @license    https://rmp-up.de/license-generic.txt
  * @link       https://project.rmp-up.de/wp-di
- * @since      2019-06-08
  */
 
 declare(strict_types=1);
@@ -43,7 +42,6 @@ use RmpUp\WpDi\Test\WordPress\Options\OptionsTestCase;
  * integer 423379498.
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
- * @since      2019-06-08
  */
 class DefaultOptionTest extends OptionsTestCase
 {

@@ -107,9 +107,9 @@ class Services implements ServiceProviderInterface
     }
 
     /**
-     * @param Container             $pimple
-     * @param string                $serviceName
-     * @param array|object   $definition
+     * @param Container         $pimple
+     * @param string            $serviceName
+     * @param array|object|null $definition
      */
     protected function compile(Container $pimple, string $serviceName, $definition)
     {

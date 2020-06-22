@@ -37,7 +37,6 @@ use RmpUp\WpDi\Yaml;
  * AbstractTestCase
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
- * @since      2019-04-25
  */
 abstract class AbstractTestCase extends TestCase
 {
