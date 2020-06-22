@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * YAML compatibility switch
+ * Yaml.php
  *
  * LICENSE: This source file is created by the company around M. Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -20,16 +20,31 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi;
+namespace RmpUp\WpDi\Compat\Symfony4;
 
-use RmpUp\WpDi\Helper\Versions;
-use RmpUp\WpDi\Compat\Symfony3\Yaml as Symfony3Yaml;
-use RmpUp\WpDi\Compat\Symfony4\Yaml as Symfony4Yaml;
+use RmpUp\WpDi\Compat\YamlCommon;
 
-switch (true) {
-    case Versions::isLowerThan('symfony/yaml', '4.0.0'):
-        class_alias(Symfony3Yaml::class, Yaml::class);
-        break;
-    default:
-        class_alias(Symfony4Yaml::class, Yaml::class);
+/**
+ * Parsing and dumping Yaml files
+ *
+ * Same as the Symfony Yaml component but pre-configured
+ * to make the things known from the documentation work.
+ *
+ * @copyright 2020 Pretzlaw (https://rmp-up.de)
+ */
+class Yaml extends YamlCommon
+{
+    public static function parse(string $input, int $flags = 0)
+    {
+        return self::process(
+            parent::parse($input, $flags | static::$defaultFlags)
+        );
+    }
+
+    public static function parseFile(string $filename, int $flags = 0)
+    {
+        return self::process(
+            parent::parseFile($filename, $flags | static::$defaultFlags)
+        );
+    }
 }
