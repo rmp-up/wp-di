@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * YAML compatibility switch
+ * Versions.php
  *
  * LICENSE: This source file is created by the company around M. Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -20,16 +20,33 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi;
+namespace RmpUp\WpDi\Helper;
 
-use RmpUp\WpDi\Helper\Versions;
-use RmpUp\WpDi\Compat\Symfony3\Yaml as Symfony3Yaml;
-use RmpUp\WpDi\Compat\Symfony4\Yaml as Symfony4Yaml;
+use PackageVersions\Versions as PackageVersions;
 
-switch (true) {
-    case Versions::isLowerThan('symfony/yaml', '4.0.0'):
-        class_alias(Symfony3Yaml::class, Yaml::class);
-        break;
-    default:
-        class_alias(Symfony4Yaml::class, Yaml::class);
+/**
+ * Versions
+ *
+ * @copyright 2020 Pretzlaw (https://rmp-up.de)
+ */
+class Versions
+{
+    private static $cache = [];
+
+    public static function getVersion(string $packageName): string
+    {
+        if (false === array_key_exists($packageName, static::$cache)) {
+            static::$cache[$packageName] = ltrim(
+                (string) strtok(PackageVersions::getVersion($packageName), '@'),
+                'v'
+            );
+        }
+
+        return static::$cache[$packageName];
+    }
+
+    public static function isLowerThan(string $packageName, string $version)
+    {
+        return version_compare(static::getVersion($packageName), $version, '<');
+    }
 }
