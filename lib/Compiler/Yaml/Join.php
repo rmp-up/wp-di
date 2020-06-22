@@ -35,7 +35,9 @@ class Join implements YamlCompiler
     public function __invoke(TaggedValue $taggedValue)
     {
         $value = '';
-        foreach (explode("\n", $taggedValue->getValue()) as $line) {
+        $definition = $taggedValue->getValue();
+
+        foreach ($definition as $line) {
             if (!$line) {
                 // An empty line shall convert to a new line
                 $value .= "\n";

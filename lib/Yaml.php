@@ -44,7 +44,7 @@ class Yaml extends SymfonyYaml
         'join' => Join::class,
     ];
 
-    public static function parse(string $input, int $flags = 0)
+    public static function parse($input, $flags = 0)
     {
         return self::process(
             parent::parse($input, $flags | static::$defaultFlags)
@@ -54,11 +54,12 @@ class Yaml extends SymfonyYaml
     protected static function parseRecursive(array &$data)
     {
         foreach ($data as &$datum) {
-            $datum = static::convertTags($datum);
-
             if (is_array($datum)) {
                 static::parseRecursive($datum);
+                continue;
             }
+
+            $datum = static::convertTags($datum);
         }
     }
 
@@ -84,7 +85,7 @@ class Yaml extends SymfonyYaml
         return $data;
     }
 
-    public static function parseFile(string $filename, int $flags = 0)
+    public static function parseFile($filename, $flags = 0)
     {
         return self::process(
             parent::parseFile($filename, $flags | static::$defaultFlags)

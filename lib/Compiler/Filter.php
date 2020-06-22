@@ -72,7 +72,7 @@ class Filter implements CompilerInterface
      * @param string[]|null           $methodNames
      * @param int                     $priority
      */
-    protected function register($filterName, \Pimple\Psr11\Container $container, string $serviceName, $methodNames, $priority): void
+    protected function register($filterName, \Pimple\Psr11\Container $container, string $serviceName, $methodNames, $priority)
     {
         if (null === $methodNames) {
             $methodNames = [null];

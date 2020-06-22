@@ -34,16 +34,11 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  *
  * ```yaml
  * templates:
- *   envemo.jpg: !join |
- *      !php/const WP_CONTENT_DIR
- *      "/plugins/my-own/public/vw.jpg"
+ *
+ *   envemo.jpg: !join [ !php/const WP_CONTENT_DIR, "/plugins/my-own/public/vw.jpg" ]
  *   # result: .../wp-content/plugins/my-own/public/vw.jpg
  *
- *   envemo2.jpg: !join |
- *      !php/const ABSPATH
- *      !php/const WPINC
- *      "/images/smilies/icon_eek.gif"
- *
+ *   envemo2.jpg: !join [ !php/const ABSPATH, !php/const WPINC, "/images/smilies/icon_eek.gif" ]
  *   # result: .../wp-includes/images/smilies/icon_eek.gif
  * ```
  *
