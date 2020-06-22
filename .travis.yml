@@ -14,7 +14,6 @@ addons:
 
 env:
   global:
-    - PHPUNIT_VERSION="~7|~8"
     - COMPOSER_CACHE_DIR=/home/travis/.composer
   matrix:
     # see https://codex.wordpress.org/WordPress_Versions
@@ -31,7 +30,7 @@ matrix:
       env: PHPUNIT_VERSION="~6" WP_VERSION=5.3.*
     # Intermediate version tests due to unstable SemVer
     #- php: '7.1'
-    #  env: PHPUNIT_VERSION="~7" WP_VERSION=4.9
+    #  env: WP_VERSION=4.9
   # in the process to achieve support
   allow_failures:
     - php: '7.0'
@@ -49,7 +48,7 @@ cache:
 before_install:
   - mysql -e 'CREATE DATABASE dev;'
   # Try supporting other versions
-  - composer require --update-with-dependencies phpunit/phpunit:$PHPUNIT_VERSION johnpbloch/wordpress:$WP_VERSION
+  - composer require --update-with-dependencies johnpbloch/wordpress:$WP_VERSION
 
 install:
   - composer install
