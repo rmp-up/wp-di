@@ -26,10 +26,10 @@ namespace RmpUp\WpDi\Test;
 use Closure;
 use PHPUnit\Framework\TestCase;
 use Pimple\Container;
-use Pretzlaw\PHPUnit\DocGen\DocComment\Parser;
 use Pretzlaw\WPInt\Traits\WordPressTests;
 use ReflectionException;
 use ReflectionObject;
+use RmpUp\Doc\DocParser;
 use RmpUp\WpDi\LazyService;
 use RmpUp\WpDi\Yaml;
 
@@ -41,7 +41,7 @@ use RmpUp\WpDi\Yaml;
  */
 abstract class AbstractTestCase extends TestCase
 {
-    use Parser;
+    use DocParser;
     use WordPressTests;
 
     /**

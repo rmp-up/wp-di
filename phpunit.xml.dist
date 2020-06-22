@@ -20,21 +20,6 @@
         </whitelist>
     </filter>
 
-    <listeners>
-        <listener class="Pretzlaw\PHPUnit\DocGen\TestCaseListener">
-            <arguments>
-                <string>var/documentation.md</string>
-            </arguments>
-        </listener>
-        <listener class="Pretzlaw\PHPUnit\DocGen\TestCaseListener">
-            <arguments>
-                <string>var/documentation.html</string>
-                <string>rmp-up/wp-di - Dependency injection magic for WordPress</string>
-                <string>etc/documentation.css</string>
-            </arguments>
-        </listener>
-    </listeners>
-
     <logging>
         <log type="coverage-html" target="var/phpunit"/>
     </logging>
