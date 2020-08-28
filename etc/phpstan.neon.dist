@@ -6,3 +6,5 @@ parameters:
         - ./lib/Test/functions.php
     excludes_analyse:
         - ./lib/Test
+    ignoreErrors:
+        - '#Parameter \#2.*of function add_shortcode expects callable.*LazyPimple, string.*given\.$#'

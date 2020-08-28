@@ -31,6 +31,7 @@ use ReflectionException;
 use ReflectionObject;
 use RmpUp\Doc\DocParser;
 use RmpUp\WpDi\LazyService;
+use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Yaml;
 
 /**
@@ -132,6 +133,17 @@ abstract class AbstractTestCase extends TestCase
         Mirror::_reset();
     }
 
+    /**
+     * Register services as defined in the doc-comment
+     *
+     * @param int   $index
+     * @param mixed ...$keys
+     */
+    protected function registerServices($index = 0, ...$keys)
+    {
+        $this->pimple->register((new Provider($this->yaml($index, ...$keys))));
+    }
+
     protected function yaml($index = 0, ...$keys)
     {
         $allNodes = $this->classComment()->xpath('//code[@class="yaml"]');
@@ -141,6 +153,10 @@ abstract class AbstractTestCase extends TestCase
         }
 
         $data = Yaml::parse((string) $allNodes[$index]);
+
+        if ([] === $keys) {
+            return $data;
+        }
 
         $path = [];
         foreach ($keys as $key) {

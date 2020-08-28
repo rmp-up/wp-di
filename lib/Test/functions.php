@@ -2,6 +2,18 @@
 
 use RmpUp\WpDi\Test\AbstractTestCase;
 
+// WordPres Methods
+const WP_BASE_PATH = __DIR__ . '/../../srv/';
+$wpFunctions = [
+    WP_BASE_PATH . 'wp-includes/shortcodes.php',
+];
+
+foreach ($wpFunctions as $wpFile) {
+    if (file_exists($wpFile)) {
+        require_once $wpFile;
+    }
+}
+
 function _rmp_record_call(string $function, array $arguments)
 {
     if (!array_key_exists($function, AbstractTestCase::$calls)) {

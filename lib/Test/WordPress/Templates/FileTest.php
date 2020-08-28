@@ -88,7 +88,6 @@ class FileTest extends TemplatesTestCase
     protected function setUp()
     {
         $this->pimple = new Container();
-        $this->pimple->register(new Provider($this->yaml(0)));
     }
 
     public function getDefinition(): array
@@ -156,5 +155,14 @@ class FileTest extends TemplatesTestCase
         $current = $this->pimple['my-own-plugin/template-parts/fester.php'];
 
         static::assertTemplatePathCorrect('my-own-plugin/template-parts/fester.php', $current);
+    }
+
+    protected function tearDown()
+    {
+        if (shortcode_exists('uncle')) {
+            remove_shortcode('uncle');
+        }
+
+        parent::tearDown();
     }
 }
