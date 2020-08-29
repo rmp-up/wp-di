@@ -27,6 +27,8 @@ use InvalidArgumentException;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use RmpUp\WpDi\Provider\Parameters;
+use RmpUp\WpDi\Provider\ProviderNode;
+use RmpUp\WpDi\Provider\ProviderNodeTrait;
 use RmpUp\WpDi\Provider\Services;
 use RmpUp\WpDi\Provider\WordPress\Options;
 use RmpUp\WpDi\Provider\WordPress\Templates;
@@ -39,8 +41,11 @@ use RmpUp\WpDi\Sanitizer\SanitizerInterface;
  */
 class Provider implements ServiceProviderInterface
 {
+    use ProviderNodeTrait;
+
     /**
      * @var array
+     * @deprecated Use ::$nodes instead
      */
     private $keyToCompiler;
     /**
@@ -63,7 +68,7 @@ class Provider implements ServiceProviderInterface
      * This provider delegates sections of a service definition to several other provider.
      *
      * @param array $definition    (Un-)normalized definitions of services, parameter or other
-     * @param array $sanitizer     Pre-Mapping provider to sanitizer instanced
+     * @param array $sanitizer     Pre-Mapping provider to sanitizer instanced (DEPRECATED 0.8)
      * @param array $keyToProvider Map a root-level key to a specific provider.
      */
     public function __construct(array $definition, array $sanitizer = [], array $keyToProvider = [])
@@ -71,9 +76,16 @@ class Provider implements ServiceProviderInterface
         $this->definition = $definition;
         $this->sanitizer = $sanitizer;
 
-        $this->keyToCompiler = $keyToProvider ?: $this->defaultCompiler();
+        $this->nodes = $keyToProvider ?: $this->defaultCompiler();
+        $this->keyToCompiler =& $this->nodes; // @deprecated 0.8.0 BC
     }
 
+    /**
+     * @param string $key               Section-Key as used in the definitions.
+     * @param string|callable $compiler Class name or already callable.
+     *
+     * @deprecated 0.8 Please use ::addProvider instead.
+     */
     public function addCompiler($key, $compiler)
     {
         if (!array_key_exists($key, $this->keyToCompiler)) {
@@ -83,10 +95,36 @@ class Provider implements ServiceProviderInterface
         $this->keyToCompiler[$key][] = $compiler;
     }
 
+    /**
+     * @param string|callable $sectionProvider A class-name or a callable.
+     * @param Container       $pimple
+     * @param array           $definition
+     *
+     * @deprecated 0.8.0 Just here for BC.
+     * @internal
+     */
+    private function bcRegistration($sectionProvider, Container $pimple, $definition)
+    {
+        if (is_callable($sectionProvider)) {
+            // Keeping provider lazy in case they are not used at all.
+            $sectionProvider = $sectionProvider($pimple);
+        }
+
+        if (false === class_exists($sectionProvider)) {
+            throw new InvalidArgumentException('Unknown provider: ' . $sectionProvider);
+        }
+
+        $pimple->register(
+            new $sectionProvider(
+                $this->sanitize($sectionProvider, $definition)
+            )
+        );
+    }
+
     private function defaultCompiler(): array
     {
         return [
-            'services' => Services::class,
+            'services' => new Services(),
             'options' => Options::class,
             'parameters' => Parameters::class,
             'templates' => Templates::class,
@@ -103,23 +141,17 @@ class Provider implements ServiceProviderInterface
      */
     public function register(Container $pimple)
     {
+        // TODO 0.8.0 $this->validateDefinition($this->definition);
+
         foreach ($this->definition as $provider => $definition) {
             $sectionProvider = $this->keyToCompiler[$provider] ?? $provider;
 
-            if (is_callable($sectionProvider)) {
-                // Keeping provider lazy in case they are not used at all.
-                $sectionProvider = $sectionProvider($pimple);
+            if ($sectionProvider instanceof ProviderNode) {
+                $sectionProvider($definition, $pimple);
+                continue;
             }
 
-            if (false === class_exists($sectionProvider)) {
-                throw new InvalidArgumentException('Unknown provider: ' . $sectionProvider);
-            }
-
-            $pimple->register(
-                new $sectionProvider(
-                    $this->sanitize($sectionProvider, $definition)
-                )
-            );
+            $this->bcRegistration($sectionProvider, $pimple, $definition);
         }
     }
 
