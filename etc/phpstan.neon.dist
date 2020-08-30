@@ -7,4 +7,6 @@ parameters:
     excludes_analyse:
         - ./lib/Test
     ignoreErrors:
-        - '#Parameter \#2.*of function add_shortcode expects callable.*LazyPimple, string.*given\.$#'
+        # __call is not considered as a callback, so we supress those warnings
+        - '#Parameter \#\d+.*of function.*expects callable.*LazyService.*given\.$#'
+        - '#Parameter \#\d+.*of function.*expects callable.*LazyPimple.*given\.$#'
