@@ -4,6 +4,7 @@ use RmpUp\WpDi\Test\Mirror;
 
 const MY_PLUGIN_DIR = __DIR__;
 
+class_alias(Mirror::class, '\\MyBox');
 class_alias(Mirror::class, '\\MyOwnActionListener');
 class_alias(Mirror::class, '\\MyOwnCliCommand');
 class_alias(Mirror::class, '\\MyOwnFilterHandler');
@@ -28,7 +29,12 @@ if (empty($_ENV['WP_DIR'])) {
     $_ENV['WP_DIR'] = dirname(__DIR__, 2) . '/srv/';
 }
 
+const WP_ADMIN = true;
+const WP_USE_THEMES = false;
+
+$_SERVER['PHP_SELF'] = ABSPATH . '/wp-admin/post.php';
 require_once __DIR__ . '/../../vendor/pretzlaw/wp-integration-test/bootstrap.php';
+require_once ABSPATH . 'wp-admin/includes/admin.php';
 
 class MyOwnWidget extends \WP_Widget {
     public function __construct($id = 'rmpup_myOwnWidget', $name = 'rmp-up test', $options = array(), $control = array())

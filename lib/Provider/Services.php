@@ -27,6 +27,7 @@ use Closure;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use RmpUp\WpDi\Compiler\Filter;
+use RmpUp\WpDi\Compiler\MetaBox;
 use RmpUp\WpDi\Compiler\PostType;
 use RmpUp\WpDi\Compiler\Shortcode;
 use RmpUp\WpDi\Compiler\Widgets;
@@ -85,6 +86,8 @@ class Services implements ServiceProviderInterface, ProviderNode
 
             Filter::ACTION_KEY => $filter,
             'add_action' => $filter, // alias
+
+            'meta_box' => [new MetaBox()],
 
             'post_type' => [new PostType()],
 
