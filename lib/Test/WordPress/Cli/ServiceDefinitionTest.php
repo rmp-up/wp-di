@@ -72,11 +72,6 @@ use RmpUp\WpDi\Test\ProviderTestCase;
 class ServiceDefinitionTest extends ProviderTestCase
 {
     /**
-     * @var array
-     */
-    private $config;
-
-    /**
      * @param $arguments
      * @param $name
      */
