@@ -23,19 +23,26 @@ env:
     - WP_VERSION=5.0.*
     - WP_VERSION=5.2.*
     - WP_VERSION=5.4.*
+    - WP_VERSION=5.5.*
     - WP_VERSION=dev-master
 
 matrix:
   include:
-    # additional combination among env (as above)
-    - php: '5.6'
-      env: WP_VERSION=4.8.*
     # Intermediate version tests due to unstable SemVer
     #- php: '7.1'
     #  env: WP_VERSION=4.9
+    # additional combination among env (as above)
+    - php: '5.6'
+      env: WP_VERSION=4.8.*
+    - php: 'hhvm'
+      env: WP_VERSION=5.4.*
+    - php: 'nightly'
+      env: WP_VERSION=5.4.*
   # in the process to achieve support
   allow_failures:
     - php: '5.6'
+    - php: 'hhvm'
+    - php: 'nightly'
     - env: WP_VERSION=dev-master
   # Do not wait for allowed failures
   fast_finish: true
