@@ -26,6 +26,7 @@ namespace RmpUp\WpDi\Provider\WordPress;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use RmpUp\WpDi\Helper\WordPress\OptionsResolver;
+use RmpUp\WpDi\Provider\ProviderNode;
 use RmpUp\WpDi\ServiceDefinition\OptionNode;
 
 /**
@@ -33,16 +34,40 @@ use RmpUp\WpDi\ServiceDefinition\OptionNode;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class Options implements ServiceProviderInterface
+class Options implements ServiceProviderInterface, ProviderNode
 {
+    /**
+     * @var OptionsResolver
+     */
+    private $optionsResolver;
     /**
      * @var array
      */
     private $serviceDefinition;
 
-    public function __construct(array $serviceDefinition)
+    /**
+     * Options constructor.
+     *
+     * @param array           $serviceDefinition
+     */
+    public function __construct(array $serviceDefinition = [])
     {
         $this->serviceDefinition = $serviceDefinition;
+    }
+
+    /**
+     * @param Container $pimple
+     *
+     * @return OptionsResolver
+     */
+    protected function optionsResolver(Container $pimple): OptionsResolver
+    {
+        if (null === $this->optionsResolver) {
+            // DEPRECATED - the options resolver should be injected instead
+            $this->optionsResolver = new OptionsResolver(new \Pimple\Psr11\Container($pimple));
+        }
+
+        return $this->optionsResolver;
     }
 
     /**
@@ -52,13 +77,18 @@ class Options implements ServiceProviderInterface
      * It should not get services.
      *
      * @param Container $pimple A container instance
+     * @deprecated 0.8.0 Use ::__invoke instead.
      */
     public function register(Container $pimple)
     {
-        // DEPRECATED - the options resolver should be injected instead
-        $optionResolver = new OptionsResolver(new \Pimple\Psr11\Container($pimple));
+        $this->__invoke($this->serviceDefinition, $pimple);
+    }
 
-        foreach ($this->serviceDefinition as $optionKey => $value) {
+    public function __invoke(array $definition, Container $pimple, $key = '')
+    {
+        $optionResolver = $this->optionsResolver($pimple);
+
+        foreach ($this->sanitize($definition) as $optionKey => $value) {
             if (!is_callable($value)) {
                 $value = new OptionNode($optionKey, $value);
             }
@@ -67,5 +97,21 @@ class Options implements ServiceProviderInterface
 
             add_filter('default_option_' . $optionKey, $optionResolver, 10, 3);
         }
+    }
+
+    private function sanitize($node): array
+    {
+        $sanitized = [];
+
+        foreach ($node as $optionKey => $optionsValue) {
+            if (is_int($optionKey)) {
+                $optionKey = $optionsValue;
+                $optionsValue = OptionNode::DEFAULT;
+            }
+
+            $sanitized[$optionKey] = $optionsValue;
+        }
+
+        return $sanitized;
     }
 }

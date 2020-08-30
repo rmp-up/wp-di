@@ -125,7 +125,7 @@ class Provider implements ServiceProviderInterface
     {
         return [
             'services' => new Services(),
-            'options' => Options::class,
+            'options' => new Options(),
             'parameters' => new Parameters(),
             'templates' => new Templates(),
         ];
