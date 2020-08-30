@@ -38,7 +38,7 @@ use RmpUp\WpDi\ServiceDefinition;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class Services implements ServiceProviderInterface
+class Services implements ServiceProviderInterface, ProviderNode
 {
     const CLASS_NAME = 'class';
     const ARGUMENTS = 'arguments';
@@ -60,7 +60,7 @@ class Services implements ServiceProviderInterface
      * @param array        $services
      * @param callable[][] $keywordToHandler Mapping of keys delegating to other handler.
      */
-    public function __construct(array $services, array $keywordToHandler = [])
+    public function __construct(array $services = [], array $keywordToHandler = [])
     {
         $this->services = $services;
         $this->keywordToHandler = $keywordToHandler ?: $this->defaultHandler();
@@ -97,6 +97,24 @@ class Services implements ServiceProviderInterface
     }
 
     /**
+     * @param array     $definition
+     * @param string    $serviceName
+     * @param Container $pimple
+     */
+    protected function delegate(array $definition, string $serviceName, Container $pimple)
+    {
+        // Delegate to extensions
+        foreach (array_intersect_key($this->keywordToHandler, $definition) as $key => $extensions) {
+            // Found keywords will be forwarded to their handler.
+            // Cast to array in case one key maps directly to one compiler (instead of an array of compiler).
+            foreach ((array) $extensions as $extension) {
+                // Handler receive the specific config but also the general container for further processing.
+                $extension($definition[$key], $serviceName, $pimple);
+            }
+        }
+    }
+
+    /**
      * Registers services on the given container.
      *
      * This method should only be used to configure services and parameters.
@@ -106,15 +124,15 @@ class Services implements ServiceProviderInterface
      */
     public function register(Container $pimple)
     {
-        foreach ($this->services as $key => $value) {
-            $this->compile($pimple, $key, $value);
-        }
+        $this->__invoke($this->services, $pimple);
     }
 
     /**
      * @param Container         $pimple
      * @param string            $serviceName
      * @param array|object|null $definition
+     *
+     * @deprecated 0.8.0 Will be completely moved into ::__invoke
      */
     protected function compile(Container $pimple, string $serviceName, $definition)
     {
@@ -125,22 +143,22 @@ class Services implements ServiceProviderInterface
         }
 
         if (null === $definition) {
-            $definition = [
-                Services::CLASS_NAME => $serviceName
-            ];
+            $definition = [];
+        }
+
+        if (empty($definition['class'])) {
+            $definition['class'] = $serviceName;
         }
 
         $pimple[$serviceName] = new ServiceDefinition($definition);
+        $this->delegate((array) $definition, $serviceName, $pimple);
 
-        // Delegate to extensions
-        $definition = (array) $definition;
-        foreach (array_intersect_key($this->keywordToHandler, $definition) as $key => $extensions) {
-            // Found keywords will be forwarded to their handler.
-            // Cast to array in case one key maps directly to one compiler (instead of an array of compiler).
-            foreach ((array) $extensions as $extension) {
-                // Handler receive the specific config but also the general container for further processing.
-                $extension($definition[$key], $serviceName, $pimple);
-            }
+    }
+
+    public function __invoke(array $definition, Container $pimple, $key = '')
+    {
+        foreach ($definition as $serviceName => $value) {
+            $this->compile($pimple, $serviceName, $value);
         }
     }
 }

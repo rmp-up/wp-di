@@ -26,6 +26,7 @@ namespace RmpUp\WpDi\Provider\WordPress;
 use Closure;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use RmpUp\WpDi\Provider\ProviderNode;
 use RmpUp\WpDi\ServiceDefinition\TemplateNode;
 
 /**
@@ -33,7 +34,7 @@ use RmpUp\WpDi\ServiceDefinition\TemplateNode;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class Templates implements ServiceProviderInterface
+class Templates implements ServiceProviderInterface, ProviderNode
 {
     /**
      * Mapping of service name to array of possible templates
@@ -45,9 +46,10 @@ class Templates implements ServiceProviderInterface
     /**
      * Template provider
      *
-     * @param array $definition Mapping of service name to array of possible templates.
+     * @param array $definition (DEPRECATED 0.8) Mapping of service name to array of possible templates.
+     * @deprecated 0.8.0
      */
-    public function __construct($definition)
+    public function __construct($definition = [])
     {
         $this->definition = $definition;
     }
@@ -62,19 +64,26 @@ class Templates implements ServiceProviderInterface
      */
     public function register(Container $pimple)
     {
-        foreach ($this->definition as $serviceName => $templates) {
-            if (is_int($serviceName) && is_string($templates)) {
-                $serviceName = $templates;
+        $this->__invoke($this->definition, $pimple);
+    }
+
+    public function __invoke(array $definition, Container $pimple, $key = '') {
+        foreach ($definition as $templateName => $templates) {
+            if (is_int($templateName) && is_string($templates)) {
+                $templateName = $templates;
                 $templates = (array) $templates;
             }
 
             if ($templates instanceof Closure) {
                 // Already a function so we reuse this instead.
-                $pimple[$serviceName] = $templates;
+                $pimple[$templateName] = $templates;
                 continue;
             }
 
-            $pimple[$serviceName] = new TemplateNode($templates);
+            $templateNode = new TemplateNode((array) $templates);
+
+            $pimple[$templateName] = $templateNode; // @deprecated 0.8.0
+            $pimple['%' . $templateName . '%'] = $templateNode;
         }
     }
 }

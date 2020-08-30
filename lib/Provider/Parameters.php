@@ -31,14 +31,19 @@ use Pimple\ServiceProviderInterface;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class Parameters implements ServiceProviderInterface
+class Parameters implements ServiceProviderInterface, ProviderNode
 {
     /**
      * @var array
      */
     private $parameters;
 
-    public function __construct(array $parameters)
+    /**
+     * Parameters constructor.
+     *
+     * @param array $parameters (DEPRECATED)
+     */
+    public function __construct(array $parameters = [])
     {
         $this->parameters = $parameters;
     }
@@ -50,10 +55,16 @@ class Parameters implements ServiceProviderInterface
      * It should not get services.
      *
      * @param Container $pimple A container instance
+     * @deprecated 0.8.0 Use ::__invoke instead
      */
     public function register(Container $pimple)
     {
-        foreach ($this->parameters as $parameterName => $value) {
+        $this->__invoke($this->parameters, $pimple);
+    }
+
+    public function __invoke(array $definition, Container $pimple, $key = '')
+    {
+        foreach ($definition as $parameterName => $value) {
             $pimple->offsetSet('%' . $parameterName . '%', $value);
         }
     }
