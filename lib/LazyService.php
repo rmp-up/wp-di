@@ -30,6 +30,7 @@ use RmpUp\WpDi\Helper\LazyInstantiating;
  * LazyService
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
+ * @deprecated 0.8.0 Use LazyPimple instead
  */
 class LazyService
 {

@@ -67,10 +67,12 @@ class Filter implements CompilerInterface
 
     /**
      * @param string                  $filterName
-     * @param \Pimple\Psr11\Container $container
+     * @param \Pimple\Psr11\Container $container (DEPRECATED 0.8 - Will use Pimple container instead)
      * @param string                  $serviceName
      * @param string[]|null           $methodNames
      * @param int                     $priority
+     *
+     * @deprecated 0.8.0 Will become private
      */
     protected function register($filterName, \Pimple\Psr11\Container $container, string $serviceName, $methodNames, $priority)
     {

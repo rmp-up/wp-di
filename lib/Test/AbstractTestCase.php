@@ -30,6 +30,7 @@ use Pretzlaw\WPInt\Traits\WordPressTests;
 use ReflectionException;
 use ReflectionObject;
 use RmpUp\Doc\DocParser;
+use RmpUp\WpDi\Helper\LazyPimple;
 use RmpUp\WpDi\LazyService;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Yaml;
@@ -94,8 +95,7 @@ abstract class AbstractTestCase extends TestCase
 
     protected static function assertLazyService(string $serviceName, $lazyServiceObject)
     {
-        static::assertInstanceOf(LazyService::class, $lazyServiceObject);
-
+        static::assertContains(get_class($lazyServiceObject), [LazyService::class, LazyPimple::class]);
         static::assertEquals($serviceName, self::getField($lazyServiceObject, 'serviceName'));
     }
 

@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Compiler;
 
 use Pimple\Container;
-use RmpUp\WpDi\LazyService;
+use RmpUp\WpDi\Helper\LazyPimple;
 use RmpUp\WpDi\Provider\Services;
 use RmpUp\WpDi\Provider\WordPress\CliCommands;
 
@@ -54,8 +54,6 @@ class WpCli implements CompilerInterface
             $commandToMethod = [$commandToMethod => null];
         }
 
-        $container = new \Pimple\Psr11\Container($pimple);
-
         foreach ($commandToMethod as $command => $method) {
             if (null === $method) {
                 $method = '__invoke';
@@ -74,7 +72,7 @@ class WpCli implements CompilerInterface
             if ($pimple->offsetExists($serviceName)) {
                 // Command is wired to existing service.
                 /** @noinspection PhpUndefinedMethodInspection */
-                $class::add_command($command, [new LazyService($container, $serviceName), $method]);
+                $class::add_command($command, [new LazyPimple($pimple, $serviceName), $method]);
                 continue;
             }
         }
