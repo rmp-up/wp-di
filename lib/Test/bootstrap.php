@@ -8,7 +8,14 @@ class_alias(Mirror::class, '\\MyOwnActionListener');
 class_alias(Mirror::class, '\\MyOwnCliCommand');
 class_alias(Mirror::class, '\\MyOwnFilterHandler');
 class_alias(Mirror::class, '\\MyOwnPostType');
-class_alias(Mirror::class, '\\MyOwnShortcode');
+
+class MyOwnShortcode extends Mirror {
+    public function __invoke(...$invoked)
+    {
+        return json_encode(parent::__invoke(...$invoked));
+    }
+}
+
 class_alias(Mirror::class, '\\MyWidget');
 
 class_alias(Mirror::class, '\\SomeRepository');

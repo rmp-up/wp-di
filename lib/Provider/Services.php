@@ -28,6 +28,7 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use RmpUp\WpDi\Compiler\Filter;
 use RmpUp\WpDi\Compiler\PostType;
+use RmpUp\WpDi\Compiler\Shortcode;
 use RmpUp\WpDi\Compiler\Widgets;
 use RmpUp\WpDi\Compiler\WpCli;
 use RmpUp\WpDi\ServiceDefinition;
@@ -76,6 +77,7 @@ class Services implements ServiceProviderInterface
     private function defaultHandler(): array
     {
         $filter = [new Filter()];
+        $shortcodes = [new Shortcode()];
 
         return [
             Filter::FILTER_KEY => $filter,
@@ -85,6 +87,9 @@ class Services implements ServiceProviderInterface
             'add_action' => $filter, // alias
 
             'post_type' => [new PostType()],
+
+            Shortcode::KEY => $shortcodes,
+            'add_shortcode' => $shortcodes,
 
             'widgets' => [new Widgets()],
             'wp_cli' => [new WpCli()],
