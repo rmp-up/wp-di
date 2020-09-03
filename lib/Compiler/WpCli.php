@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Compiler;
 
 use Pimple\Container;
+use RmpUp\WpDi\Helper\InvokeRedirect;
 use RmpUp\WpDi\Helper\LazyPimple;
 use RmpUp\WpDi\Provider\Services;
 use RmpUp\WpDi\Provider\WordPress\CliCommands;
@@ -65,24 +66,36 @@ class WpCli implements CompilerInterface
 
             if (empty($serviceDefinition[Services::ARGUMENTS])) {
                 /** @noinspection PhpUndefinedMethodInspection */
-                $this->addCommand((string) $command, $serviceDefinition[Services::CLASS_NAME]);
+                $this->addCommand((string) $command, $serviceDefinition[Services::CLASS_NAME], $method);
                 continue;
             }
 
             if ($pimple->offsetExists($serviceName)) {
                 // Command is wired to existing service.
                 /** @noinspection PhpUndefinedMethodInspection */
-                $this->addCommand((string) $command, [new LazyPimple($pimple, $serviceName), $method]);
+                $this->addCommand((string) $command, new LazyPimple($pimple, $serviceName), $method);
                 continue;
             }
         }
     }
 
-    private function addCommand(string $command, $callback)
+    /**
+     * @param string $command
+     * @param object $handler
+     * @param string $method
+     */
+    private function addCommand(string $command, $handler, string $method)
     {
         $this->assertPathToCommand($command);
 
-        ($this->wpCliClass)::add_command($command, $callback);
+        if ('__invoke' !== $method) {
+            // wp-cli uses reflection on the method
+            // which is not given when $handler is a proxy already
+            // so we give wp-cli the __invoke method and redirect later on.
+            $handler = new InvokeRedirect([$handler, $method]);
+        }
+
+        ($this->wpCliClass)::add_command($command, $handler);
     }
 
     private function assertPathToCommand(string $command)
