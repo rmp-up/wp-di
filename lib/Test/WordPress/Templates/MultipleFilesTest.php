@@ -53,34 +53,6 @@ use RmpUp\WpDi\Test\WordPress\Templates\TemplatesTestCase;
  * (using `locate_template`) and stops with the first found.
  * In doubt it returns the very last entry even when not found.
  *
- * In PHP it can be defined like this:
- *
- * ```php
- * <?php
- *
- * use \RmpUp\WpDi\Provider\WordPress;
- * use \RmpUp\WpDi\Provider\Services;
- *
- * return [
- *   WordPress\Templates::class => [
- *
- *     'some-feature.php' => [
- *       'template-parts/my-plugin/some-feature.php',
- *       'other-plugin/template-parts/some-feature.php',
- *       'my-plugin/template-parts/some-feature.php',
- *     ],
- *
- *   ],
- *
- *   Services::class => [
- *     SomeThing::class => [
- *       'some-feature.php'
- *     ]
- *   ]
- * ];
- * ```
- *
- *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
 class MultipleFilesTest extends TemplatesTestCase
@@ -96,10 +68,6 @@ class MultipleFilesTest extends TemplatesTestCase
     public function getDefinitions(): array
     {
         return [
-            'php' => [
-                $this->classComment()->execute(1),
-                \RmpUp\WpDi\Provider\WordPress\Templates::class
-            ],
             'yaml' => [
                 $this->yaml(0),
                 'templates'
