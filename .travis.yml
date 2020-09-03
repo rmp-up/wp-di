@@ -59,6 +59,8 @@ before_install:
   # Disable PHPStan because it gives false-positives PHP < 7.1
   - php -r 'if ( PHP_VERSION_ID < 70100 ) passthru("composer remove --dev phpstan/phpstan");'
   # Try supporting other versions
+  - "[[ $WP_VERSION != *'dev-master' ]] || composer config minimum-stability dev"
+  - "[[ $WP_VERSION != *'dev-master' ]] || composer config prefer-stable true"
   - composer require --update-with-dependencies johnpbloch/wordpress:$WP_VERSION
 
 install:
@@ -70,7 +72,7 @@ install:
   - ln -s etc/.coveralls.yml
 
 script:
-  - composer validate --strict --no-check-lock
+  - "[[ $WP_VERSION == *'dev-master' ]] || composer validate --strict --no-check-lock"
   - vendor/bin/phpunit --coverage-clover coverage.xml
   # Code quality checks should not differ among different PHP versions, so we spare runtime here
   - "[[ $TRAVIS_PHP_VERSION != 7.3 ]] || vendor/bin/phpstan analyse lib/"
