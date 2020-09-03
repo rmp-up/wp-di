@@ -64,7 +64,12 @@ class Services implements ServiceProviderInterface, ProviderNode
     public function __construct(array $services = [], array $keywordToHandler = [])
     {
         $this->services = $services;
-        $this->keywordToHandler = $keywordToHandler ?: $this->defaultHandler();
+
+        if ([] === $keywordToHandler) {
+            $keywordToHandler = $this->defaultHandler();
+        }
+
+        $this->keywordToHandler = $keywordToHandler;
     }
 
     /**

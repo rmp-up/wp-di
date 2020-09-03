@@ -76,7 +76,11 @@ class Provider implements ServiceProviderInterface
         $this->definition = $definition;
         $this->sanitizer = $sanitizer;
 
-        $this->nodes = $keyToProvider ?: $this->defaultCompiler();
+        if ([] === $keyToProvider) {
+            $keyToProvider = $this->defaultCompiler();
+        }
+
+        $this->nodes = $keyToProvider;
         $this->keyToCompiler =& $this->nodes; // @deprecated 0.8.0 BC
     }
 
