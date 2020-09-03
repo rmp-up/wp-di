@@ -26,6 +26,8 @@ use Pimple\Container;
 use RmpUp\WpDi\Helper\LazyPimple;
 use RmpUp\WpDi\Provider\Services;
 use RmpUp\WpDi\Provider\WordPress\CliCommands;
+use WP_CLI;
+use WP_CLI\Dispatcher\CompositeCommand;
 
 /**
  * WpCli
@@ -59,22 +61,61 @@ class WpCli implements CompilerInterface
                 $method = '__invoke';
             }
 
-            $class = $this->wpCliClass;
-
             $serviceDefinition = $pimple->raw($serviceName);
 
             if (empty($serviceDefinition[Services::ARGUMENTS])) {
                 /** @noinspection PhpUndefinedMethodInspection */
-                $class::add_command($command, $serviceDefinition[Services::CLASS_NAME]);
+                $this->addCommand((string) $command, $serviceDefinition[Services::CLASS_NAME]);
                 continue;
             }
 
             if ($pimple->offsetExists($serviceName)) {
                 // Command is wired to existing service.
                 /** @noinspection PhpUndefinedMethodInspection */
-                $class::add_command($command, [new LazyPimple($pimple, $serviceName), $method]);
+                $this->addCommand((string) $command, [new LazyPimple($pimple, $serviceName), $method]);
                 continue;
             }
+        }
+    }
+
+    private function addCommand(string $command, $callback)
+    {
+        $this->assertPathToCommand($command);
+
+        ($this->wpCliClass)::add_command($command, $callback);
+    }
+
+    private function assertPathToCommand(string $command)
+    {
+        $parent = WP_CLI::get_root_command();
+        $class = $this->wpCliClass;
+        $path = (array) explode(' ', $command);
+        array_pop($path);
+
+        if (empty($path)) {
+            // No path left to assert
+            return;
+        }
+
+        $currentScope = [];
+        foreach ($path as $node) {
+            $currentScope[] = $node;
+            $currentNamespace = new CompositeCommand($parent, $node, new \WP_CLI\DocParser(''));
+            $parent = $currentNamespace;
+
+            $definition = $class::get_runner()->find_command_to_run($currentScope);
+            if (is_array($definition)) {
+                // Something exists there already.
+
+                if (current($definition) instanceof CompositeCommand) {
+                    // Reusing if it is a composite command
+                    $parent = current($definition);
+                }
+
+                continue;
+            }
+
+            $class::add_command(implode(' ', $currentScope), $currentNamespace);
         }
     }
 }

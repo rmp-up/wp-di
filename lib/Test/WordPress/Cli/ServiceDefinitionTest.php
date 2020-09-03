@@ -24,7 +24,8 @@ namespace RmpUp\WpDi\Test\WordPress\Cli;
 
 use MyOwnCliCommand;
 use RmpUp\WpDi\Provider;
-use RmpUp\WpDi\Test\ProviderTestCase;
+use RmpUp\WpDi\Test\WordPress\CliTestCase;
+use WP_CLI;
 
 /**
  * WP-CLI commands in service definition
@@ -69,7 +70,7 @@ use RmpUp\WpDi\Test\ProviderTestCase;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class ServiceDefinitionTest extends ProviderTestCase
+class ServiceDefinitionTest extends CliTestCase
 {
     /**
      * @param $arguments
@@ -109,11 +110,10 @@ class ServiceDefinitionTest extends ProviderTestCase
         $this->provider = new Provider($config);
         $this->provider->register($this->pimple);
 
-        $history = \WP_CLI::_history('add_command');
+        static::assertEmpty(MyOwnCliCommand::_history());
+        WP_CLI::run_command(['hello', 'neighbour']);
 
-        $this->assertCount(1, $history);
-        $this->assertEquals('hello neighbour', $history[0]['arguments'][0]);
-        $this->assertEquals(MyOwnCliCommand::class, $history[0]['arguments'][1]);
+        static::assertCount(1, MyOwnCliCommand::_history('__invoke'));
     }
 
     /**
@@ -125,10 +125,8 @@ class ServiceDefinitionTest extends ProviderTestCase
         $this->provider = new Provider($config);
         $this->provider->register($this->pimple);
 
-        $history = \WP_CLI::_history('add_command');
-
-        $this->assertCommandRegistered('hello neighbour', '__invoke', $history[0]['arguments']);
-        $this->assertCommandRegistered('hello world', 'terra', $history[1]['arguments']);
-        $this->assertCommandRegistered('hello upstairs', '__invoke', $history[2]['arguments']);
+        $this->assertCliHasCommand('hello neighbour');
+        $this->assertCliHasCommand('hello world');
+        $this->assertCliHasCommand('hello upstairs');
     }
 }
