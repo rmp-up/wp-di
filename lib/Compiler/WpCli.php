@@ -53,6 +53,11 @@ class WpCli implements CompilerInterface
 
     public function __invoke($commandToMethod, string $serviceName, Container $pimple)
     {
+        if ('cli' !== PHP_SAPI || false === class_exists($this->wpCliClass)) {
+            // Only register CLI commands when CLI is active and WP_CLI is available.
+            return;
+        }
+
         if (is_scalar($commandToMethod)) {
             $commandToMethod = [$commandToMethod => null];
         }
