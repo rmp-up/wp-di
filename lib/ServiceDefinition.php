@@ -25,6 +25,7 @@ namespace RmpUp\WpDi;
 use ArrayObject;
 use Pimple\Container;
 use RmpUp\WpDi\Helper\Check;
+use RmpUp\WpDi\Helper\LazyInvoke;
 use RmpUp\WpDi\Helper\LazyPimple;
 use RmpUp\WpDi\Provider\Services;
 
@@ -64,6 +65,10 @@ class ServiceDefinition extends ArrayObject
 
             if (is_string($argument)) {
                 $this[Services::ARGUMENTS][$key] = $this->resolveParameter($pimple, $argument);
+            }
+
+            if ($argument instanceof LazyInvoke) {
+                $this[Services::ARGUMENTS][$key] = $argument();
             }
         }
 

@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * OptionNode.php
+ * AbstractNode.php
  *
  * LICENSE: This source file is created by the company around M. Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -22,35 +22,21 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\ServiceDefinition;
 
+use RmpUp\WpDi\Helper\LazyInvoke;
+
 /**
- * OptionNode
+ * AbstractNode
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class OptionNode extends AbstractNode
+abstract class AbstractNode
 {
-    /**
-     * @see get_option()
-     */
-    const DEFAULT = false;
-    /**
-     * @var mixed
-     */
-    private $default;
-
-    /**
-     * @var string
-     */
-    private $optionName;
-
-    public function __construct(string $optionName, $default = self::DEFAULT)
+    protected function wakeup($value)
     {
-        $this->optionName = $optionName;
-        $this->default = $default;
-    }
+        if ($value instanceof LazyInvoke) {
+            $value = $value();
+        }
 
-    public function __invoke()
-    {
-        return get_option($this->optionName, $this->wakeup($this->default));
+        return $value;
     }
 }

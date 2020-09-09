@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Compiler\Yaml;
 
+use RmpUp\WpDi\Helper\Yaml\Implode;
 use RmpUp\WpDi\Yaml;
 use Symfony\Component\Yaml\Tag\TaggedValue;
 
@@ -34,19 +35,29 @@ class Join implements YamlCompiler
 {
     public function __invoke(TaggedValue $taggedValue)
     {
-        $value = '';
-        $definition = $taggedValue->getValue();
+        $value = [];
 
-        foreach ($definition as $line) {
+        foreach ((array) $taggedValue->getValue() as $line) {
             if (!$line) {
                 // An empty line shall convert to a new line
-                $value .= "\n";
+                $value[] = "\n";
                 continue;
             }
 
-            $value .= trim(Yaml::parse($line));
+            if (is_string($line)) {
+                if (' ' === $line[0]) {
+                    // Need to swap out empty spaces, otherwise Symfony falsely nags about wrong indents.
+                    $fullLength = strlen($line);
+                    $line = ltrim($line, ' ');
+                    $value[] = str_repeat(' ', $fullLength - strlen($line));
+                }
+
+                $line = Yaml::parse($line);
+            }
+
+            $value[] = $line;
         }
 
-        return rtrim($value, "\n"); // sometimes YAML may append a new line
+        return new Implode('', $value);
     }
 }

@@ -71,7 +71,6 @@ class Templates implements ServiceProviderInterface, ProviderNode
         foreach ($definition as $templateName => $templates) {
             if (is_int($templateName) && is_string($templates)) {
                 $templateName = $templates;
-                $templates = (array) $templates;
             }
 
             if ($templates instanceof Closure) {
@@ -80,7 +79,11 @@ class Templates implements ServiceProviderInterface, ProviderNode
                 continue;
             }
 
-            $templateNode = new TemplateNode((array) $templates);
+            if (false === is_array($templates)) {
+                $templates = [$templates];
+            }
+
+            $templateNode = new TemplateNode($templates);
 
             $pimple[$templateName] = $templateNode; // @deprecated 0.8.0
             $pimple['%' . $templateName . '%'] = $templateNode;

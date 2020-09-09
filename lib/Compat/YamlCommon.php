@@ -23,6 +23,8 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Compat;
 
 use RmpUp\WpDi\Compiler\Yaml\Join;
+use RmpUp\WpDi\Compiler\Yaml\Translate;
+use RmpUp\WpDi\Compiler\Yaml\YamlCompiler;
 use Symfony\Component\Yaml\Tag\TaggedValue;
 use Symfony\Component\Yaml\Yaml as SymfonyYaml;
 
@@ -37,19 +39,51 @@ abstract class YamlCommon extends SymfonyYaml
         SymfonyYaml::PARSE_CONSTANT
         | SymfonyYaml::PARSE_CUSTOM_TAGS;
 
+    /**
+     * @var array<string,string|YamlCompiler>
+     */
     public static $tags = [
         'join' => Join::class,
+        
+        // Translations
+        '__' => Translate::class,
+        '_n' => Translate::class,
+        '_nx' => Translate::class,
+        '_x' => Translate::class,
+        'esc_attr__' => Translate::class,
+        'esc_attr_x' => Translate::class,
+        'esc_html__' => Translate::class,
+        'esc_html_x' => Translate::class,
     ];
+
+    /**
+     * @var YamlCompiler[]
+     */
+    private static $instances = [];
+
+    /**
+     * @param string $compiler
+     *
+     * @return YamlCompiler
+     */
+    private static function instantiate(string $compiler): YamlCompiler
+    {
+        if (false === array_key_exists($compiler, self::$instances)) {
+            self::$instances[$compiler] = new $compiler;
+        }
+
+        return self::$instances[$compiler];
+    }
 
     private static function parseRecursive(array &$data)
     {
         foreach ($data as &$datum) {
             if (is_array($datum)) {
-                static::parseRecursive($datum);
+                self::parseRecursive($datum);
                 continue;
             }
 
-            $datum = static::convertTags($datum);
+            $datum = self::convertTags($datum);
         }
     }
 
@@ -65,11 +99,11 @@ abstract class YamlCommon extends SymfonyYaml
     protected static function process($data)
     {
         if (is_array($data)) {
-            static::parseRecursive($data);
+            self::parseRecursive($data);
         }
 
         if ($data instanceof TaggedValue) {
-            $data = static::convertTags($data);
+            $data = self::convertTags($data);
         }
 
         return $data;
@@ -81,13 +115,19 @@ abstract class YamlCommon extends SymfonyYaml
             return $value;
         }
 
+        // Parse inner tags before parsing the outer
+        $parsedValue = [];
+        foreach ((array) $value->getValue() as $single) {
+            $parsedValue[] = self::convertTags($single);
+        }
+
         $tag = $value->getTag();
         $compiler = static::$tags[$tag];
 
-        if (is_string($compiler) && class_exists($compiler)) {
-            $compiler = static::$tags[$tag] = new $compiler;
+        if (is_string($compiler)) {
+            $compiler = static::$tags[$tag] = self::instantiate($compiler);
         }
 
-        return $compiler($value);
+        return $compiler(new TaggedValue($tag, $parsedValue));
     }
 }

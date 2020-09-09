@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * OptionNode.php
+ * LazyTranslation.php
  *
  * LICENSE: This source file is created by the company around M. Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -20,37 +20,40 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\ServiceDefinition;
+namespace RmpUp\WpDi\Helper\WordPress;
+
+use RmpUp\WpDi\Helper\LazyInvoke;
 
 /**
- * OptionNode
+ * LazyTranslation
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class OptionNode extends AbstractNode
+class LazyFunctionCall implements LazyInvoke
 {
     /**
-     * @see get_option()
+     * @var array
      */
-    const DEFAULT = false;
+    private $arguments;
     /**
-     * @var mixed
+     * @var callable
      */
-    private $default;
+    private $callable;
 
     /**
-     * @var string
+     * LazyFunctionCall constructor.
+     *
+     * @param callable $callable
+     * @param mixed    ...$arguments
      */
-    private $optionName;
-
-    public function __construct(string $optionName, $default = self::DEFAULT)
+    public function __construct($callable, ...$arguments)
     {
-        $this->optionName = $optionName;
-        $this->default = $default;
+        $this->callable = $callable;
+        $this->arguments = $arguments;
     }
 
     public function __invoke()
     {
-        return get_option($this->optionName, $this->wakeup($this->default));
+        return (($this->callable)(...$this->arguments));
     }
 }

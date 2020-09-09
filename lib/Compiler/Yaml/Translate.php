@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * OptionNode.php
+ * Translate.php
  *
  * LICENSE: This source file is created by the company around M. Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -20,37 +20,29 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\ServiceDefinition;
+namespace RmpUp\WpDi\Compiler\Yaml;
+
+use RmpUp\WpDi\Helper\WordPress\LazyFunctionCall;
+use RmpUp\WpDi\Yaml;
+use Symfony\Component\Yaml\Tag\TaggedValue;
 
 /**
- * OptionNode
+ * Translate
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class OptionNode extends AbstractNode
+class Translate implements YamlCompiler
 {
-    /**
-     * @see get_option()
-     */
-    const DEFAULT = false;
-    /**
-     * @var mixed
-     */
-    private $default;
-
-    /**
-     * @var string
-     */
-    private $optionName;
-
-    public function __construct(string $optionName, $default = self::DEFAULT)
+    public function __invoke(TaggedValue $taggedValue)
     {
-        $this->optionName = $optionName;
-        $this->default = $default;
-    }
+        $definition = (array) $taggedValue->getValue();
 
-    public function __invoke()
-    {
-        return get_option($this->optionName, $this->wakeup($this->default));
+        if (false === is_callable($taggedValue->getTag())) {
+            throw new \InvalidArgumentException(
+                'Translate handler bound to non-callable - please only use existing functions/callables'
+            );
+        }
+
+        return new LazyFunctionCall($taggedValue->getTag(), ...$definition);
     }
 }

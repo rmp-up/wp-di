@@ -22,17 +22,19 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\ServiceDefinition;
 
+use RmpUp\WpDi\Helper\LazyInvoke;
+
 /**
  * TemplateNode
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class TemplateNode
+class TemplateNode extends AbstractNode
 {
     /**
      * All possible locations
      *
-     * @var array
+     * @var string[]|LazyInvoke[]
      */
     private $templates;
 
@@ -60,6 +62,8 @@ class TemplateNode
     {
         $templatePath = '';
         foreach ($this->templates as $templatePath) {
+            $templatePath = $this->wakeup($templatePath);
+
             $located = locate_template($templatePath, false, false);
 
             if ('' !== $located) {
