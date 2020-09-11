@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * OptionNode.php
+ * Implode.php
  *
  * LICENSE: This source file is created by the company around M. Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -20,37 +20,40 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\ServiceDefinition;
+namespace RmpUp\WpDi\Helper\Yaml;
+
+use RmpUp\WpDi\Helper\LazyInvoke;
 
 /**
- * OptionNode
+ * Implode
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class OptionNode extends AbstractNode
+class Implode implements LazyInvoke
 {
-    /**
-     * @see get_option()
-     */
-    const DEFAULT = false;
-    /**
-     * @var mixed
-     */
-    private $default;
-
+    private $parts;
     /**
      * @var string
      */
-    private $optionName;
+    private $seperator;
 
-    public function __construct(string $optionName, $default = self::DEFAULT)
+    public function __construct(string $seperator, $parts)
     {
-        $this->optionName = $optionName;
-        $this->default = $default;
+        $this->parts = $parts;
+        $this->seperator = $seperator;
     }
 
     public function __invoke()
     {
-        return get_option($this->optionName, $this->wakeup($this->default));
+        $parsedParts = [];
+        foreach ($this->parts as $part) {
+            if ($part instanceof LazyInvoke) {
+                $part = $part();
+            }
+
+            $parsedParts[] = $part;
+        }
+
+        return implode($this->seperator, $parsedParts);
     }
 }

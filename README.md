@@ -1,8 +1,8 @@
 ![](https://img.shields.io/badge/PHP-7.0%20--%207.4-blue?style=for-the-badge&logo=php)
 ![](https://img.shields.io/badge/WordPress-4.8%20--%205.5-blue?style=for-the-badge&logo=wordpress)
 
-[![Build Status](https://travis-ci.org/rmp-up/wp-di.svg?branch=master)](https://travis-ci.org/rmp-up/wp-di)
-[![Coverage Status](https://coveralls.io/repos/github/rmp-up/wp-di/badge.svg?branch=master)](https://coveralls.io/github/rmp-up/wp-di?branch=master)
+[![Build Status](https://travis-ci.org/rmp-up/wp-di.svg?branch=release/0.7)](https://travis-ci.org/rmp-up/wp-di)
+[![Coverage Status](https://coveralls.io/repos/github/rmp-up/wp-di/badge.svg?branch=release/0.7)](https://coveralls.io/github/rmp-up/wp-di?branch=release/0.7)
 
 # WP DI
 
@@ -34,80 +34,144 @@ $container->register(
 );
 ```
 
-with as much config files as you like.
-Those could return an array like the following.
+Friends of YAML can add `composer require symfony/yaml`
+and use
+
+```php
+$container->register(
+  new \RmpUp\WpDi\Provider(
+    \RmpUp\WpDi\Yaml::parseFile( 'services.yaml' )
+  )
+);
+```
 
 
 ## Features
 
-wp-di does not only support registering services but also:
-
-* Register post-types
-* Add action/filter handler (as service)
-* Register wp-cli commands
-
-See how simple it is with the following examples.
-
-
-## Examples
+A full documentation can be found in the
+[documentation of the latest releases](https://github.com/rmp-up/wp-di/releases).
+The following is just a sneak peek into some of the possibilities.
 
 ### Services and parameters
 
-Common structure for defining services:
+Define services as known from classical DI but also ...
+
+* Primitive parameters as usual
+* Default values for options
+* Path to templates
+* Inject all of them into services
 
 ```yaml
+# Primitive parameters as usual
 parameters:
   some: "primitives"
   like: 42
 
+# Default values for options
+options:
+  _my_plugin_rating: 5/7
+  _this_is: cool
+
+# Path to templates
+templates:
+  admin-view: my-own-plugin/template-parts/fester.php
+  frontend-view: my-own-plugin/public/coogan.jpg
+  # looks up the file in theme, theme-compat and plugin directory
+
+# Inject all of them into services
 services:
-  Something:
-    arguments: "%like%" # injecting the parameter here
+  SimpleOne:
+    arguments:
+      - "Hello there!" 
+      - 1337
+ 
+  SomeThing:
+    arguments:
+      - "%like%" # the parameter
+      - "%_this_is%" # the option
+      - "%frontend-view%" # path to the template
+      - "@SimpleOne" # the other service
 ```
 
 
-### Post-Types
+### Register services in WordPress
 
-Just needs the post-type name and the class which defines it:
+Services can also be used to ...
+
+* Add actions / filters
+* Add Meta-Boxes
+* Register Post-Types
+* Register Shortcodes
+* Register Widgets
+* Add WP-CLI commands
 
 ```yaml
 services:
+  StrrevEverything:
+    filter: the_content
+    # calling `::__invoke` for the "the_content"-filter
+
+  BackendAdminListThing:
+    meta_box:
+      title: Greatest box in the World!
+      screen: post
+
   MyOwnPostType:
     post_type: animals
+    # cast service to array and forward to register_post_type
+
+  BestShortcodeEver:
+    shortcode: shortcode_wont_die
+    widget: ~
+    # Shortcode and widget at once. Wow!
+
+  DoItCommand:
+    wp_cli:
+      do-it: __invoke
+      doit: __invoke
+      seriously do-it do-it do-it: seriously
+      # cli commands mapped to methods 
 ```
 
-Such classes will be cast to array
-and used for `register_post_type()`.
 
+### Use tags to enhance YAML
 
-### Actions
+Within YAML you can:
 
-Registering actions can be kept that simple too.
-Write ...
+* Access PHP-Constants
+* Concatenate text
+* Translate text
+
+Mostly lazy to get the best performance.
 
 ```yaml
 services:
-  Tribute\BestPluginInTheWorld\Rock:
-    add_action: init
+  # Access PHP-Constants
+  InjectingConstants:
+    arguments:
+      - !php/const ABSPATH
+
+  # Concatenate text
+  ThisIsSomeTemplate:
+    arguments:
+      - !join [ !php/const WP_CONTENT_DIR, "/plugins/grey-matter/walter.jpg" ]
+
+  # Translations within YAML
+  ThisThingNeedsTranslations:
+    arguments:
+      - !__ [ Who is Adam?, dark ]
+      - !esc_attr__ [ white ]
+      # ... many more translation functions available ...
 ```
 
-... to add a service for the class `\Tribute\BestPluginInTheWorld\Rock`
-which is invoked when the "init"-action occurs.
-
-
-### And more
-
-* Options
-* wp-cli commands
-* Widgets
-
-Read how this works in the official documentation of every release.
+All of this is only possible when using `\RmpUp\WpDi\Yaml::parseFile(...)`
+or `::parse(...)`.
 
 
 ## Contributing
 
-We used this in older projects
-and still maintain it,
+We used this in some projects
+and still maintain/enhance it,
 so please [open an issue](https://github.com/rmp-up/wp-di/issues/new)
 if there is anything we can help with.
 
