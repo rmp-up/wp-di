@@ -3,6 +3,9 @@
   "license": "proprietary",
   "description": "Simple Dependency Injection / Service Container for more OOP in WordPress (PSR-11 compatible)",
   "autoload": {
+    "files": [
+      "preload.php"
+    ],
     "psr-4": {
       "RmpUp\\WpDi\\": "lib"
     }
@@ -15,6 +18,7 @@
   "require-dev": {
     "php": ">=7.0",
     "johnpbloch/wordpress": "5.2.*",
+    "perftools/php-profiler": "^0.12.0",
     "php-coveralls/php-coveralls": "1.1.*",
     "phpcompatibility/php-compatibility": "^9.3",
     "phpstan/phpstan": "0.11.*",
