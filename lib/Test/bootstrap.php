@@ -33,6 +33,8 @@ require_once ABSPATH . 'wp-admin/includes/admin.php';
  */
 
 const MY_PLUGIN_DIR = __DIR__;
+const WPDI_BASE_DIR = __DIR__ . '/../../';
+const WPDI_LIB_DIR = WPDI_BASE_DIR . 'lib/';
 
 class MyOwnWidget extends \WP_Widget {
     public function __construct($id = 'rmpup_myOwnWidget', $name = 'rmp-up test', $options = array(), $control = array())

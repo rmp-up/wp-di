@@ -51,6 +51,8 @@ $container->register(
 A full documentation can be found in the
 [documentation of the latest releases](https://github.com/rmp-up/wp-di/releases).
 The following is just a sneak peek into some of the possibilities.
+Please use the "preload.php" when you are using PHP >= 7.4
+for even more performance of the following features.
 
 ### Services and parameters
 
