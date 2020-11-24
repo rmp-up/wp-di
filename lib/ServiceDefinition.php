@@ -49,30 +49,79 @@ class ServiceDefinition extends ArrayObject
 {
     private static $referenceCache = [];
 
-    public function __invoke(Container $pimple)
+    /**
+     * Default factory to create objects
+     *
+     * @param mixed ...$arguments
+     *
+     * @return mixed
+     */
+    private function createObject(...$arguments)
     {
         $className = $this[Services::CLASS_NAME];
 
-        if (!$this->offsetExists(Services::ARGUMENTS)) {
+        if (empty($arguments)) {
             return new $className();
         }
 
-        foreach ($this[Services::ARGUMENTS] as $key => $argument) {
+        return new $className(...$arguments);
+    }
+
+    /**
+     * Delegate to appropriate factory
+     *
+     * @param Container $pimple
+     *
+     * @return mixed
+     */
+    public function __invoke(Container $pimple)
+    {
+        $arguments = null;
+        if (isset($this[Services::ARGUMENTS])) {
+            $arguments = $this->resolve($pimple, $this[Services::ARGUMENTS]);
+        }
+
+        $factory = [$this, 'createObject'];
+        if (isset($this['factory'])) {
+            $factory = $this->resolve($pimple, $this['factory']);
+        }
+
+        if (null === $arguments) {
+            return $factory();
+        }
+
+        return $factory(...array_values($arguments));
+    }
+
+    /**
+     * @param Container $pimple
+     * @param array|string $definition
+     *
+     * @return mixed|LazyPimple|string
+     */
+    private function resolve($pimple, $definition)
+    {
+        $resolved = $definition;
+        if (is_string($definition)) {
+            return $this->resolveParameter($pimple, $definition);
+        }
+
+        foreach ($definition as $key => $argument) {
             if (!$argument) {
                 // Skip empty
                 continue;
             }
 
             if (is_string($argument)) {
-                $this[Services::ARGUMENTS][$key] = $this->resolveParameter($pimple, $argument);
+                $resolved[$key] = $this->resolveParameter($pimple, $argument);
             }
 
             if ($argument instanceof LazyInvoke) {
-                $this[Services::ARGUMENTS][$key] = $argument();
+                $resolved[$key] = $argument();
             }
         }
 
-        return new $className(...array_values($this[Services::ARGUMENTS]));
+        return $resolved;
     }
 
     /**
