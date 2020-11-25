@@ -31,6 +31,11 @@ use RmpUp\WpDi\Helper\LazyInvoke;
  */
 abstract class AbstractNode
 {
+    /**
+     * @param mixed|LazyInvoke $value
+     *
+     * @return mixed
+     */
     protected function wakeup($value)
     {
         if ($value instanceof LazyInvoke) {

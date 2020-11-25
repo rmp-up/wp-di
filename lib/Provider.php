@@ -81,7 +81,9 @@ class Provider implements ServiceProviderInterface
         }
 
         $this->nodes = $keyToProvider;
-        $this->keyToCompiler =& $this->nodes; // @deprecated 0.8.0 BC
+
+        // @deprecated 0.8.0 BC
+        $this->keyToCompiler =& $this->nodes;
     }
 
     /**
@@ -92,7 +94,7 @@ class Provider implements ServiceProviderInterface
      */
     public function addCompiler($key, $compiler)
     {
-        if (!array_key_exists($key, $this->keyToCompiler)) {
+        if (false === array_key_exists($key, $this->keyToCompiler)) {
             $this->keyToCompiler[$key] = [];
         }
 

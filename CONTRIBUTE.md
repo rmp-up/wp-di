@@ -40,7 +40,7 @@ vendor/bin/wp --allow-root core update --minor
 vendor/bin/phpunit
 ```
 
-### Documetation
+### Documentation
 
 The documentation is done while testing using
 `composer require --dev --update-with-all-dependencies pretzlaw/phpunit-docgen`.
@@ -64,3 +64,7 @@ For phpunit.xml.dist add:
 And export the HTML to PDF using Chromium.
 Firefox is not able to properly move images/text to the next page
 without cutting them in half.
+
+
+### Performance
+

@@ -21,14 +21,12 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\WordPress\Templates\Definition;
+namespace RmpUp\WpDi\Test\WordPress\Templates;
 
 use Pimple\Container;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Sanitizer\WordPress\Templates;
 use const RmpUp\WpDi\Test\MY_PLUGIN_DIR;
-use RmpUp\WpDi\Test\ProviderTestCase;
-use RmpUp\WpDi\Test\WordPress\Templates\TemplatesTestCase;
 
 /**
  * Resolve multiple files

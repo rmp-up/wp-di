@@ -35,7 +35,7 @@ class Widgets implements CompilerInterface
     public function __invoke($definition, string $serviceName, Container $pimple)
     {
         $className = $pimple->raw($serviceName)['class'] ?? $serviceName;
-        if (!$className) {
+        if (empty($className)) {
             throw new RuntimeException('No class name provided for widget (see' . $serviceName . ')');
         }
 

@@ -59,7 +59,7 @@ class FallbackToOptionTest extends AbstractTestCase
     {
         parent::setUp();
 
-        $this->mockOption('blog_public')->expects($this->atLeastOnce())->willReturn('noice');
+        $this->mockOption('blog_public')->expects($this->atLeastOnce())->willReturn('nice');
 
         $this->pimple->register(new Provider($this->yaml()));
     }
@@ -72,7 +72,7 @@ class FallbackToOptionTest extends AbstractTestCase
         static::assertSame(
             [
                 true,
-                'noice'
+                'nice'
             ],
             $thing->getConstructorArgs()
         );

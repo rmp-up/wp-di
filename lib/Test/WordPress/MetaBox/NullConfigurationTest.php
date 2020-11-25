@@ -28,7 +28,7 @@ use RmpUp\WpDi\Test\WordPress\MetaBoxTestCase;
 /**
  * Configure Meta-Box
  *
- * The most minimal configurtion would be to add a meta-box to each screen like this:
+ * The most minimal configuration would be to add a meta-box to each screen like this:
  *
  * ```yaml
  * services:

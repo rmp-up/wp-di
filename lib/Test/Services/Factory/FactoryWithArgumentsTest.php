@@ -28,6 +28,11 @@ use SomeThing;
 /**
  * Using arguments
  *
+ * Of course the factory needs to know some things of the environment.
+ * Usually the arguments are injected in the new object
+ * but in case of a factory-pattern the arguments become
+ * the parameter of the factory callback:
+ *
  * ```yaml
  * parameters:
  *   line: wand
@@ -41,6 +46,8 @@ use SomeThing;
  *     factory: "@MyFactory"
  *     arguments: [ "%line%", "%circle%", "%triangle%", "404 logic not found" ]
  * ```
+ *
+ * Here the callback is `MyFactory->__invoke("wand", ...)`.
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */

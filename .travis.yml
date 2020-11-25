@@ -4,7 +4,7 @@ php:
   # see http://php.net/supported-versions.php
   - '7.0' # deprecated
   - '7.1' # deprecated
-  - '7.2' # Until 30 Nov 2020
+  - '7.2' # deprecated
   - '7.3' # Until 6 Dec 2021
   - '7.4' # Until 28 Nov 2022
 
@@ -56,8 +56,8 @@ cache:
 
 before_install:
   - mysql -e 'CREATE DATABASE dev;'
-  # ocramius/package-versions:1.2 (for PHP 7.0) needs Composer 1.*
-  - "[[ $TRAVIS_PHP_VERSION > '7.0' ]] || composer self-update --1"
+  # ocramius/package-versions:<=1.5 (for PHP 7.3) needs Composer 1.*
+  - "[[ $TRAVIS_PHP_VERSION > '7.3' ]] || composer self-update --1"
   # Disable PHPStan because it gives false-positives PHP < 7.1
   - "[[ $TRAVIS_PHP_VERSION > '7.0' ]] || composer remove --no-update -n --dev phpstan/phpstan"
   # Try supporting other versions
@@ -79,6 +79,9 @@ script:
   # Code quality checks should not differ among different PHP versions, so we spare runtime here
   - "[[ $TRAVIS_PHP_VERSION != 7.3 ]] || vendor/bin/phpstan analyse lib/"
   - "[[ $TRAVIS_PHP_VERSION != 7.3 ]] || vendor/bin/phpcs --standard=etc/phpcs.xml.dist -s lib/"
+
+after_success:
+  - vendor/bin/coveralls --verbose
 
 after_failure:
   - cat srv/wp-content/debug.log || true

@@ -89,7 +89,7 @@ class Options implements ServiceProviderInterface, ProviderNode
         $optionResolver = $this->optionsResolver($pimple);
 
         foreach ($this->sanitize($definition) as $optionKey => $value) {
-            if (!is_callable($value)) {
+            if (false === is_callable($value)) {
                 $value = new OptionNode($optionKey, $value);
             }
 

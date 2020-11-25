@@ -38,7 +38,7 @@ class Join implements YamlCompiler
         $value = [];
 
         foreach ((array) $taggedValue->getValue() as $line) {
-            if (!$line) {
+            if (empty($line)) {
                 // An empty line shall convert to a new line
                 $value[] = "\n";
                 continue;

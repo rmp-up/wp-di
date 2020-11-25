@@ -73,6 +73,11 @@ use WP_CLI;
 class ServiceDefinitionTest extends CliTestCase
 {
     /**
+     * @var Provider
+     */
+    private $provider;
+
+    /**
      * @param $arguments
      * @param $name
      */

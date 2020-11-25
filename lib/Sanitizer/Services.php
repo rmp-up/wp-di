@@ -66,7 +66,7 @@ class Services implements SanitizerInterface
                 ];
             }
 
-            if (is_array($definition) && !array_key_exists(ServicesProvider::CLASS_NAME, $definition)) {
+            if (is_array($definition) && false === array_key_exists(ServicesProvider::CLASS_NAME, $definition)) {
                 $definition[ServicesProvider::CLASS_NAME] = $id;
             }
 

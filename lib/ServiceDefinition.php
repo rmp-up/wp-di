@@ -107,7 +107,7 @@ class ServiceDefinition extends ArrayObject
         }
 
         foreach ($definition as $key => $argument) {
-            if (!$argument) {
+            if (empty($argument)) {
                 // Skip empty
                 continue;
             }
@@ -140,7 +140,7 @@ class ServiceDefinition extends ArrayObject
             case '@':
                 $argument = substr($parameter, 1);
 
-                if (!empty($this[Services::LAZY_ARGS])) {
+                if (false === empty($this[Services::LAZY_ARGS])) {
                     return new LazyPimple($pimple, $argument);
                 }
 
@@ -151,6 +151,8 @@ class ServiceDefinition extends ArrayObject
                     // Not found in Pimple so we fallback to options
                     return $this->resolveReference($parameter);
                 }
+
+                return $parameter;
 
             default:
                 return $parameter;

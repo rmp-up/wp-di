@@ -144,8 +144,12 @@ class Services implements ServiceProviderInterface, ProviderNode
      */
     protected function compile(Container $pimple, string $serviceName, $definition)
     {
-        if ($definition instanceof Closure || is_callable($definition)) {
-            // Already lazy
+        if (
+            $definition instanceof Closure
+            || is_callable($definition)
+            || is_object($definition)
+        ) {
+            // Already lazy or an instance
             $pimple[$serviceName] = $definition;
             return;
         }

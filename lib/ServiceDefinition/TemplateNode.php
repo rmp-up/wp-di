@@ -58,6 +58,9 @@ class TemplateNode extends AbstractNode
         return $this->resolvedPath;
     }
 
+    /**
+     * @return void
+     */
     private function resolve()
     {
         $templatePath = '';

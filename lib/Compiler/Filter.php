@@ -80,7 +80,8 @@ class Filter implements CompilerInterface
             $methodNames = [null];
         }
 
-        $methodNames = (array) $methodNames; // could be still just a method name
+        // could be still just a method name
+        $methodNames = (array) $methodNames;
 
         foreach ($methodNames as $methodName) {
             $lazyCallback = new LazyService($container, $serviceName);

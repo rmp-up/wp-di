@@ -18,10 +18,10 @@
   "require-dev": {
     "php": ">=7.0",
     "johnpbloch/wordpress": "5.2.*",
-    "perftools/php-profiler": "^0.12.0",
+    "perftools/php-profiler": "0.12.*",
     "php-coveralls/php-coveralls": "1.1.*",
     "phpcompatibility/php-compatibility": "^9.3",
-    "phpstan/phpstan": "0.11.*",
+    "phpstan/phpstan": "0.12.*",
     "phpunit/phpunit": "7.5.*|8.2.*|6.5.*",
     "pretzlaw/wp-integration-test": "0.3.*",
     "rmp-up/doc-parser": "0.1.*",
@@ -39,5 +39,13 @@
   },
   "extra": {
     "wordpress-install-dir": "srv"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "test -h srv/wp-content/plugins/wp-di || ln -sr opt/wp-di srv/wp-content/plugins/"
+    ],
+    "post-update-cmd": [
+      "test -h srv/wp-content/plugins/wp-di || ln -sr opt/wp-di srv/wp-content/plugins/"
+    ]
   }
 }

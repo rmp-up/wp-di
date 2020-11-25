@@ -21,14 +21,11 @@
 
 declare(strict_types=1);
 
-namespace RmpUp\WpDi\Test\WordPress\Templates\Definition;
+namespace RmpUp\WpDi\Test\WordPress\Templates;
 
 use Pimple\Container;
-use Prophecy\Doubler\Generator\Node\ArgumentNode;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Sanitizer\WordPress\Templates;
-use RmpUp\WpDi\Test\ProviderTestCase;
-use RmpUp\WpDi\Test\WordPress\Templates\TemplatesTestCase;
 
 /**
  * Single files

@@ -30,6 +30,12 @@ use SomeThingElse;
 /**
  * Factory
  *
+ * Services might not always be the same in any context.
+ * For example a API call is way different from a CLI or Browser call.
+ * In those cases you may want to inject a service slightly different
+ * depending on the context or environment.
+ * Factories can be used to dynamically create those services/objects:
+ *
  * ```yaml
  * services:
  *   MyFactory: ~
