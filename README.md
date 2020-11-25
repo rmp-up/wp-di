@@ -62,6 +62,7 @@ Define services as known from classical DI but also ...
 * Default values for options
 * Path to templates
 * Inject all of them into services
+* Allow factories to create services
 
 ```yaml
 # Primitive parameters as usual

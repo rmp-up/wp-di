@@ -44,6 +44,7 @@ class MyOwnWidget extends \WP_Widget {
 }
 
 class_alias(Mirror::class, '\\MyBox');
+class_alias(Mirror::class, '\\MyFactory');
 class_alias(Mirror::class, '\\MyOwnActionListener');
 class_alias(Mirror::class, '\\MyOwnCliCommand');
 class_alias(Mirror::class, '\\MyOwnFilterHandler');
