@@ -1,7 +1,16 @@
 version: '3'
 
 services:
-  # additionally use fpm for better performance
+  php73:
+    image: php:7.3-apache
+    volumes:
+      - ".:/var/www"
+      - "$COMPOSER_LOCAL:/var/composer"
+    env_file: [ .env ]
+    networks:
+      default:
+        ipv4_address: 10.210.9.73
+
   php71:
     image: pretzlaw/php:7.1-apache
     volumes:
