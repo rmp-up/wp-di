@@ -61,7 +61,7 @@ class UseInServiceTest extends OptionsTestCase
     {
         parent::setUp();
 
-        $this->pimple->register(new Provider($this->yaml()));
+        $this->registerServices();
 
         $this->mockFilter('pre_option_blog_public')->expects($this->any())->willReturn(0);
         $this->mockFilter('pre_option_ping_sites')->expects($this->any())->willReturn(['example.org', 'rmp-up.de']);

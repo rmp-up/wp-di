@@ -103,17 +103,16 @@ class PostTypeDefinitionAsCallableTest extends AbstractTestCase
     {
         static::assertEmpty(static::$calls);
 
-        $this->pimple->register(
-            new Provider(
-                [
-                    'services' => [
-                        'callable_type' => [
-                            'class' => get_class($this),
-                            'post_type' => 'callable_type',
-                        ],
-                    ]
+        (new Provider())(
+            [
+                'services' => [
+                    'callable_type' => [
+                        'class' => get_class($this),
+                        'post_type' => 'callable_type',
+                    ],
                 ]
-            )
+            ],
+            $this->pimple
         );
 
         static::assertFilterHasCallback(
@@ -125,7 +124,7 @@ class PostTypeDefinitionAsCallableTest extends AbstractTestCase
     public function testPostTypeIsRegistered()
     {
         static::assertFalse(post_type_exists('daga_afd'));
-        $this->pimple->register(new Provider($this->yaml()));
+        $this->registerServices();
         do_action('init');
         static::assertTrue(post_type_exists('daga_afd'));
     }

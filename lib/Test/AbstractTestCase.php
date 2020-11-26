@@ -141,7 +141,8 @@ abstract class AbstractTestCase extends TestCase
      */
     protected function registerServices($index = 0, ...$keys)
     {
-        $this->pimple->register((new Provider($this->yaml($index, ...$keys))));
+        $provider = new Provider();
+        $provider($this->yaml($index, ...$keys), $this->pimple);
     }
 
     protected function yaml($index = 0, ...$keys)

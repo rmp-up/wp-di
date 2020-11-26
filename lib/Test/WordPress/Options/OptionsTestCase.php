@@ -67,7 +67,8 @@ abstract class OptionsTestCase extends ProviderTestCase
         }
 
         $this->optionsResolver = new OptionsResolver($this->pimple);
-        $this->pimple->register(new Provider([Options::class => $this->optionsDefinition]));
+
+        (new Provider())([Options::class => $this->optionsDefinition], $this->pimple);
     }
 
     protected function option($optionName, $default = null)

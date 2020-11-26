@@ -83,7 +83,7 @@ class PostTypeDefinitionAsArrayTest extends AbstractTestCase
 
     public function testServiceConvertedToArray()
     {
-        $this->pimple->register(new Provider($this->yaml(0)));
+        $this->registerServices();
 
         static::assertFilterHasCallback(
             'init',
@@ -94,7 +94,7 @@ class PostTypeDefinitionAsArrayTest extends AbstractTestCase
     public function testPostTypeIsRegistered()
     {
         static::assertFalse(post_type_exists('albini'));
-        $this->pimple->register(new Provider($this->yaml(0)));
+        $this->registerServices();
         do_action('init');
         static::assertTrue(post_type_exists('albini'));
     }

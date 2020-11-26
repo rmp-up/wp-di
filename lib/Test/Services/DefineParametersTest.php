@@ -51,7 +51,7 @@ class DefineParametersTest extends SanitizerTestCase
     {
         parent::setUp();
 
-        $this->pimple->register(new Provider($this->yaml(0)));
+        $this->registerServices();
     }
 
     public function testParameterDefinition()

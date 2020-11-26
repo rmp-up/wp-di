@@ -69,7 +69,7 @@ class OptionsTest extends AbstractTestCase
 
     public function testOptionsIntro()
     {
-        $this->pimple->register(new Provider($this->yaml(0)));
+        (new Provider())($this->yaml(0), $this->pimple);
 
         /** @var Mirror $mirror */
         $mirror = $this->pimple[\SomeThing::class];

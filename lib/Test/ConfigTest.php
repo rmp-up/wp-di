@@ -136,12 +136,15 @@ class ConfigTest extends AbstractTestCase
         static::assertEquals(['foo'], $mirror->getConstructorArgs());
     }
 
-    public function testThrowsExceptionWhenProviderInvalid()
+    /**
+     * Before 0.8 an InvalidArgumentException has been thrown
+     * when there is an unknown section in the definition.
+     *
+     * @internal
+     */
+    public function testThrowsNoExceptionWhenProviderInvalid()
     {
-        $this->expectException(InvalidArgumentException::class);
-
-        $this->pimple->register(
-            new Provider([uniqid('', true) => []])
-        );
+        $provider = new Provider();
+        static::assertNull($provider([uniqid('', true) => []], $this->pimple));
     }
 }

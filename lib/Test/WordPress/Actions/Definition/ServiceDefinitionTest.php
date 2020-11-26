@@ -147,12 +147,11 @@ class ServiceDefinitionTest extends SanitizerTestCase
 
     public function testShortFilterDefinition()
     {
-        $this->pimple->register(
-            new \RmpUp\WpDi\Provider(
-                [
-                    Services::class => $this->yaml(0, 'services')
-                ]
-            )
+        (new \RmpUp\WpDi\Provider())(
+            [
+                Services::class => $this->yaml(0, 'services')
+            ],
+            $this->pimple
         );
 
         $this->assertLazyFilterRegistered('the_content', MyOwnFilterHandler::class);
@@ -163,7 +162,7 @@ class ServiceDefinitionTest extends SanitizerTestCase
      */
     public function testMultipleFilterDefinition($config)
     {
-        $this->pimple->register(new \RmpUp\WpDi\Provider($config));
+        (new \RmpUp\WpDi\Provider())($config, $this->pimple);
 
         $this->assertLazyFilterRegistered('personal_options_update', MyOwnActionListener::class);
         $this->assertLazyFilterRegistered('edit_user_profile_update', MyOwnActionListener::class);
@@ -175,9 +174,7 @@ class ServiceDefinitionTest extends SanitizerTestCase
      */
     public function testCompleteFilterDefinition($definition)
     {
-        $this->pimple->register(
-            new \RmpUp\WpDi\Provider($definition)
-        );
+        (new \RmpUp\WpDi\Provider())($definition, $this->pimple);
 
         $this->assertLazyFilterRegistered('personal_options_update', MyOwnActionListener::class);
         $this->assertLazyFilterRegistered(

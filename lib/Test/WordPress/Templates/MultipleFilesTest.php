@@ -99,7 +99,7 @@ class MultipleFilesTest extends TemplatesTestCase
      */
     public function testRegisteredAsService($definition)
     {
-        $this->pimple->register(new Provider($definition));
+        (new Provider())($definition, $this->pimple);
 
         static::assertEquals('my-plugin/template-parts/some-feature.php', $this->pimple['%some-feature.php%']);
     }
@@ -109,7 +109,7 @@ class MultipleFilesTest extends TemplatesTestCase
      */
     public function testSecondOneExists($config)
     {
-        $this->pimple->register(new Provider($config));
+        (new Provider())($config, $this->pimple);
 
         $fullPath = $this->stubTemplateFile('other-plugin/template-parts/some-feature.php');
 

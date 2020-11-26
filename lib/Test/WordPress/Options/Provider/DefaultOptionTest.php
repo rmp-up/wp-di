@@ -49,7 +49,7 @@ class DefaultOptionTest extends OptionsTestCase
     {
         static::assertFalse(get_option('my_fav_isni'));
 
-        $this->pimple->register(new Provider($this->yaml(0)));
+        $this->registerServices(0);
 
         $optionValue = get_option('my_fav_isni');
 

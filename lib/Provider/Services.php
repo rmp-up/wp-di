@@ -25,7 +25,6 @@ namespace RmpUp\WpDi\Provider;
 
 use Closure;
 use Pimple\Container;
-use Pimple\ServiceProviderInterface;
 use RmpUp\WpDi\Compiler\Filter;
 use RmpUp\WpDi\Compiler\MetaBox;
 use RmpUp\WpDi\Compiler\PostType;
@@ -39,7 +38,7 @@ use RmpUp\WpDi\ServiceDefinition;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class Services implements ServiceProviderInterface, ProviderNode
+class Services implements ProviderNode
 {
     const CLASS_NAME = 'class';
     const ARGUMENTS = 'arguments';

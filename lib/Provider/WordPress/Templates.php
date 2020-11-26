@@ -25,7 +25,6 @@ namespace RmpUp\WpDi\Provider\WordPress;
 
 use Closure;
 use Pimple\Container;
-use Pimple\ServiceProviderInterface;
 use RmpUp\WpDi\Helper\Deprecated;
 use RmpUp\WpDi\Provider\ProviderNode;
 use RmpUp\WpDi\ServiceDefinition\TemplateNode;
@@ -35,7 +34,7 @@ use RmpUp\WpDi\ServiceDefinition\TemplateNode;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class Templates implements ServiceProviderInterface, ProviderNode
+class Templates implements ProviderNode
 {
     /**
      * Mapping of service name to array of possible templates

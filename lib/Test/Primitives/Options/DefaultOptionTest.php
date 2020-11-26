@@ -53,7 +53,7 @@ class DefaultOptionTest extends AbstractTestCase
     {
         parent::setUp();
 
-        $this->pimple->register(new Provider($this->yaml()));
+        $this->registerServices();
 
         $description = $this->classComment()->xpath('//p')[1]->asXML();
 

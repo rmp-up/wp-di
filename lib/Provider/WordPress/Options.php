@@ -24,7 +24,6 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Provider\WordPress;
 
 use Pimple\Container;
-use Pimple\ServiceProviderInterface;
 use RmpUp\WpDi\Helper\Deprecated;
 use RmpUp\WpDi\Helper\WordPress\OptionsResolver;
 use RmpUp\WpDi\Provider\ProviderNode;
@@ -35,7 +34,7 @@ use RmpUp\WpDi\ServiceDefinition\OptionNode;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class Options implements ServiceProviderInterface, ProviderNode
+class Options implements ProviderNode
 {
     /**
      * @var OptionsResolver
@@ -53,10 +52,6 @@ class Options implements ServiceProviderInterface, ProviderNode
      */
     public function __construct(array $serviceDefinition = [])
     {
-        if ($serviceDefinition) {
-            Deprecated::forwardIncompatible('Injecting a service definition is deprecated.');
-        }
-
         $this->serviceDefinition = $serviceDefinition;
     }
 
