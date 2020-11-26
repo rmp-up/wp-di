@@ -170,6 +170,11 @@ class Services implements ServiceProviderInterface, ProviderNode
     public function __invoke(array $definition, Container $pimple, $key = '')
     {
         foreach ($definition as $serviceName => $value) {
+            if (is_int($serviceName)) {
+                $serviceName = $value;
+                $value = null;
+            }
+
             $this->compile($pimple, $serviceName, $value);
         }
     }

@@ -25,11 +25,6 @@ namespace RmpUp\WpDi\Test;
 
 use ArrayObject;
 use InvalidArgumentException;
-use PHPUnit\Framework\Constraint\IsEqual;
-use PHPUnit\Framework\Constraint\IsInstanceOf;
-use Pretzlaw\WPInt\Filter\FilterAssertions;
-use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
-use RmpUp\WpDi\LazyService;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Provider\Services;
 use RmpUp\WpDi\Provider\WordPress\Actions;
@@ -101,17 +96,14 @@ use RmpUp\WpDi\Provider\WordPress\PostTypes;
  *
  * $container = new \Pimple\Container();
  *
- * $container->register(
- *   new \RmpUp\WpDi\Provider( require 'my-plugin-services.php' )
- * );
+ * $provider = new \RmpUp\WpDi\Provider();
+ * $provider(require 'my-plugin-services.php', $container)
  * ```
  *
  * @copyright 2020 Mike Pretzlaw (https://mike-pretzlawWordPress.de)
  */
 class ConfigTest extends AbstractTestCase
 {
-    use FilterAssertions;
-
     private $definition;
 
     protected function setUp()
@@ -129,7 +121,8 @@ class ConfigTest extends AbstractTestCase
 
         parent::setUp();
 
-        $this->pimple->register(new Provider($this->definition));
+        $provider = new Provider();
+        $provider($this->definition, $this->pimple);
     }
 
     public function testServicesRegistered()

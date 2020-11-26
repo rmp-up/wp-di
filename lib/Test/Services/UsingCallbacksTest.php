@@ -91,13 +91,14 @@ class UsingCallbacksTest extends ProviderTestCase
 
         $this->sanitizer = new Services();
 
-        $this->pimple->register(
-            new Provider(
-                array_merge_recursive(
-                    $this->classComment()->execute(0),
-                    $this->classComment()->execute(1)
-                )
-            )
+        $provider = new Provider([]);
+
+        $provider->__invoke(
+            array_merge_recursive(
+                $this->classComment()->execute(0),
+                $this->classComment()->execute(1)
+            ),
+            $this->pimple
         );
     }
 
