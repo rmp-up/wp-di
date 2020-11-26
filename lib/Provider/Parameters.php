@@ -24,7 +24,6 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Provider;
 
 use Pimple\Container;
-use Pimple\ServiceProviderInterface;
 use RmpUp\WpDi\Helper\Deprecated;
 
 /**
@@ -32,7 +31,7 @@ use RmpUp\WpDi\Helper\Deprecated;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class Parameters implements ServiceProviderInterface, ProviderNode
+class Parameters implements ProviderNode
 {
     /**
      * @var array
@@ -51,24 +50,6 @@ class Parameters implements ServiceProviderInterface, ProviderNode
         }
 
         $this->parameters = $parameters;
-    }
-
-    /**
-     * Registers services on the given container.
-     *
-     * This method should only be used to configure services and parameters.
-     * It should not get services.
-     *
-     * @param Container $pimple A container instance
-     * @deprecated 0.8.0 Use ::__invoke instead
-     */
-    public function register(Container $pimple)
-    {
-        Deprecated::forwardIncompatible(
-            'Using ::register is deprecated. It will be removed.'
-        );
-
-        $this->__invoke($this->parameters, $pimple);
     }
 
     public function __invoke(array $definition, Container $pimple, $key = '')

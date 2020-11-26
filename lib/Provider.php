@@ -71,7 +71,7 @@ class Provider implements ServiceProviderInterface
      * @param array $sanitizer     Pre-Mapping provider to sanitizer instanced (DEPRECATED 0.8)
      * @param array $keyToProvider Map a root-level key to a specific provider.
      */
-    public function __construct(array $definition, array $sanitizer = [], array $keyToProvider = [])
+    public function __construct(array $definition = [], array $sanitizer = [], array $keyToProvider = [])
     {
         $this->definition = $definition;
         $this->sanitizer = $sanitizer;
@@ -129,12 +129,19 @@ class Provider implements ServiceProviderInterface
 
     private function defaultCompiler(): array
     {
-        return [
+        $defaults = [
             'services' => new Services(),
             'options' => new Options(),
             'parameters' => new Parameters(),
             'templates' => new Templates(),
         ];
+
+        $defaults[Services::class] = $defaults['services'];
+        $defaults[Options::class] = $defaults['options'];
+        $defaults[Parameters::class] = $defaults['parameters'];
+        $defaults[Templates::class] = $defaults['templates'];
+
+        return $defaults;
     }
 
     /**

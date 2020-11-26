@@ -54,14 +54,23 @@ trait ProviderNodeTrait
         }
     }
 
+    /**
+     * @param array      $definition
+     * @param Container  $pimple
+     * @param string|int $key
+     */
     public function __invoke(array $definition, Container $pimple, $key = '')
     {
         foreach (array_intersect_key($this->nodes, $definition) as $section => $extensions) {
             // Found keywords will be forwarded to their handler.
-            // Cast to array in case one key maps directly to one compiler (instead of an array of compiler).
-            foreach ((array) $extensions as $extension) {
+
+            if (false === is_array($extensions)) {
+                $extensions = [$extensions];
+            }
+
+            foreach ($extensions as $extension) {
                 // Handler receive the specific config but also the general container for further processing.
-                $extension($definition[$key], $pimple, $section);
+                $extension($definition[$section], $pimple, $section);
             }
         }
     }
