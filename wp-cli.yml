@@ -20,6 +20,8 @@ core config:
   locale: en_GB
   extra-php: |
     // for development only
+    require_once __DIR__ . '/../opt/profiling.php';
+
     define( 'AUTOMATIC_UPDATER_DISABLED', true ); // no automatic updates
     define( 'IMAGE_EDIT_OVERWRITE', true);        // developer may overwrite images
     define( 'SCRIPT_DEBUG', true);                // do not minimize scripts
