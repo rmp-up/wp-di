@@ -112,8 +112,8 @@ class ServiceDefinitionTest extends CliTestCase
      */
     public function testShortCliCommandSyntax($config)
     {
-        $this->provider = new Provider($config);
-        $this->provider->register($this->pimple);
+        $this->provider = new Provider();
+        ($this->provider)($config, $this->pimple);
 
         static::assertEmpty(MyOwnCliCommand::_history());
         WP_CLI::run_command(['hello', 'neighbour']);
@@ -127,8 +127,8 @@ class ServiceDefinitionTest extends CliTestCase
      */
     public function testLongCliCommandSyntax($config)
     {
-        $this->provider = new Provider($config);
-        $this->provider->register($this->pimple);
+        $this->provider = new Provider();
+        ($this->provider)($config, $this->pimple);
 
         $this->assertCliHasCommand('hello neighbour');
         $this->assertCliHasCommand('hello world');

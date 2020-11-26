@@ -106,7 +106,7 @@ class FileTest extends TemplatesTestCase
      */
     public function testExtendsToArray(array $services)
     {
-        $this->pimple->register(new Provider($services));
+        (new Provider())($services, $this->pimple);
 
         static::assertEquals(
             [
@@ -135,7 +135,7 @@ class FileTest extends TemplatesTestCase
      */
     public function testRegisteredAsService(array $services)
     {
-        $this->pimple->register(new Provider($services));
+        (new Provider())($services, $this->pimple);
 
         static::assertEquals('my-own-plugin/template-parts/fester.php', $this->pimple['my-own-plugin/template-parts/fester.php']);
     }
@@ -145,7 +145,7 @@ class FileTest extends TemplatesTestCase
      */
     public function testFileExists($services)
     {
-        $this->pimple->register(new Provider($services));
+        (new Provider())($services, $this->pimple);
 
         $this->stubTemplateFile('my-own-plugin/template-parts/fester.php');
 

@@ -70,11 +70,7 @@ class NoArgumentsTest extends AbstractTestCase
         $this->pimple = new Container();
         $this->container = new \Pimple\Psr11\Container($this->pimple);
 
-        $this->pimple->register(
-            new Provider\Services(
-                $sanitizer->sanitize($this->services)
-            )
-        );
+        (new Provider\Services())($this->services, $this->pimple);
     }
 
 

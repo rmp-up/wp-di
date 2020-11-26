@@ -72,7 +72,7 @@ class WidgetsTest extends AbstractTestCase
     public function testExampleRegistersWidget()
     {
         static::assertWidgetNotExists('rmpup_myownwidget');
-        $this->pimple->register(new Provider($this->yaml()));
+        (new Provider())($this->yaml(), $this->pimple);
         static::assertWidgetExists('rmpup_myownwidget');
     }
 

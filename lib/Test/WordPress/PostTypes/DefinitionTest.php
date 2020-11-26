@@ -71,7 +71,7 @@ class DefinitionTest extends AbstractTestCase
     {
         $this->assertFilterNotHasCallback('init', new IsInstanceOf(RegisterPostType::class));
 
-        $this->pimple->register(new Provider($this->yaml(0)));
+        $this->registerServices();
 
         $this->assertFilterHasCallback('init', new IsInstanceOf(RegisterPostType::class));
 

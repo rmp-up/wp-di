@@ -85,8 +85,8 @@ class RegistersActionTest extends AbstractTestCase
         remove_all_filters('posts_pre_query');
         remove_all_filters('template_redirect');
 
-        $this->pimple->register(new Provider($this->yaml(0)));
-        $this->pimple->register(new Provider($this->yaml(1)));
+        $this->registerServices(0);
+        $this->registerServices(1);
     }
 
     public function testPriorityToOneMethod()

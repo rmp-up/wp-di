@@ -54,10 +54,7 @@ class IncludesTest extends ProviderTestCase
     {
         parent::setUp();
 
-        $this->sanitizer = new Options();
-        $this->provider = new Provider($this->yaml());
-
-        $this->pimple->register($this->provider);
+        $this->registerServices();
     }
 
     public function testOptionsExistAsService()

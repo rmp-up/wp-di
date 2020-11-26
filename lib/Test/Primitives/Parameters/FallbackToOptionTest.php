@@ -61,7 +61,7 @@ class FallbackToOptionTest extends AbstractTestCase
 
         $this->mockOption('blog_public')->expects($this->atLeastOnce())->willReturn('nice');
 
-        $this->pimple->register(new Provider($this->yaml()));
+        $this->registerServices();
     }
 
     public function testFetchedOptionInstead()

@@ -24,7 +24,6 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Provider;
 
 use Pimple\Container;
-use Pimple\ServiceProviderInterface;
 
 /**
  * Parameters

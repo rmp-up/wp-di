@@ -58,7 +58,7 @@ class ConstantsTest extends AbstractTestCase
     {
         parent::setUp();
 
-        $this->pimple->register(new Provider($this->yaml()));
+        $this->registerServices();
     }
 
     public function testConstantAndOneString()

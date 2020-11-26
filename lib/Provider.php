@@ -25,7 +25,6 @@ namespace RmpUp\WpDi;
 
 use InvalidArgumentException;
 use Pimple\Container;
-use Pimple\ServiceProviderInterface;
 use RmpUp\WpDi\Provider\Parameters;
 use RmpUp\WpDi\Provider\ProviderNode;
 use RmpUp\WpDi\Provider\ProviderNodeTrait;
@@ -39,7 +38,7 @@ use RmpUp\WpDi\Sanitizer\SanitizerInterface;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class Provider implements ServiceProviderInterface
+class Provider
 {
     use ProviderNodeTrait;
 

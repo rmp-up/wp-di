@@ -72,7 +72,8 @@ class WithClosuresTest extends TemplatesTestCase
         $this->services[Templates::class] = $this->sanitizer->sanitize($this->definition[Templates::class]);
 
         $this->pimple = new Container();
-        $this->pimple->register(new Provider($this->services));
+
+        (new Provider())($this->services, $this->pimple);
     }
 
     public function testClosureUnchanged()

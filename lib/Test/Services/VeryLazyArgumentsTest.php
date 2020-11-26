@@ -97,7 +97,7 @@ class VeryLazyArgumentsTest extends AbstractTestCase
 {
     public function testDisabledLazyArgsDoesNothing()
     {
-        $this->pimple->register(new Provider($this->yaml(0)));
+        $this->registerServices(0);
 
         static::assertFalse(
             $this->isServiceFrozen($this->pimple, SomeRepository::class),
@@ -115,7 +115,7 @@ class VeryLazyArgumentsTest extends AbstractTestCase
 
     public function testEnablingLazyArgumentsPostponesObjectCreation()
     {
-        $this->pimple->register(new Provider($this->yaml(1)));
+        $this->registerServices(1);
 
         static::assertFalse(
             $this->isServiceFrozen($this->pimple, SomeRepository::class),
