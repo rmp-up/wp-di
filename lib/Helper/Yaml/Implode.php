@@ -37,10 +37,10 @@ class Implode implements LazyInvoke
      */
     private $separator;
 
-    public function __construct(string $seperator, $parts)
+    public function __construct(string $separator, $parts)
     {
         $this->parts = $parts;
-        $this->separator = $seperator;
+        $this->separator = $separator;
     }
 
     public function __invoke()

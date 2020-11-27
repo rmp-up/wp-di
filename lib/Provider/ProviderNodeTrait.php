@@ -22,7 +22,6 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Provider;
 
-use DomainException;
 use Pimple\Container;
 
 /**

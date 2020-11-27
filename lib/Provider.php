@@ -23,15 +23,11 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi;
 
-use InvalidArgumentException;
-use Pimple\Container;
 use RmpUp\WpDi\Provider\Parameters;
-use RmpUp\WpDi\Provider\ProviderNode;
 use RmpUp\WpDi\Provider\ProviderNodeTrait;
 use RmpUp\WpDi\Provider\Services;
 use RmpUp\WpDi\Provider\WordPress\Options;
 use RmpUp\WpDi\Provider\WordPress\Templates;
-use RmpUp\WpDi\Sanitizer\SanitizerInterface;
 
 /**
  * Provider

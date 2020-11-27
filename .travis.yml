@@ -57,10 +57,6 @@ cache:
 
 before_install:
   - mysql -e 'CREATE DATABASE dev;'
-  # ocramius/package-versions:<=1.5 (for PHP 7.3) needs Composer 1.*
-  - "[[ $TRAVIS_PHP_VERSION > '7.3' ]] || composer self-update --1"
-  # Disable PHPStan because it gives false-positives PHP < 7.1
-  - "[[ $TRAVIS_PHP_VERSION > '7.0' ]] || composer remove --no-update -n --dev phpstan/phpstan"
   # Try supporting other versions
   - "[[ $WP_VERSION != *'dev-master' ]] || composer config minimum-stability dev"
   - "[[ $WP_VERSION != *'dev-master' ]] || composer config prefer-stable true"

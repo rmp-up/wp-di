@@ -23,11 +23,9 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Helper\WordPress;
 
-use InvalidArgumentException;
 use Pimple\Container;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use RmpUp\WpDi\Helper\Deprecated;
 
 /**
  * Resolve default options from the container
@@ -41,7 +39,7 @@ use RmpUp\WpDi\Helper\Deprecated;
 class OptionsResolver
 {
     /**
-     * @var ContainerInterface|Container
+     * @var Container
      */
     private $container;
 
@@ -50,22 +48,8 @@ class OptionsResolver
      */
     private $cache = [];
 
-    public function __construct($container)
+    public function __construct(Container $container)
     {
-        if ($container instanceof ContainerInterface) {
-            Deprecated::forwardCompatible(
-                'Using PSR-11 is deprecated. Please inject a Pimple container'
-            );
-        }
-
-        if ($container instanceof Container) {
-            $container = new \Pimple\Psr11\Container($container);
-        }
-
-        if (false === $container instanceof ContainerInterface) {
-            throw new InvalidArgumentException('Please inject a Pimple container');
-        }
-
         $this->container = $container;
     }
 
@@ -82,7 +66,7 @@ class OptionsResolver
         }
 
         try {
-            $this->cache[$option] = $this->container->get('%' . $option . '%');
+            $this->cache[$option] = $this->container['%' . $option . '%'];
         } catch (NotFoundExceptionInterface $e) {
             $this->cache[$option] = $currentDefault;
         }
