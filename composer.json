@@ -11,7 +11,7 @@
     }
   },
   "require": {
-    "ocramius/package-versions": "~1",
+    "composer/package-versions-deprecated": "1.*",
     "pimple/pimple": "^3.0",
     "psr/container": "1.*"
   },

@@ -29,6 +29,9 @@ namespace RmpUp\WpDi\Helper;
  */
 trait LazyInstantiating
 {
+    /**
+     * @var object
+     */
     protected $proxyObject;
 
     public function __call($name, $arguments)
@@ -43,6 +46,7 @@ trait LazyInstantiating
 
     public function __invoke(...$arguments)
     {
+        // @phpstan-ignore-next-line some object may/can be callables
         return ($this->proxyObject())(...$arguments);
     }
 
@@ -66,6 +70,9 @@ trait LazyInstantiating
      */
     abstract protected function createProxyObject();
 
+    /**
+     * @return object
+     */
     protected function proxyObject()
     {
         if (null === $this->proxyObject) {

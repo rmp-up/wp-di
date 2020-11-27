@@ -26,9 +26,9 @@ use Pimple\Container;
 use RmpUp\WpDi\Helper\InvokeRedirect;
 use RmpUp\WpDi\Helper\LazyPimple;
 use RmpUp\WpDi\Provider\Services;
-use RmpUp\WpDi\Provider\WordPress\CliCommands;
 use WP_CLI;
 use WP_CLI\Dispatcher\CompositeCommand;
+use WP_CLI\DocParser;
 
 /**
  * WpCli
@@ -45,7 +45,7 @@ class WpCli implements CompilerInterface
     public function __construct($wpCliClass = null)
     {
         if (null === $wpCliClass) {
-            $wpCliClass = '\\WP_CLI';
+            $wpCliClass = WP_CLI::class;
         }
 
         $this->wpCliClass = $wpCliClass;
@@ -79,15 +79,14 @@ class WpCli implements CompilerInterface
                 // Command is wired to existing service.
                 /** @noinspection PhpUndefinedMethodInspection */
                 $this->addCommand((string) $command, new LazyPimple($pimple, $serviceName), $method);
-                continue;
             }
         }
     }
 
     /**
-     * @param string $command
-     * @param object $handler
-     * @param string $method
+     * @param string   $command
+     * @param callable $handler
+     * @param string   $method
      */
     private function addCommand(string $command, $handler, string $method)
     {
@@ -118,7 +117,8 @@ class WpCli implements CompilerInterface
         $currentScope = [];
         foreach ($path as $node) {
             $currentScope[] = $node;
-            $currentNamespace = new CompositeCommand($parent, $node, new \WP_CLI\DocParser(''));
+            /** @var callable $currentNamespace */
+            $currentNamespace = new CompositeCommand($parent, $node, new DocParser(''));
             $parent = $currentNamespace;
 
             $definition = $class::get_runner()->find_command_to_run($currentScope);

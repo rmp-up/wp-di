@@ -23,7 +23,6 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Helper\WordPress;
 
-use Pimple\Psr11\Container;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 

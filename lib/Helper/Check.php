@@ -31,7 +31,7 @@ namespace RmpUp\WpDi\Helper;
  */
 class Check
 {
-    public static function isReferenceToParameter(string $value)
+    public static function isReferenceToParameter(string $value): bool
     {
         return strpos($value, '%') === 0 && '%' === substr($value, -1);
     }
