@@ -131,7 +131,10 @@ class FileTest extends TemplatesTestCase
     {
         (new Provider())($services, $this->pimple);
 
-        static::assertEquals('my-own-plugin/template-parts/fester.php', $this->pimple['%my-own-plugin/template-parts/fester.php%']);
+        static::assertEquals(
+            'my-own-plugin/template-parts/fester.php',
+            $this->pimple['%my-own-plugin/template-parts/fester.php%']
+        );
     }
 
     /**
@@ -143,10 +146,9 @@ class FileTest extends TemplatesTestCase
 
         $this->stubTemplateFile('my-own-plugin/template-parts/fester.php');
 
-        static::assertTemplatePathCorrect(
-            'my-own-plugin/template-parts/fester.php',
-            $this->pimple['%my-own-plugin/template-parts/fester.php%']
-        );
+        $current = $this->pimple['%my-own-plugin/template-parts/fester.php%'];
+
+        static::assertTemplatePathCorrect('my-own-plugin/template-parts/fester.php', $current);
     }
 
     protected function tearDown()

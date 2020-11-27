@@ -44,7 +44,7 @@ use const RmpUp\WpDi\Test\MY_PLUGIN_DIR;
  *
  * services:
  *   SomeThing:
- *     arguments: [ 'some-feature.php' ]
+ *     arguments: [ '%some-feature.php%' ]
  * ```
  *
  * Now we have a service named "some-feature.php" that tries each file

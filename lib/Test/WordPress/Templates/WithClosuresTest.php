@@ -105,17 +105,9 @@ class WithClosuresTest extends TemplatesTestCase
 
     public function testClosureUnchanged()
     {
-        $definition = $this->definition[Templates::class]['my-footer.php'];
-
         static::assertSame(
-            $definition,
-            $this->services[Templates::class]['my-footer.php']
-        );
-
-        static::assertSame(
-            $definition,
-            $this->getRawServiceDefinition('%my-footer.php%'),
-            get_class($definition) . ' is not ' . get_class($this->pimple->raw('%my-footer.php%'))
+            $this->definition[Templates::class]['my-footer.php'],
+            $this->pimple->raw('%my-footer.php%')
         );
     }
 }

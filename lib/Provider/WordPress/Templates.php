@@ -44,7 +44,6 @@ class Templates implements ProviderNode
 
             if ($templates instanceof Closure) {
                 // Already a function so we reuse this instead.
-                $pimple[$templateName] = $templates;
                 $pimple['%' . $templateName . '%'] = $templates;
                 continue;
             }
@@ -53,10 +52,7 @@ class Templates implements ProviderNode
                 $templates = [$templates];
             }
 
-            $templateNode = new TemplateNode($templates);
-
-            $pimple[$templateName] = $templateNode; // @deprecated 0.8.0
-            $pimple['%' . $templateName . '%'] = $templateNode;
+            $pimple['%' . $templateName . '%'] = new TemplateNode($templates);
         }
     }
 }
