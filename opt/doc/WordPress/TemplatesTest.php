@@ -23,15 +23,15 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress;
 
-use RmpUp\WpDi\Sanitizer\WordPress\Templates;
-use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
+use RmpUp\WpDi\Provider\WordPress\Templates;
+use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**
  * Templates
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class TemplatesTest extends SanitizerTestCase
+class TemplatesTest extends AbstractTestCase
 {
     public function testExists()
     {

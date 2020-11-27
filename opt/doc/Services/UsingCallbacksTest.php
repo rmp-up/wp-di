@@ -25,8 +25,7 @@ namespace RmpUp\WpDi\Test\Services;
 
 use ArrayObject;
 use RmpUp\WpDi\Provider;
-use RmpUp\WpDi\Sanitizer\Services;
-use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
+use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**
  * Custom service using lambda function
@@ -83,13 +82,11 @@ use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class UsingCallbacksTest extends SanitizerTestCase
+class UsingCallbacksTest extends AbstractTestCase
 {
     protected function setUp()
     {
         parent::setUp();
-
-        $this->sanitizer = new Services();
 
         $provider = new Provider([]);
 

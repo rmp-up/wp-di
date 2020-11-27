@@ -23,16 +23,14 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress\Templates;
 
-use RmpUp\WpDi\Provider;
-use RmpUp\WpDi\Sanitizer\WordPress\Templates;
-use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
+use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**
  * TemplatesTestCase
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-abstract class TemplatesTestCase extends SanitizerTestCase
+abstract class TemplatesTestCase extends AbstractTestCase
 {
     protected $definition;
 

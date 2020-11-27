@@ -93,10 +93,8 @@ class WithClosuresTest extends TemplatesTestCase
 
     protected function setUp()
     {
-        $this->sanitizer = new \RmpUp\WpDi\Sanitizer\WordPress\Templates();
-
         $this->definition = $this->classComment()->execute(0);
-        $this->services[Templates::class] = $this->sanitizer->sanitize($this->definition[Templates::class]);
+        $this->services[Templates::class] = $this->definition[Templates::class];
 
         $this->pimple = new Container();
 

@@ -24,7 +24,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Test\Services;
 
 use RmpUp\WpDi\Provider;
-use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
+use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**
  * Parameters
@@ -45,7 +45,7 @@ use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class DefineParametersTest extends SanitizerTestCase
+class DefineParametersTest extends AbstractTestCase
 {
     protected function setUp()
     {

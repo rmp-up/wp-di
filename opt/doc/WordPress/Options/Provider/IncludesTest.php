@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress\Options\Provider;
 
-use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
+use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**
  * Include an option
@@ -44,7 +44,7 @@ use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class IncludesTest extends SanitizerTestCase
+class IncludesTest extends AbstractTestCase
 {
     protected function setUp()
     {

@@ -23,7 +23,6 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress;
 
-use RmpUp\WpDi\Sanitizer\WordPress\Options;
 use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**
@@ -56,7 +55,6 @@ class OptionsTest extends AbstractTestCase
 {
     public function testExists()
     {
-        static::assertTrue(class_exists(Options::class));
         static::assertTrue(class_exists(\RmpUp\WpDi\Provider\WordPress\Options::class));
     }
 }
