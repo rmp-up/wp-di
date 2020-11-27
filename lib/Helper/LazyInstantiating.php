@@ -26,8 +26,6 @@ namespace RmpUp\WpDi\Helper;
  * Proxy all calls, read and writes to another object
  *
  * @package RmpUp\WpDi\Helper
- *
- * @deprecated 0.8.0 Will be shifted to LazyPimple
  */
 trait LazyInstantiating
 {

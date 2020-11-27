@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * LazyServiceTest.php
+ * ServicesTest.php
  *
  * LICENSE: This source file is created by the company around Mike Pretzlaw
  * located in Germany also known as rmp-up. All its contents are proprietary
@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test;
 
-use RmpUp\WpDi\LazyService;
+use RmpUp\WpDi\Helper\LazyPimple;
 
 /**
  * Services
@@ -37,7 +37,7 @@ use RmpUp\WpDi\LazyService;
 class ServicesTest extends AbstractTestCase
 {
     /**
-     * @var LazyService
+     * @var LazyPimple
      */
     private $lazy;
 
@@ -49,7 +49,7 @@ class ServicesTest extends AbstractTestCase
             return new Mirror();
         };
 
-        $this->lazy = new LazyService($this->container, 'qux');
+        $this->lazy = new LazyPimple($this->pimple, 'qux');
     }
 
     public function testLoadsServiceWhenAsked()

@@ -101,7 +101,7 @@ class ServiceDefinitionTest extends SanitizerTestCase
     {
         self::assertActionNotEmpty($filterName);
         $filter = current($this->getFilter($filterName)->callbacks[$priority]);
-        self::assertLazyService($serviceName, $filter['function'][0]);
+        self::assertLazyPimple($serviceName, $filter['function'][0]);
         self::assertSame($method, $filter['function'][1]);
     }
 

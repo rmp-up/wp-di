@@ -56,7 +56,7 @@ class NullConfigurationTest extends MetaBoxTestCase
         static::assertNotNull($registeredBox, 'Box not properly registered');
 
         static::assertEquals('', $registeredBox['title']);
-        static::assertLazyService(MyBox::class, $registeredBox['callback']);
+        static::assertLazyPimple(MyBox::class, $registeredBox['callback']);
     }
 
     protected function tearDown()

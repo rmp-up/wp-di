@@ -89,7 +89,7 @@ use SomeRepository;
  * **WARNING: When you use lazy arguments then the targeted class (here: `MyWidget`)
  * can no longer use type-hints in the signature of the constructor,
  * because a proxy-class will be injected instead of the real ones
- * (here: `LazyService` instead of `SomeRepository`).**
+ * (here: `LazyPimple` instead of `SomeRepository`).**
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
