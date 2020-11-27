@@ -2,21 +2,18 @@
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/7.0/phpunit.xsd"
          backupGlobals="false"
          colors="true"
-         bootstrap="lib/Test/bootstrap.php"
+         bootstrap="opt/doc/bootstrap.php"
          convertDeprecationsToExceptions="false"
 >
     <testsuites>
         <testsuite name="default">
-            <directory>lib/Test</directory>
+            <directory>opt/doc</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
             <directory>lib/</directory>
-            <exclude>
-                <directory>lib/Test</directory>
-            </exclude>
         </whitelist>
     </filter>
 
