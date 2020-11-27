@@ -25,32 +25,18 @@ namespace RmpUp\WpDi\Test\WordPress\Templates;
 
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Sanitizer\WordPress\Templates;
-use RmpUp\WpDi\Test\ProviderTestCase;
+use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
  * TemplatesTestCase
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-abstract class TemplatesTestCase extends ProviderTestCase
+abstract class TemplatesTestCase extends SanitizerTestCase
 {
     protected $definition;
 
     protected $stubFiles = [];
-
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $this->sanitizer = new Templates();
-
-        // @deprecated This is magic that will introduce bugs some day
-        $this->definition = $this->classComment()->execute(0);
-        $this->services = $this->sanitizer->sanitize($this->definition);
-        $this->provider = new Provider();
-
-        (new Provider())($this->services, $this->pimple);
-    }
 
     public static function assertTemplateExists(string $fileName)
     {

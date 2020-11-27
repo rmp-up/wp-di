@@ -26,7 +26,7 @@ namespace RmpUp\WpDi\Test\Services;
 use ArrayObject;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Sanitizer\Services;
-use RmpUp\WpDi\Test\ProviderTestCase;
+use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
  * Custom service using lambda function
@@ -83,7 +83,7 @@ use RmpUp\WpDi\Test\ProviderTestCase;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class UsingCallbacksTest extends ProviderTestCase
+class UsingCallbacksTest extends SanitizerTestCase
 {
     protected function setUp()
     {
