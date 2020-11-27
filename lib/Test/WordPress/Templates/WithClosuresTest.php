@@ -80,11 +80,6 @@ class WithClosuresTest extends TemplatesTestCase
     {
         static::assertSame(
             $this->definition[Templates::class]['my-footer.php'],
-            $this->services[Templates::class]['my-footer.php']
-        );
-
-        static::assertSame(
-            $this->definition[Templates::class]['my-footer.php'],
             $this->pimple->raw('%my-footer.php%')
         );
     }
