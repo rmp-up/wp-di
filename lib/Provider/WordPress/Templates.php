@@ -35,24 +35,6 @@ use RmpUp\WpDi\ServiceDefinition\TemplateNode;
  */
 class Templates implements ProviderNode
 {
-    /**
-     * Mapping of service name to array of possible templates
-     *
-     * @var array
-     */
-    private $definition;
-
-    /**
-     * Template provider
-     *
-     * @param array $definition (DEPRECATED 0.8) Mapping of service name to array of possible templates.
-     * @deprecated 0.8.0
-     */
-    public function __construct($definition = [])
-    {
-        $this->definition = $definition;
-    }
-
     public function __invoke(array $definition, Container $pimple, $key = '') {
         foreach ($definition as $templateName => $templates) {
             if (is_int($templateName) && is_string($templates)) {

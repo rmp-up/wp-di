@@ -43,11 +43,6 @@ class Provider
     use ProviderNodeTrait;
 
     /**
-     * @var array
-     * @deprecated Use ::$nodes instead
-     */
-    private $keyToCompiler;
-    /**
      * (Un-)Normalized definition of the services
      *
      * @var array
@@ -80,50 +75,6 @@ class Provider
         }
 
         $this->nodes = $keyToProvider;
-
-        // @deprecated 0.8.0 BC
-        $this->keyToCompiler =& $this->nodes;
-    }
-
-    /**
-     * @param string $key               Section-Key as used in the definitions.
-     * @param string|callable $compiler Class name or already callable.
-     *
-     * @deprecated 0.8 Please use ::addProvider instead.
-     */
-    public function addCompiler($key, $compiler)
-    {
-        if (false === array_key_exists($key, $this->keyToCompiler)) {
-            $this->keyToCompiler[$key] = [];
-        }
-
-        $this->keyToCompiler[$key][] = $compiler;
-    }
-
-    /**
-     * @param string|callable $sectionProvider A class-name or a callable.
-     * @param Container       $pimple
-     * @param array           $definition
-     *
-     * @deprecated 0.8.0 Just here for BC.
-     * @internal
-     */
-    private function bcRegistration($sectionProvider, Container $pimple, $definition)
-    {
-        if (is_callable($sectionProvider)) {
-            // Keeping provider lazy in case they are not used at all.
-            $sectionProvider = $sectionProvider($pimple);
-        }
-
-        if (false === class_exists($sectionProvider)) {
-            throw new InvalidArgumentException('Unknown provider: ' . $sectionProvider);
-        }
-
-        $pimple->register(
-            new $sectionProvider(
-                $this->sanitize($sectionProvider, $definition)
-            )
-        );
     }
 
     private function defaultCompiler(): array

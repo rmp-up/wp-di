@@ -126,9 +126,9 @@ class Services implements ProviderNode
      * @param string            $serviceName
      * @param array|object|null $definition
      *
-     * @deprecated 0.8.0 Will be completely moved into ::__invoke
+     * @deprecated 0.9.0 Will be completely moved into ::__invoke
      */
-    protected function compile(Container $pimple, string $serviceName, $definition)
+    private function compile(Container $pimple, string $serviceName, $definition)
     {
         if (
             $definition instanceof Closure

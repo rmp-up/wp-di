@@ -71,10 +71,8 @@ class Filter implements CompilerInterface
      * @param string                  $serviceName
      * @param string[]|null           $methodNames
      * @param int                     $priority
-     *
-     * @deprecated 0.8.0 Will become private
      */
-    protected function register($filterName, \Pimple\Psr11\Container $container, string $serviceName, $methodNames, $priority)
+    private function register($filterName, \Pimple\Psr11\Container $container, string $serviceName, $methodNames, $priority)
     {
         if (null === $methodNames) {
             $methodNames = [null];
