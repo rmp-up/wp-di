@@ -26,14 +26,32 @@ namespace RmpUp\WpDi\Test\WordPress\Options;
 use RmpUp\WpDi\Helper\WordPress\OptionsResolver;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Provider\WordPress\Options;
-use RmpUp\WpDi\Test\ProviderTestCase;
+use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
- * OptionsTestCase
+ * Options
  *
+ * ```php
+ * <?php
+ *
+ * return [
+ *   'foo' => 'bar',
+ *   'baz' => static function () {
+ *     return 'qux';
+ *   },
+ *   'ref' => static function ($container) {
+ *     return $container['foo'];
+ *   },
+ *   'invalid' => static function ($container) {
+ *     return $container[uniqid('', true)];
+ *   }
+ * ];
+ * ```
+ *
+ * @internal
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-abstract class OptionsTestCase extends ProviderTestCase
+abstract class OptionsTestCase extends SanitizerTestCase
 {
     /**
      * @var OptionsResolver
@@ -42,25 +60,11 @@ abstract class OptionsTestCase extends ProviderTestCase
 
     protected $optionsDefinition = [];
 
-    /**
-     * @deprecated 0.x We want to use documentation notes instead of hard scripted arrays.
-     */
     protected function setUp()
     {
         parent::setUp();
 
-        $this->optionsDefinition = [
-            'foo' => 'bar',
-            'baz' => static function () {
-                return 'qux';
-            },
-            'ref' => static function ($container) {
-                return $container['foo'];
-            },
-            'invalid' => static function ($container) {
-                return $container[uniqid('', true)];
-            }
-        ];
+        $this->optionsDefinition = $this->classComment(OptionsTestCase::class)->code(0)->evaluate();
 
         foreach ($this->optionsDefinition as $key => $value) {
             $this->pimple[$key] = $value;

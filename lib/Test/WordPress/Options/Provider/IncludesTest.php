@@ -23,11 +23,7 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Test\WordPress\Options\Provider;
 
-use Pretzlaw\WPInt\Filter\FilterAssertions;
-use RmpUp\WpDi\Provider;
-use RmpUp\WpDi\Sanitizer\WordPress\Options;
-use RmpUp\WpDi\Test\Mirror;
-use RmpUp\WpDi\Test\ProviderTestCase;
+use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
 
 /**
  * Include an option
@@ -48,7 +44,7 @@ use RmpUp\WpDi\Test\ProviderTestCase;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class IncludesTest extends ProviderTestCase
+class IncludesTest extends SanitizerTestCase
 {
     protected function setUp()
     {
