@@ -53,14 +53,6 @@ class RegisterPostType
         $this->postType = $postType;
     }
 
-    /**
-     * @return string
-     */
-    public function getPostType(): string
-    {
-        return $this->postType;
-    }
-
     public function __invoke()
     {
         $postTypeService = $this->pimple[$this->serviceName];

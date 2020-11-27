@@ -79,6 +79,10 @@ class DefinitionTest extends AbstractTestCase
         $recent = end($initHook);
 
         static::assertInstanceOf(RegisterPostType::class, $recent['function']);
-        static::assertSame('animals', $recent['function']->getPostType());
+
+        $postType = (new \ReflectionObject($recent['function']))->getProperty('postType');
+        $postType->setAccessible(true);
+
+        static::assertSame('animals', $postType->getValue($recent['function']));
     }
 }

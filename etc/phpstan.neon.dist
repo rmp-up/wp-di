@@ -5,13 +5,13 @@ parameters:
     excludes_analyse:
         - ./lib/Test
         - ./lib/Compat
+    reportUnmatchedIgnoredErrors: false
     # From 0.11 to 0.12 lead to some new hints
     # which are suppressed until completely fixed
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
     ignoreErrors:
         # __call is not considered as a callback, so we supress those warnings
-        - '#Parameter \#\d+.*of function.*expects callable.*LazyService.*given\.$#'
         - '#Parameter \#\d+.*of function.*expects callable.*LazyPimple.*given\.$#'
         # Again some supression of 0.12.x incompat here
         - '# has no typehint specified\.$#'

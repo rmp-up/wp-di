@@ -32,21 +32,6 @@ use Pimple\Container;
  */
 class Parameters implements ProviderNode
 {
-    /**
-     * @var array
-     */
-    private $parameters;
-
-    /**
-     * Parameters constructor.
-     *
-     * @param array $parameters (DEPRECATED)
-     */
-    public function __construct(array $parameters = [])
-    {
-        $this->parameters = $parameters;
-    }
-
     public function __invoke(array $definition, Container $pimple, $key = '')
     {
         foreach ($definition as $parameterName => $value) {

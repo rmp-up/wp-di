@@ -43,33 +43,14 @@ class Provider
     use ProviderNodeTrait;
 
     /**
-     * (Un-)Normalized definition of the services
-     *
-     * @var array
-     */
-    private $definition;
-
-    /**
-     * Provider to sanitizer mapping.
-     *
-     * @var array
-     */
-    private $sanitizer;
-
-    /**
      * Create provider
      *
      * This provider delegates sections of a service definition to several other provider.
      *
-     * @param array $definition    (Un-)normalized definitions of services, parameter or other
-     * @param array $sanitizer     Pre-Mapping provider to sanitizer instanced (DEPRECATED 0.8)
      * @param array $keyToProvider Map a root-level key to a specific provider.
      */
-    public function __construct(array $definition = [], array $sanitizer = [], array $keyToProvider = [])
+    public function __construct(array $keyToProvider = [])
     {
-        $this->definition = $definition;
-        $this->sanitizer = $sanitizer;
-
         if ([] === $keyToProvider) {
             $keyToProvider = $this->defaultCompiler();
         }
@@ -92,45 +73,5 @@ class Provider
         $defaults[Templates::class] = $defaults['templates'];
 
         return $defaults;
-    }
-
-    /**
-     * Sanitize service definition based on provider class.
-     *
-     * @param string $provider   Class name of the provider
-     * @param array  $definition Service definition that shall be normalized
-     *
-     * @return array
-     */
-    private function sanitize(string $provider, array $definition): array
-    {
-        $sanitizer = $this->sanitizer($provider);
-
-        if ($sanitizer instanceof SanitizerInterface) {
-            $definition = $sanitizer->sanitize($definition);
-        }
-
-        return $definition;
-    }
-
-    /**
-     * Fetch sanitizer for given provider class
-     *
-     * @param string $provider Class name of a provider
-     *
-     * @return SanitizerInterface
-     */
-    private function sanitizer(string $provider)
-    {
-        if (false === array_key_exists($provider, $this->sanitizer)) {
-            $this->sanitizer[$provider] = null;
-
-            $sanitizerClass = str_replace('Provider', 'Sanitizer', $provider);
-            if (true === class_exists($sanitizerClass)) {
-                $this->sanitizer[$provider] = new $sanitizerClass();
-            }
-        }
-
-        return $this->sanitizer[$provider];
     }
 }

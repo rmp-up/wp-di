@@ -50,20 +50,12 @@ class Services implements ProviderNode
     private $keywordToHandler;
 
     /**
-     * @var array
-     */
-    protected $services;
-
-    /**
      * Services constructor.
      *
-     * @param array        $services
      * @param callable[][] $keywordToHandler Mapping of keys delegating to other handler.
      */
-    public function __construct(array $services = [], array $keywordToHandler = [])
+    public function __construct(array $keywordToHandler = [])
     {
-        $this->services = $services;
-
         if ([] === $keywordToHandler) {
             $keywordToHandler = $this->defaultHandler();
         }
