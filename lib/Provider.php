@@ -144,30 +144,6 @@ class Provider
     }
 
     /**
-     * Registers services on the given container.
-     *
-     * This method should only be used to configure services and parameters.
-     * It should not get services.
-     *
-     * @param Container $pimple A container instance
-     */
-    public function register(Container $pimple)
-    {
-        // TODO 0.8.0 $this->validateDefinition($this->definition);
-
-        foreach ($this->definition as $provider => $definition) {
-            $sectionProvider = $this->keyToCompiler[$provider] ?? $provider;
-
-            if ($sectionProvider instanceof ProviderNode) {
-                $sectionProvider($definition, $pimple);
-                continue;
-            }
-
-            $this->bcRegistration($sectionProvider, $pimple, $definition);
-        }
-    }
-
-    /**
      * Sanitize service definition based on provider class.
      *
      * @param string $provider   Class name of the provider
