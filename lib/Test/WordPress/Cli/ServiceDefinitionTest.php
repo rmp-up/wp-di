@@ -85,7 +85,7 @@ class ServiceDefinitionTest extends CliTestCase
     {
         static::assertEquals($name, $arguments[0]);
         static::assertInternalType('array', $arguments[1]);
-        static::assertLazyService('MyOwnCliCommand', $arguments[1][0]);
+        static::assertLazyPimple('MyOwnCliCommand', $arguments[1][0]);
         static::assertSame($method, $arguments[1][1]);
     }
 

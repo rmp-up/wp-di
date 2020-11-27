@@ -31,7 +31,6 @@ use ReflectionException;
 use ReflectionObject;
 use RmpUp\Doc\DocParser;
 use RmpUp\WpDi\Helper\LazyPimple;
-use RmpUp\WpDi\LazyService;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Yaml;
 
@@ -93,9 +92,9 @@ abstract class AbstractTestCase extends TestCase
         return $wp_filter[$filterName] ?? null;
     }
 
-    protected static function assertLazyService(string $serviceName, $lazyServiceObject)
+    protected static function assertLazyPimple(string $serviceName, $lazyServiceObject)
     {
-        static::assertContains(get_class($lazyServiceObject), [LazyService::class, LazyPimple::class]);
+        static::assertContains(get_class($lazyServiceObject), [LazyPimple::class, LazyPimple::class]);
         static::assertEquals($serviceName, self::getField($lazyServiceObject, 'serviceName'));
     }
 

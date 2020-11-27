@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Compiler;
 
 use Pimple\Container;
-use RmpUp\WpDi\LazyService;
+use RmpUp\WpDi\Helper\LazyPimple;
 
 /**
  * Filter or action
@@ -57,22 +57,21 @@ class Filter implements CompilerInterface
     {
         $definition = $this->sanitize($definition);
 
-        $container = new \Pimple\Psr11\Container($pimple);
         foreach ($definition as $filterName => $prioToCallback) {
             foreach ($prioToCallback as $priority => $methodNames) {
-                $this->register($filterName, $container, $serviceName, $methodNames, $priority);
+                $this->register($filterName, $pimple, $serviceName, $methodNames, $priority);
             }
         }
     }
 
     /**
-     * @param string                  $filterName
-     * @param \Pimple\Psr11\Container $container (DEPRECATED 0.8 - Will use Pimple container instead)
-     * @param string                  $serviceName
-     * @param string[]|null           $methodNames
-     * @param int                     $priority
+     * @param string        $filterName
+     * @param Container     $container (DEPRECATED 0.8 - Will use Pimple container instead)
+     * @param string        $serviceName
+     * @param string[]|null $methodNames
+     * @param int           $priority
      */
-    private function register($filterName, \Pimple\Psr11\Container $container, string $serviceName, $methodNames, $priority)
+    private function register($filterName, Container $container, string $serviceName, $methodNames, $priority)
     {
         if (null === $methodNames) {
             $methodNames = [null];
@@ -82,7 +81,7 @@ class Filter implements CompilerInterface
         $methodNames = (array) $methodNames;
 
         foreach ($methodNames as $methodName) {
-            $lazyCallback = new LazyService($container, $serviceName);
+            $lazyCallback = new LazyPimple($container, $serviceName);
             if (null !== $methodName) {
                 $lazyCallback = [$lazyCallback, $methodName];
             }

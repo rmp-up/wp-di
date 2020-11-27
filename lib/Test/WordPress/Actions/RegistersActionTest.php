@@ -25,8 +25,7 @@ namespace RmpUp\WpDi\Test\WordPress\Actions;
 
 use MyOwnFilterHandler;
 use PHPUnit\Framework\Constraint\IsEqual;
-use RmpUp\WpDi\LazyService;
-use RmpUp\WpDi\Provider;
+use RmpUp\WpDi\Helper\LazyPimple;
 use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**
@@ -93,7 +92,7 @@ class RegistersActionTest extends AbstractTestCase
     {
         static::assertFilterHasCallback(
             'template_redirect',
-            new IsEqual(new LazyService($this->container, MyOwnFilterHandler::class)),
+            new IsEqual(new LazyPimple($this->pimple, MyOwnFilterHandler::class)),
             1
         );
     }
@@ -103,7 +102,7 @@ class RegistersActionTest extends AbstractTestCase
         static::assertFilterHasCallback(
             'posts_pre_query',
             new IsEqual(
-                [new LazyService($this->container, MyOwnFilterHandler::class), 'warmUpCache']
+                [new LazyPimple($this->pimple, MyOwnFilterHandler::class), 'warmUpCache']
             ),
             4
         );
@@ -111,7 +110,7 @@ class RegistersActionTest extends AbstractTestCase
         static::assertFilterHasCallback(
             'posts_pre_query',
             new IsEqual(
-                [new LazyService($this->container, MyOwnFilterHandler::class), 'applyCache']
+                [new LazyPimple($this->pimple, MyOwnFilterHandler::class), 'applyCache']
             ),
             4
         );
@@ -119,7 +118,7 @@ class RegistersActionTest extends AbstractTestCase
         static::assertFilterHasCallback(
             'posts_pre_query',
             new IsEqual(
-                [new LazyService($this->container, MyOwnFilterHandler::class), 'writeCache']
+                [new LazyPimple($this->pimple, MyOwnFilterHandler::class), 'writeCache']
             ),
             13
         );
