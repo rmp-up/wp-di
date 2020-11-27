@@ -2,7 +2,7 @@
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/7.0/phpunit.xsd"
          backupGlobals="false"
          colors="true"
-         bootstrap="lib/Test/bootstrap.php"
+         bootstrap="opt/doc/bootstrap.php"
 >
     <php>
         <!-- Never raise errors for incompatible changes, as they will be resolved in the next major version -->
@@ -13,16 +13,13 @@
 
     <testsuites>
         <testsuite name="default">
-            <directory>lib/Test</directory>
+            <directory>opt/doc</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
             <directory>lib/</directory>
-            <exclude>
-                <directory>lib/Test</directory>
-            </exclude>
         </whitelist>
     </filter>
 
