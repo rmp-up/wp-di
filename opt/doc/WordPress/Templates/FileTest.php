@@ -25,7 +25,6 @@ namespace RmpUp\WpDi\Test\WordPress\Templates;
 
 use Pimple\Container;
 use RmpUp\WpDi\Provider;
-use RmpUp\WpDi\Sanitizer\WordPress\Templates;
 
 /**
  * Single files
@@ -97,31 +96,6 @@ class FileTest extends TemplatesTestCase
                 $this->yaml(0),
             ],
         ];
-    }
-
-    /**
-     * @dataProvider getDefinition
-     *
-     * @param array $services
-     */
-    public function testExtendsToArray(array $services)
-    {
-        (new Provider())($services, $this->pimple);
-
-        static::assertEquals(
-            [
-                'my-own-plugin/template-parts/fester.php' => [
-                    'my-own-plugin/template-parts/fester.php',
-                ],
-                'my-own-plugin/public/coogan.jpg' => [
-                    'my-own-plugin/public/coogan.jpg',
-                ]
-            ],
-            (new Templates())->sanitize(
-                $services[\RmpUp\WpDi\Provider\WordPress\Templates::class]
-                ?? $services['templates']
-            )
-        );
     }
 
     /**

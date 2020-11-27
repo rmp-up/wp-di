@@ -66,7 +66,6 @@ class NoArgumentsTest extends AbstractTestCase
             ]
         ];
 
-        $sanitizer = new Sanitizer\Services();
         $this->pimple = new Container();
         $this->container = new \Pimple\Psr11\Container($this->pimple);
 

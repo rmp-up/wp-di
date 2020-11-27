@@ -26,7 +26,7 @@ namespace RmpUp\WpDi\Test\WordPress\Options;
 use RmpUp\WpDi\Helper\WordPress\OptionsResolver;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Provider\WordPress\Options;
-use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
+use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**
  * Options
@@ -51,7 +51,7 @@ use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
  * @internal
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-abstract class OptionsTestCase extends SanitizerTestCase
+abstract class OptionsTestCase extends AbstractTestCase
 {
     /**
      * @var OptionsResolver

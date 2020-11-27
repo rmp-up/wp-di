@@ -29,7 +29,7 @@ use RmpUp\WpDi\Provider\Services;
 use RmpUp\WpDi\Provider\WordPress\Actions as Provider;
 use RmpUp\WpDi\Sanitizer\WordPress\Actions;
 use RmpUp\WpDi\Test\Mirror;
-use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
+use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**
  * Direct service definition at once
@@ -95,7 +95,7 @@ use RmpUp\WpDi\Test\Sanitizer\SanitizerTestCase;
  *
  * @copyright 2020 Pretzlaw (https://rmp-up.de)
  */
-class ServiceDefinitionTest extends SanitizerTestCase
+class ServiceDefinitionTest extends AbstractTestCase
 {
     private function assertLazyFilterRegistered($filterName, $serviceName, $method = '__invoke', $priority = 10)
     {

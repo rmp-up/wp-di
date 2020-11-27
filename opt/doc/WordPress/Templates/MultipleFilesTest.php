@@ -25,7 +25,6 @@ namespace RmpUp\WpDi\Test\WordPress\Templates;
 
 use Pimple\Container;
 use RmpUp\WpDi\Provider;
-use RmpUp\WpDi\Sanitizer\WordPress\Templates;
 use const RmpUp\WpDi\Test\MY_PLUGIN_DIR;
 
 /**
@@ -58,7 +57,6 @@ class MultipleFilesTest extends TemplatesTestCase
     protected function setUp()
     {
         $this->pimple = new Container();
-        $this->sanitizer = new Templates();
 
         // Disabled default setup
     }
@@ -71,27 +69,6 @@ class MultipleFilesTest extends TemplatesTestCase
                 'templates'
             ]
         ];
-    }
-
-    /**
-     * @param $services
-     *
-     * @dataProvider getDefinitions
-     */
-    public function testExtendsToArray($services, $index)
-    {
-        $templates = [
-            'template-parts/my-plugin/some-feature.php',
-            'other-plugin/template-parts/some-feature.php',
-            'my-plugin/template-parts/some-feature.php',
-        ];
-
-        static::assertEquals(
-            [
-                'some-feature.php' => $templates,
-            ],
-            $this->sanitizer->sanitize($services[$index])
-        );
     }
 
     /**
