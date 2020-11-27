@@ -122,19 +122,6 @@ class Services implements ProviderNode
     }
 
     /**
-     * Registers services on the given container.
-     *
-     * This method should only be used to configure services and parameters.
-     * It should not get services.
-     *
-     * @param Container $pimple A container instance
-     */
-    public function register(Container $pimple)
-    {
-        $this->__invoke($this->services, $pimple);
-    }
-
-    /**
      * @param Container         $pimple
      * @param string            $serviceName
      * @param array|object|null $definition

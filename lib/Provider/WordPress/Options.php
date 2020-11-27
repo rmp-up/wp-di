@@ -70,20 +70,6 @@ class Options implements ProviderNode
         return $this->optionsResolver;
     }
 
-    /**
-     * Registers services on the given container.
-     *
-     * This method should only be used to configure services and parameters.
-     * It should not get services.
-     *
-     * @param Container $pimple A container instance
-     * @deprecated 0.8.0 Use ::__invoke instead.
-     */
-    public function register(Container $pimple)
-    {
-        $this->__invoke($this->serviceDefinition, $pimple);
-    }
-
     public function __invoke(array $definition, Container $pimple, $key = '')
     {
         $optionResolver = $this->optionsResolver($pimple);

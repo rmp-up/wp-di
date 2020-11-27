@@ -58,19 +58,6 @@ class Templates implements ProviderNode
         $this->definition = $definition;
     }
 
-    /**
-     * Registers services on the given container.
-     *
-     * This method should only be used to configure services and parameters.
-     * It should not get services.
-     *
-     * @param Container $pimple A container instance
-     */
-    public function register(Container $pimple)
-    {
-        $this->__invoke($this->definition, $pimple);
-    }
-
     public function __invoke(array $definition, Container $pimple, $key = '') {
         foreach ($definition as $templateName => $templates) {
             if (is_int($templateName) && is_string($templates)) {
