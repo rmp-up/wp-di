@@ -40,20 +40,6 @@ class Options implements ProviderNode
      * @var OptionsResolver
      */
     private $optionsResolver;
-    /**
-     * @var array
-     */
-    private $serviceDefinition;
-
-    /**
-     * Options constructor.
-     *
-     * @param array           $serviceDefinition
-     */
-    public function __construct(array $serviceDefinition = [])
-    {
-        $this->serviceDefinition = $serviceDefinition;
-    }
 
     /**
      * @param Container $pimple

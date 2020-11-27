@@ -45,15 +45,6 @@ trait ProviderNodeTrait
         $this->nodes[$key][] = $node;
     }
 
-    protected function validateDefinition($definition)
-    {
-        $missing = array_diff_key($this->nodes, $definition);
-
-        if ([] !== $missing) {
-            throw new DomainException(sprintf('Unknown sections: "%s"', implode('", "', array_keys($missing))));
-        }
-    }
-
     /**
      * @param array      $definition
      * @param Container  $pimple
@@ -64,6 +55,7 @@ trait ProviderNodeTrait
         foreach (array_intersect_key($this->nodes, $definition) as $section => $extensions) {
             // Found keywords will be forwarded to their handler.
 
+            // @phpstan-ignore-next-line The extension may be a string sometimes.
             if (false === is_array($extensions)) {
                 $extensions = [$extensions];
             }

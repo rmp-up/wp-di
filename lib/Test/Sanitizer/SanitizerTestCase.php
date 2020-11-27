@@ -38,9 +38,4 @@ abstract class SanitizerTestCase extends AbstractTestCase
      * @var SanitizerInterface
      */
     protected $sanitizer;
-
-    /**
-     * @var Provider
-     */
-    protected $provider;
 }

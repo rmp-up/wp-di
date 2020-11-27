@@ -24,7 +24,6 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Provider;
 
 use Pimple\Container;
-use RmpUp\WpDi\Helper\Deprecated;
 
 /**
  * Parameters
@@ -33,25 +32,6 @@ use RmpUp\WpDi\Helper\Deprecated;
  */
 class Parameters implements ProviderNode
 {
-    /**
-     * @var array
-     */
-    private $parameters;
-
-    /**
-     * Parameters constructor.
-     *
-     * @param array $parameters (DEPRECATED)
-     */
-    public function __construct(array $parameters = [])
-    {
-        if ($parameters) {
-            Deprecated::forwardIncompatible('Injecting parameter definition is deprecated.');
-        }
-
-        $this->parameters = $parameters;
-    }
-
     public function __invoke(array $definition, Container $pimple, $key = '')
     {
         foreach ($definition as $parameterName => $value) {

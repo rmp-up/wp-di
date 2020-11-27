@@ -104,25 +104,24 @@ use RmpUp\WpDi\Provider\WordPress\PostTypes;
  */
 class ConfigTest extends AbstractTestCase
 {
-    private $definition;
-
     protected function setUp()
     {
         remove_all_actions('template_redirect'); // TODO use ::truncateActions instead as soon as available
 
-        $this->definition = [
-            Services::class => [
-                ArrayObject::class,
-                Mirror::class => [
-                    'arguments' => ['foo'],
-                ]
-            ],
-        ];
-
         parent::setUp();
 
         $provider = new Provider();
-        $provider($this->definition, $this->pimple);
+        $provider(
+            [
+                Services::class => [
+                    ArrayObject::class,
+                    Mirror::class => [
+                        'arguments' => ['foo'],
+                    ]
+                ],
+            ],
+            $this->pimple
+        );
     }
 
     public function testServicesRegistered()
