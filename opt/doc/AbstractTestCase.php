@@ -30,8 +30,8 @@ use Pretzlaw\WPInt\Traits\WordPressTests;
 use ReflectionException;
 use ReflectionObject;
 use RmpUp\Doc\DocParser;
+use RmpUp\WpDi\Factory;
 use RmpUp\WpDi\Helper\LazyPimple;
-use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Yaml;
 
 /**
@@ -140,8 +140,7 @@ abstract class AbstractTestCase extends TestCase
      */
     protected function registerServices($index = 0, ...$keys)
     {
-        $provider = new Provider();
-        $provider($this->yaml($index, ...$keys), $this->pimple);
+        (Factory::createProvider())($this->yaml($index, ...$keys), $this->pimple);
     }
 
     protected function yaml($index = 0, ...$keys)

@@ -7,6 +7,7 @@ require_once 'lib/Compiler/PostType.php';
 require_once 'lib/Compiler/Shortcode.php';
 require_once 'lib/Compiler/Widgets.php';
 require_once 'lib/Compiler/WpCli.php';
+require_once 'lib/Factory.php';
 require_once 'lib/Helper/Check.php';
 require_once 'lib/Helper/InvokeRedirect.php';
 require_once 'lib/Helper/LazyInstantiating.php';

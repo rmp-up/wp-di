@@ -23,11 +23,7 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi;
 
-use RmpUp\WpDi\Provider\Parameters;
 use RmpUp\WpDi\Provider\ProviderNodeTrait;
-use RmpUp\WpDi\Provider\Services;
-use RmpUp\WpDi\Provider\WordPress\Options;
-use RmpUp\WpDi\Provider\WordPress\Templates;
 
 /**
  * Provider
@@ -54,20 +50,12 @@ class Provider
         $this->nodes = $keyToProvider;
     }
 
+    /**
+     * @return array
+     * @deprecated 0.9 Please use Factory::createProvider instead.
+     */
     private function defaultCompiler(): array
     {
-        $defaults = [
-            'services' => new Services(),
-            'options' => new Options(),
-            'parameters' => new Parameters(),
-            'templates' => new Templates(),
-        ];
-
-        $defaults[Services::class] = $defaults['services'];
-        $defaults[Options::class] = $defaults['options'];
-        $defaults[Parameters::class] = $defaults['parameters'];
-        $defaults[Templates::class] = $defaults['templates'];
-
-        return $defaults;
+        return Factory::getProviderArguments();
     }
 }
