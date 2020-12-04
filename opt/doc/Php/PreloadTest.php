@@ -2,10 +2,7 @@
 
 namespace RmpUp\WpDi\Test\Php;
 
-use Exception;
-use RmpUp\WpDi\Compiler\AlreadyExistsException;
-use RmpUp\WpDi\Provider\InvalidActionDefinitionException;
-use RmpUp\WpDi\Provider\MissingServiceDefinitionException;
+use ReflectionClass;
 use RmpUp\WpDi\Test\AbstractTestCase;
 use RuntimeException;
 use Symfony\Component\Finder\Finder;
@@ -26,19 +23,71 @@ use Symfony\Component\Finder\Finder;
 class PreloadTest extends AbstractTestCase
 {
     /**
+     * Set this to TRUE to regenerate the preload.php
+     *
+     * @var bool
+     */
+    private $regenerate = false;
+
+    /**
      * @var string[]
      */
     protected $classList;
+
+    /**
+     * @var string[]
+     */
+    private $excludeFromPreload = [
+        'RmpUp\\WpDi\\Compat\\',
+        'RmpUp\\WpDi\\Compiler\\Yaml\\',
+
+        \RmpUp\WpDi\Exception::class,
+        \RmpUp\WpDi\Yaml::class,
+
+        \RmpUp\WpDi\Compiler\Exception::class,
+        \RmpUp\WpDi\Compiler\AlreadyExistsException::class,
+
+        'RmpUp\\WpDi\\Helper\\Yaml\\',
+
+        \RmpUp\WpDi\Provider\InvalidActionDefinitionException::class,
+        \RmpUp\WpDi\Provider\MissingServiceDefinitionException::class,
+    ];
+
+    /**
+     * Include in pre-load
+     *
+     * @var string[]
+     */
+    private $includeInPreload = [
+        'RmpUp\\WpDi\\',
+    ];
 
     /**
      * @var string
      */
     private $preloadFilePath;
 
+    private function findInList(string $className, array $list): bool
+    {
+        foreach ($list as $item) {
+            if ('\\' === substr($item, -1) && 0 === strpos($className, $item)) {
+                // Namespace match
+                return true;
+            }
+
+            if ($item === $className) {
+                // FQN match
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function getScenarios()
     {
         $scenarios = [];
-        foreach ($this->getClasses() as $item) {
+        foreach ($this->getClassesAndDependencies() as $item) {
             $scenarios[$item] = [$item];
         }
 
@@ -47,7 +96,7 @@ class PreloadTest extends AbstractTestCase
 
     public function assertClassesNotLoaded()
     {
-        foreach ($this->getClasses() as $className) {
+        foreach ($this->getClassesAndDependencies() as $className) {
             static::assertFalse(
                 class_exists($className, false),
                 'Class has been loaded: ' . $className
@@ -55,11 +104,53 @@ class PreloadTest extends AbstractTestCase
         }
     }
 
+    private function isWhitelisted(string $className): bool
+    {
+        return $this->findInList($className, $this->includeInPreload);
+    }
+
+    /**
+     * @param string $class
+     *
+     * @return ReflectionClass[]
+     * @throws \ReflectionException
+     */
+    private function resolveDependencies($class)
+    {
+        $dependencies = [];
+
+        if (false === $class instanceof \ReflectionClass) {
+            $class = new ReflectionClass($class);
+        }
+
+        // Interfaces
+        if ($class->isInterface()) {
+            return [$class];
+        }
+
+        foreach ($class->getInterfaces() as $interface) {
+            $dependencies[] = $this->resolveDependencies($interface);
+        }
+
+        // Parents
+        $parentClass = $class->getParentClass();
+        if ($parentClass) {
+            $dependencies[] = $this->resolveDependencies($parentClass);
+        }
+
+        // Traits
+        foreach ($class->getTraits() as $trait) {
+            $dependencies[] = $this->resolveDependencies($trait);
+        }
+
+        $dependencies[] = [$class];
+
+        return array_merge(...$dependencies);
+    }
+
     protected function setUp()
     {
         $this->preloadFilePath = realpath(WPDI_BASE_DIR) . '/preload.php';
-
-        $this->getClasses();
 
         require_once WPDI_BASE_DIR . 'preload.php';
     }
@@ -70,41 +161,41 @@ class PreloadTest extends AbstractTestCase
      */
     public function testClassesHaveBeenPreloaded(string $className)
     {
-//        foreach ($this->classList as $classPath => $className)
-        {
-            static::assertTrue(
-                class_exists($className)
-                || interface_exists($className)
-                || trait_exists($className),
-                false
-            );
-        }
+        static::assertTrue(
+            class_exists($className)
+            || interface_exists($className)
+            || trait_exists($className),
+            false
+        );
     }
 
     public function testGeneratedPreloaderIsComplete()
     {
         $content = '<?php' . PHP_EOL;
 
-        foreach ($this->getClasses() as $classPath => $className) {
+        foreach ($this->getClassesAndDependencies() as $classPath => $className) {
             static::assertTrue(
                 class_exists($className) || interface_exists($className) || trait_exists($className),
                 'Unknown thing: ' . $className
             );
 
-            if ($this->isClassIgnored($className)) {
-                continue;
-            }
-
             $content .= PHP_EOL . "require_once '" . addslashes($classPath) . "';";
         }
 
-        static::assertSame($content, file_get_contents($this->preloadFilePath));
+        if ($this->regenerate) {
+            file_put_contents($this->preloadFilePath, $content);
+            $this->markTestSkipped('Flag to regenerate preload.php is set');
+        }
 
-        // file_put_contents($this->preloadFilePath, $content);
+        static::assertSame($content, file_get_contents($this->preloadFilePath));
     }
 
-    private function isClassIgnored(string $className)
+    private function isBlacklisted(string $className): bool
     {
+        if ($this->findInList($className, $this->excludeFromPreload)) {
+            return true;
+        }
+
         $classReallyNotExists = class_exists($className)
             || interface_exists($className)
             || trait_exists($className);
@@ -113,29 +204,18 @@ class PreloadTest extends AbstractTestCase
             throw new RuntimeException('Unknown: ' . $className);
         }
 
-        // Ignore the following
-        $ignored = [
-            \RmpUp\WpDi\Exception::class,
-            \RmpUp\WpDi\Compiler\Exception::class,
-            AlreadyExistsException::class,
-            InvalidActionDefinitionException::class,
-            MissingServiceDefinitionException::class,
-        ];
-
-        return in_array($className, $ignored, true)
-            || $className instanceof Exception;
+        return false;
     }
 
     /**
      * @return array
      */
-    protected function getClasses(): array
+    protected function getAllClasses(): array
     {
         if (null === $this->classList) {
             // Build class list
             $finder = new Finder();
-            $finder->in(WPDI_LIB_DIR . 'Compiler');
-            $finder->in(WPDI_LIB_DIR . 'Provider');
+            $finder->in(WPDI_LIB_DIR);
             $finder->name('*.php');
 
             $classList = array_map(
@@ -161,5 +241,57 @@ class PreloadTest extends AbstractTestCase
         }
 
         return $this->classList;
+    }
+
+    /**
+     * @return array<string, string>
+     * @throws \ReflectionException
+     */
+    public function getClassesAndDependencies()
+    {
+        $wpDiBaseDir = realpath(WPDI_BASE_DIR);
+        $dependencies = [];
+        foreach ($this->getAllClasses() as $classPath => $class) {
+            if (
+                false === $this->isWhitelisted($class)
+                || $this->isBlacklisted($class)
+                || in_array($class, $dependencies, true)
+            ) {
+                // Not our scope, excluded or already part of the pre-loading.
+                continue;
+            }
+
+            foreach ($this->resolveDependencies($class) as $item) {
+                $dependencyName = $item->getName();
+                if (false === $this->isWhitelisted($dependencyName)) {
+                    // Not our scope.
+                    continue;
+                }
+
+                if ($this->isBlacklisted($dependencyName)) {
+                    // In our scope but excluded.
+                    // Either load all dependencies or ignore the actual class.
+                    // Otherwise pre-loading (without autoloader) makes no sense.
+                    throw new \RuntimeException(
+                        sprintf(
+                            '"%s" is excluded from pre-loading but needed by "%s"',
+                            $dependencyName,
+                            $class
+                        )
+                    );
+                }
+
+                $dependencyPath = ltrim(str_replace($wpDiBaseDir, '', $item->getFileName()), '/');
+                $dependencies[] = [$dependencyPath => $dependencyName];
+            }
+
+            $dependencies[] = [$classPath => $class];
+        }
+
+        if (empty($dependencies)) {
+            return [];
+        }
+
+        return array_merge(...$dependencies);
     }
 }
