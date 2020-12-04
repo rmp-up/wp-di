@@ -20,6 +20,10 @@
     <filter>
         <whitelist>
             <directory>lib/</directory>
+            <exclude>
+                <directory>lib/Compat/Symfony3</directory>
+                <directory>lib/Compat/Symfony4</directory>
+            </exclude>
         </whitelist>
     </filter>
 

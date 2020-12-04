@@ -24,12 +24,11 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Test\WordPress\PostTypes\Provider;
 
 use PHPUnit\Framework\Constraint\IsEqual;
-use Pretzlaw\WPInt\Filter\FilterAssertions;
+use RmpUp\WpDi\Factory;
 use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
-use RmpUp\WpDi\Provider;
-use RmpUp\WpDi\Provider\WordPress\PostTypes as PostTypesProvider;
 use RmpUp\WpDi\Sanitizer\WordPress\PostTypes;
 use RmpUp\WpDi\Test\AbstractTestCase;
+use function RmpUp\WpDi\Factory;
 
 /**
  * The post-type definition class
@@ -103,7 +102,7 @@ class PostTypeDefinitionAsCallableTest extends AbstractTestCase
     {
         static::assertEmpty(static::$calls);
 
-        (new Provider())(
+        (Factory::createProvider())(
             [
                 'services' => [
                     'callable_type' => [

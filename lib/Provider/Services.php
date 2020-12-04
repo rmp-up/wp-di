@@ -25,12 +25,7 @@ namespace RmpUp\WpDi\Provider;
 
 use Closure;
 use Pimple\Container;
-use RmpUp\WpDi\Compiler\Filter;
-use RmpUp\WpDi\Compiler\MetaBox;
-use RmpUp\WpDi\Compiler\PostType;
-use RmpUp\WpDi\Compiler\Shortcode;
-use RmpUp\WpDi\Compiler\Widgets;
-use RmpUp\WpDi\Compiler\WpCli;
+use RmpUp\WpDi\Factory;
 use RmpUp\WpDi\ServiceDefinition;
 
 /**
@@ -70,29 +65,11 @@ class Services implements ProviderNode
      * until handler can be properly injected.
      *
      * @return array
+     * @deprecated 0.9.0
      */
     private function defaultHandler(): array
     {
-        $filter = [new Filter()];
-        $shortcodes = [new Shortcode()];
-
-        return [
-            Filter::FILTER_KEY => $filter,
-            'add_filter' => $filter, // alias
-
-            Filter::ACTION_KEY => $filter,
-            'add_action' => $filter, // alias
-
-            'meta_box' => [new MetaBox()],
-
-            'post_type' => [new PostType()],
-
-            Shortcode::KEY => $shortcodes,
-            'add_shortcode' => $shortcodes,
-
-            'widgets' => [new Widgets()],
-            'wp_cli' => [new WpCli()],
-        ];
+        return Factory::getServiceProviderArguments();
     }
 
     /**
