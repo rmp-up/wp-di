@@ -16,6 +16,7 @@ addons:
 env:
   global:
     - COMPOSER_CACHE_DIR=/home/travis/.composer
+    - XDEBUG_MODE=coverage
   matrix:
     # see https://codex.wordpress.org/WordPress_Versions
     # see https://phpunit.de/supported-versions.html
