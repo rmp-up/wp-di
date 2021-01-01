@@ -32,6 +32,7 @@ use ReflectionObject;
 use RmpUp\Doc\DocParser;
 use RmpUp\WpDi\Factory;
 use RmpUp\WpDi\Helper\LazyPimple;
+use RmpUp\WpDi\WpDi;
 use RmpUp\WpDi\Yaml;
 
 /**
@@ -55,6 +56,8 @@ abstract class AbstractTestCase extends TestCase
 
     /**
      * @var \Pimple\Psr11\Container
+     *
+     * @deprecated 0.9 Please use Pimple directly.
      */
     protected $container;
 
@@ -140,7 +143,7 @@ abstract class AbstractTestCase extends TestCase
      */
     protected function registerServices($index = 0, ...$keys)
     {
-        (Factory::createProvider())($this->yaml($index, ...$keys), $this->pimple);
+        WpDi::load($this->yaml($index, ...$keys), $this->pimple);
     }
 
     protected function yaml($index = 0, ...$keys)
