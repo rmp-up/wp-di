@@ -30,7 +30,6 @@ use Pretzlaw\WPInt\Traits\WordPressTests;
 use ReflectionException;
 use ReflectionObject;
 use RmpUp\Doc\DocParser;
-use RmpUp\WpDi\Factory;
 use RmpUp\WpDi\Helper\LazyPimple;
 use RmpUp\WpDi\WpDi;
 use RmpUp\WpDi\Yaml;
@@ -61,10 +60,33 @@ abstract class AbstractTestCase extends TestCase
      */
     protected $container;
 
+    private $filterBackup;
+
+    private function backupWpFilter()
+    {
+        global $wp_filter;
+
+        if (false === is_array($wp_filter)) {
+            return;
+        }
+
+        $this->filterBackup = [];
+
+        foreach ($wp_filter as $filterName => $hook) {
+            if (is_object($hook)) {
+                $hook = clone $hook;
+            }
+
+            $this->filterBackup[$filterName] = $hook;
+        }
+    }
+
     protected function setUp()
     {
         $this->pimple = new Container();
         $this->container = new \Pimple\Psr11\Container($this->pimple);
+
+        $this->backupWpFilter();
     }
 
     private static function getField($object, string $parameterName)
@@ -133,6 +155,9 @@ abstract class AbstractTestCase extends TestCase
         static::$calls = [];
         static::$actions = [];
         Mirror::_reset();
+
+        global $wp_filter;
+        $wp_filter = $this->filterBackup;
     }
 
     /**

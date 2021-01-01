@@ -49,7 +49,7 @@ class DefaultOptionTest extends OptionsTestCase
     {
         static::assertFalse(get_option('my_fav_isni'));
 
-        $this->registerServices(0);
+        $this->registerServices();
 
         $optionValue = get_option('my_fav_isni');
 

@@ -24,7 +24,6 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Provider\WordPress;
 
 use Pimple\Container;
-use RmpUp\WpDi\Helper\Deprecated;
 use RmpUp\WpDi\Helper\WordPress\OptionsResolver;
 use RmpUp\WpDi\Provider\ProviderNode;
 use RmpUp\WpDi\ServiceDefinition\OptionNode;
@@ -37,9 +36,9 @@ use RmpUp\WpDi\ServiceDefinition\OptionNode;
 class Options implements ProviderNode
 {
     /**
-     * @var OptionsResolver
+     * @var OptionsResolver[]
      */
-    private $optionsResolver;
+    private $optionsResolver = [];
 
     /**
      * @param Container $pimple
@@ -48,12 +47,16 @@ class Options implements ProviderNode
      */
     protected function optionsResolver(Container $pimple): OptionsResolver
     {
-        if (null === $this->optionsResolver) {
+        // Since there is a factory for the options resolver
+        // we need to distinguish between multiple Pimple instances here.
+        $hash = spl_object_hash($pimple);
+
+        if (empty($this->optionsResolver[$hash])) {
             // DEPRECATED - the options resolver should be injected instead
-            $this->optionsResolver = new OptionsResolver($pimple);
+            $this->optionsResolver[$hash] = new OptionsResolver($pimple);
         }
 
-        return $this->optionsResolver;
+        return $this->optionsResolver[$hash];
     }
 
     public function __invoke(array $definition, Container $pimple, $key = '')

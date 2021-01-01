@@ -29,3 +29,4 @@ require_once 'lib/ServiceDefinition.php';
 require_once 'lib/ServiceDefinition/AbstractNode.php';
 require_once 'lib/ServiceDefinition/OptionNode.php';
 require_once 'lib/ServiceDefinition/TemplateNode.php';
+require_once 'lib/WpDi.php';
