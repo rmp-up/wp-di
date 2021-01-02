@@ -139,6 +139,9 @@ class ServiceDefinition extends ArrayObject
         switch ($parameter[0]) {
             case '@':
                 $argument = substr($parameter, 1);
+                if ('@' === $argument[0]) {
+                    return $argument;
+                }
 
                 if (false === empty($this[Services::LAZY_ARGS])) {
                     return new LazyPimple($pimple, $argument);
