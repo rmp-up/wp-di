@@ -41,7 +41,7 @@ use RmpUp\WpDi\Helper\Deprecated;
 class OptionsResolver
 {
     /**
-     * @var ContainerInterface
+     * @var ContainerInterface|Container
      */
     private $container;
 
