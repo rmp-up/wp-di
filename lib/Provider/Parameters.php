@@ -25,6 +25,7 @@ namespace RmpUp\WpDi\Provider;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use RmpUp\WpDi\Helper\Deprecated;
 
 /**
  * Parameters
@@ -45,6 +46,10 @@ class Parameters implements ServiceProviderInterface, ProviderNode
      */
     public function __construct(array $parameters = [])
     {
+        if ($parameters) {
+            Deprecated::forwardIncompatible('Injecting parameter definition is deprecated.');
+        }
+
         $this->parameters = $parameters;
     }
 
@@ -59,6 +64,10 @@ class Parameters implements ServiceProviderInterface, ProviderNode
      */
     public function register(Container $pimple)
     {
+        Deprecated::forwardIncompatible(
+            'Using ::register is deprecated. It will be removed.'
+        );
+
         $this->__invoke($this->parameters, $pimple);
     }
 

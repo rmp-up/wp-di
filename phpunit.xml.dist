@@ -3,8 +3,14 @@
          backupGlobals="false"
          colors="true"
          bootstrap="lib/Test/bootstrap.php"
-         convertDeprecationsToExceptions="false"
 >
+    <php>
+        <!-- Never raise errors for incompatible changes, as they will be resolved in the next major version -->
+        <env name="WPDI_ERROR_FORWARD_INCOMPATIBLE" value="0" />
+        <!-- Always raise errors when a new API is not used internally. -->
+        <env name="WPDI_ERROR_DEPRECATED" value="1" />
+    </php>
+
     <testsuites>
         <testsuite name="default">
             <directory>lib/Test</directory>

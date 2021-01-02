@@ -24,6 +24,8 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Test\WordPress\Templates;
 
 use Pimple\Container;
+use ReflectionProperty;
+use RmpUp\WpDi\Helper\Deprecated;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Provider\WordPress\Templates;
 
@@ -64,6 +66,31 @@ use RmpUp\WpDi\Provider\WordPress\Templates;
  */
 class WithClosuresTest extends TemplatesTestCase
 {
+    /**
+     * @param string         $serviceName
+     * @param null|Container $container
+     *
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    private function getRawServiceDefinition(string $serviceName, $container = null)
+    {
+        if (null === $container) {
+            $container = $this->pimple;
+        }
+
+        $serviceDefinition = $container->raw($serviceName);
+
+        if ($serviceDefinition instanceof Deprecated) {
+            $serviceProperty = (new ReflectionProperty($serviceDefinition, 'serviceDefinition'));
+            $serviceProperty->setAccessible(true);
+
+            return $serviceProperty->getValue($serviceDefinition);
+        }
+
+        return $serviceDefinition;
+    }
+
     protected function setUp()
     {
         $this->sanitizer = new \RmpUp\WpDi\Sanitizer\WordPress\Templates();
@@ -77,14 +104,17 @@ class WithClosuresTest extends TemplatesTestCase
 
     public function testClosureUnchanged()
     {
+        $definition = $this->definition[Templates::class]['my-footer.php'];
+
         static::assertSame(
-            $this->definition[Templates::class]['my-footer.php'],
+            $definition,
             $this->services[Templates::class]['my-footer.php']
         );
 
         static::assertSame(
-            $this->definition[Templates::class]['my-footer.php'],
-            $this->pimple->raw('%my-footer.php%')
+            $definition,
+            $this->getRawServiceDefinition('%my-footer.php%'),
+            get_class($definition) . ' is not ' . get_class($this->pimple->raw('%my-footer.php%'))
         );
     }
 }

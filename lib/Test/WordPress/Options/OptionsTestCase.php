@@ -66,7 +66,7 @@ abstract class OptionsTestCase extends ProviderTestCase
             $this->pimple[$key] = $value;
         }
 
-        $this->optionsResolver = new OptionsResolver($this->container);
+        $this->optionsResolver = new OptionsResolver($this->pimple);
         $this->pimple->register(new Provider([Options::class => $this->optionsDefinition]));
     }
 

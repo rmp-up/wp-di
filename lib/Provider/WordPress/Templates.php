@@ -26,6 +26,7 @@ namespace RmpUp\WpDi\Provider\WordPress;
 use Closure;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use RmpUp\WpDi\Helper\Deprecated;
 use RmpUp\WpDi\Provider\ProviderNode;
 use RmpUp\WpDi\ServiceDefinition\TemplateNode;
 
@@ -51,6 +52,10 @@ class Templates implements ServiceProviderInterface, ProviderNode
      */
     public function __construct($definition = [])
     {
+        if ($definition) {
+            Deprecated::forwardIncompatible('Injecting a service definition is deprecated.');
+        }
+
         $this->definition = $definition;
     }
 
@@ -73,9 +78,15 @@ class Templates implements ServiceProviderInterface, ProviderNode
                 $templateName = $templates;
             }
 
+            $deprecated = new Deprecated(
+                $templates,
+                'Please inject templates using % as pre- and suffix.'
+            );
+
             if ($templates instanceof Closure) {
                 // Already a function so we reuse this instead.
-                $pimple[$templateName] = $templates;
+                $pimple[$templateName] = $deprecated;
+                $pimple['%' . $templateName . '%'] = $templates;
                 continue;
             }
 
@@ -85,7 +96,7 @@ class Templates implements ServiceProviderInterface, ProviderNode
 
             $templateNode = new TemplateNode($templates);
 
-            $pimple[$templateName] = $templateNode; // @deprecated 0.8.0
+            $pimple[$templateName] = $deprecated; // @deprecated 0.8.0
             $pimple['%' . $templateName . '%'] = $templateNode;
         }
     }
