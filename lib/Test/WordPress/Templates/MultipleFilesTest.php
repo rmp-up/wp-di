@@ -89,7 +89,6 @@ class MultipleFilesTest extends TemplatesTestCase
         static::assertEquals(
             [
                 'some-feature.php' => $templates,
-                '%some-feature.php%' => $templates,
             ],
             $this->sanitizer->sanitize($services[$index])
         );
@@ -102,7 +101,7 @@ class MultipleFilesTest extends TemplatesTestCase
     {
         $this->pimple->register(new Provider($definition));
 
-        static::assertEquals('my-plugin/template-parts/some-feature.php', $this->pimple['some-feature.php']);
+        static::assertEquals('my-plugin/template-parts/some-feature.php', $this->pimple['%some-feature.php%']);
     }
 
     /**
@@ -115,6 +114,6 @@ class MultipleFilesTest extends TemplatesTestCase
         $fullPath = $this->stubTemplateFile('other-plugin/template-parts/some-feature.php');
 
         self::assertNotEmpty($fullPath);
-        self::assertEquals($fullPath, $this->pimple['some-feature.php']);
+        self::assertEquals($fullPath, $this->pimple['%some-feature.php%']);
     }
 }

@@ -25,6 +25,7 @@ namespace RmpUp\WpDi\Provider\WordPress;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use RmpUp\WpDi\Helper\Deprecated;
 use RmpUp\WpDi\Helper\WordPress\OptionsResolver;
 use RmpUp\WpDi\Provider\ProviderNode;
 use RmpUp\WpDi\ServiceDefinition\OptionNode;
@@ -52,6 +53,10 @@ class Options implements ServiceProviderInterface, ProviderNode
      */
     public function __construct(array $serviceDefinition = [])
     {
+        if ($serviceDefinition) {
+            Deprecated::forwardIncompatible('Injecting a service definition is deprecated.');
+        }
+
         $this->serviceDefinition = $serviceDefinition;
     }
 
@@ -64,7 +69,7 @@ class Options implements ServiceProviderInterface, ProviderNode
     {
         if (null === $this->optionsResolver) {
             // DEPRECATED - the options resolver should be injected instead
-            $this->optionsResolver = new OptionsResolver(new \Pimple\Psr11\Container($pimple));
+            $this->optionsResolver = new OptionsResolver($pimple);
         }
 
         return $this->optionsResolver;

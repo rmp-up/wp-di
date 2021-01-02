@@ -113,15 +113,9 @@ class FileTest extends TemplatesTestCase
                 'my-own-plugin/template-parts/fester.php' => [
                     'my-own-plugin/template-parts/fester.php',
                 ],
-                '%my-own-plugin/template-parts/fester.php%' => [
-                    'my-own-plugin/template-parts/fester.php',
-                ],
                 'my-own-plugin/public/coogan.jpg' => [
                     'my-own-plugin/public/coogan.jpg',
                 ],
-                '%my-own-plugin/public/coogan.jpg%' => [
-                    'my-own-plugin/public/coogan.jpg',
-                ]
             ],
             (new Templates())->sanitize(
                 $services[\RmpUp\WpDi\Provider\WordPress\Templates::class]
@@ -137,7 +131,7 @@ class FileTest extends TemplatesTestCase
     {
         $this->pimple->register(new Provider($services));
 
-        static::assertEquals('my-own-plugin/template-parts/fester.php', $this->pimple['my-own-plugin/template-parts/fester.php']);
+        static::assertEquals('my-own-plugin/template-parts/fester.php', $this->pimple['%my-own-plugin/template-parts/fester.php%']);
     }
 
     /**
@@ -149,9 +143,10 @@ class FileTest extends TemplatesTestCase
 
         $this->stubTemplateFile('my-own-plugin/template-parts/fester.php');
 
-        $current = $this->pimple['my-own-plugin/template-parts/fester.php'];
-
-        static::assertTemplatePathCorrect('my-own-plugin/template-parts/fester.php', $current);
+        static::assertTemplatePathCorrect(
+            'my-own-plugin/template-parts/fester.php',
+            $this->pimple['%my-own-plugin/template-parts/fester.php%']
+        );
     }
 
     protected function tearDown()
