@@ -22,8 +22,8 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Compiler\Yaml;
 
+use InvalidArgumentException;
 use RmpUp\WpDi\Helper\WordPress\LazyFunctionCall;
-use RmpUp\WpDi\Yaml;
 use Symfony\Component\Yaml\Tag\TaggedValue;
 
 /**
@@ -38,7 +38,7 @@ class Translate implements YamlCompiler
         $definition = (array) $taggedValue->getValue();
 
         if (false === is_callable($taggedValue->getTag())) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Translate handler bound to non-callable - please only use existing functions/callables'
             );
         }

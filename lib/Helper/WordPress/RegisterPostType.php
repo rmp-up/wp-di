@@ -55,9 +55,13 @@ class RegisterPostType
 
     /**
      * @return string
+     *
+     * @deprecated 0.8 Will be removed
      */
     public function getPostType(): string
     {
+        trigger_error('Please no longer use RegisterPostType::getPostType method');
+
         return $this->postType;
     }
 

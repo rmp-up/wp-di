@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Test\WordPress\PostTypes;
 
 use PHPUnit\Framework\Constraint\IsInstanceOf;
+use ReflectionProperty;
 use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
 use RmpUp\WpDi\Provider;
 use RmpUp\WpDi\Test\AbstractTestCase;
@@ -79,6 +80,9 @@ class DefinitionTest extends AbstractTestCase
         $recent = end($initHook);
 
         static::assertInstanceOf(RegisterPostType::class, $recent['function']);
-        static::assertSame('animals', $recent['function']->getPostType());
+
+        $property = (new ReflectionProperty($recent['function'], 'postType'));
+        $property->setAccessible(true);
+        static::assertSame('animals', $property->getValue($recent['function']));
     }
 }

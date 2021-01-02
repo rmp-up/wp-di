@@ -35,12 +35,12 @@ class Implode implements LazyInvoke
     /**
      * @var string
      */
-    private $seperator;
+    private $separator;
 
     public function __construct(string $seperator, $parts)
     {
         $this->parts = $parts;
-        $this->seperator = $seperator;
+        $this->separator = $seperator;
     }
 
     public function __invoke()
@@ -54,6 +54,6 @@ class Implode implements LazyInvoke
             $parsedParts[] = $part;
         }
 
-        return implode($this->seperator, $parsedParts);
+        return implode($this->separator, $parsedParts);
     }
 }

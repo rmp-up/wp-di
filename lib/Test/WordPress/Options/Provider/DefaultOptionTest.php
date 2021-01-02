@@ -45,11 +45,6 @@ use RmpUp\WpDi\Test\WordPress\Options\OptionsTestCase;
  */
 class DefaultOptionTest extends OptionsTestCase
 {
-    protected function setUp()
-    {
-        parent::setUp();
-    }
-
     public function testUseDefaultOption()
     {
         static::assertFalse(get_option('my_fav_isni'));

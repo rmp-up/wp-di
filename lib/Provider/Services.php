@@ -140,7 +140,8 @@ class Services implements ServiceProviderInterface, ProviderNode
      * @param string            $serviceName
      * @param array|object|null $definition
      *
-     * @deprecated 0.8.0 Will be completely moved into ::__invoke
+     * @deprecated 0.8.0 Will become private
+     * @deprecated 0.9.0 Will be completely moved into ::__invoke
      */
     protected function compile(Container $pimple, string $serviceName, $definition)
     {
@@ -164,12 +165,16 @@ class Services implements ServiceProviderInterface, ProviderNode
 
         $pimple[$serviceName] = new ServiceDefinition($definition);
         $this->delegate((array) $definition, $serviceName, $pimple);
-
     }
 
     public function __invoke(array $definition, Container $pimple, $key = '')
     {
         foreach ($definition as $serviceName => $value) {
+            if (is_int($serviceName)) {
+                $serviceName = $value;
+                $value = null;
+            }
+
             $this->compile($pimple, $serviceName, $value);
         }
     }

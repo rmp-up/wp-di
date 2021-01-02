@@ -57,7 +57,6 @@ class OptionsResolver
             return $currentDefault;
         }
 
-
         if (array_key_exists($option, $this->cache)) {
             // Keep it cached to not resolve this again.
             return $this->cache[$option];

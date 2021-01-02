@@ -1,4 +1,7 @@
+/.bash_history
+/.composer
 /.idea
+/coverage.xml
 /documentation.css
 /srv
 /tmp

@@ -16,6 +16,7 @@ addons:
 env:
   global:
     - COMPOSER_CACHE_DIR=/home/travis/.composer
+    - XDEBUG_MODE=coverage
   matrix:
     # see https://codex.wordpress.org/WordPress_Versions
     # see https://phpunit.de/supported-versions.html
@@ -68,7 +69,7 @@ before_install:
 install:
   - composer install
   # Using WP-CLI instead of Composer because this way we can use the env matrix (above).
-  - vendor/bin/wp --allow-root config create --force --dbuser=travis --dbpass="" --dbhost="127.0.0.1" --skip-check
+  - vendor/bin/wp --allow-root config create --skip-check --force --dbuser=travis --dbpass="" --dbhost="127.0.0.1"
   - vendor/bin/wp --allow-root core install --skip-email
   - for L in etc/*; do ln -s $L; done
   - ln -s etc/.coveralls.yml

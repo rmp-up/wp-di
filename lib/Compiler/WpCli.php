@@ -79,7 +79,6 @@ class WpCli implements CompilerInterface
                 // Command is wired to existing service.
                 /** @noinspection PhpUndefinedMethodInspection */
                 $this->addCommand((string) $command, new LazyPimple($pimple, $serviceName), $method);
-                continue;
             }
         }
     }
