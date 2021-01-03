@@ -53,30 +53,6 @@ use RmpUp\WpDi\Provider;
  * which uses `locate_template` to resolve the path to the template.
  * The result will be injected into the SomeThing service/class.
  *
- * Defining this in PHP would look like this:
- *
- * ```php
- * <?php
- *
- * use \RmpUp\WpDi\Provider\WordPress;
- * use \RmpUp\WpDi\Provider\Services;
- *
- * return [
- *   WordPress\Templates::class => [
- *     'my-own-plugin/template-parts/fester.php',
- *     'my-own-plugin/public/coogan.jpg',
- *   ],
- *
- *   Services::class => [
- *     SomeThing::class => [
- *       '%my-own-plugin/template-parts/fester.php%',
- *       '%my-own-plugin/public/coogan.jpg%',
- *     ]
- *   ]
- * ];
- * ```
- *
- *
  * @copyright 2021 Pretzlaw (https://rmp-up.de)
  */
 class FileTest extends TemplatesTestCase
@@ -89,10 +65,7 @@ class FileTest extends TemplatesTestCase
     public function getDefinition(): array
     {
         return [
-            '0.6' => [
-                $this->classComment()->execute(1),
-            ],
-            '0.7' => [
+            '0.8' => [
                 $this->yaml(0),
             ],
         ];

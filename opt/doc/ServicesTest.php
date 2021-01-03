@@ -28,9 +28,9 @@ use RmpUp\WpDi\Helper\LazyPimple;
 /**
  * Services
  *
- * As usual services are loaded only when needed from the container.
- * This way they spare some costs (ticks, memory, reads/writes, network, etc.)
+ * As usual services are instantiated only when needed
  * and can be exchanged as long as not yet loaded.
+ * This way they spare some costs (ticks, memory, reads/writes, network, etc.).
  *
  * @copyright 2021 Pretzlaw (https://rmp-up.de)
  */

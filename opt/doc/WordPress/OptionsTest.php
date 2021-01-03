@@ -30,16 +30,9 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  *
  * Options can be manipulated or loaded from other services using the options-provider:
  *
- * ```php
- * <?php
- *
- * use \RmpUp\WpDi\Provider\WordPress;
- *
- * return [
- *   WordPress\Options::class => [
- *     'my_fav_isni' => 423379498,
- *   ]
- * ];
+ * ```yaml
+ * options:
+ *   my_fav_isni: 423379498
  * ```
  *
  * Speaking of WordPress 4.7.0 (and above) this service will only be triggered
@@ -53,6 +46,13 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  */
 class OptionsTest extends AbstractTestCase
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->registerServices();
+    }
+
     public function testExists()
     {
         static::assertTrue(class_exists(\RmpUp\WpDi\Provider\WordPress\Options::class));

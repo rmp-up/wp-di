@@ -44,7 +44,7 @@ use SomeThingElse;
  * ```
  *
  * ... like this "blog_public"
- * will make wp-di look-up the option with the same name.
+ * will make wp-di look-up an option with the same name.
  * For the above example this will result into:
  *
  * ```

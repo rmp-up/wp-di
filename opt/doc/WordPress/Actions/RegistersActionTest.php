@@ -31,9 +31,8 @@ use RmpUp\WpDi\Test\AbstractTestCase;
 /**
  * Priority and arguments
  *
- * There is often the need to only adjust the priority
- * or the argument count.
- * This is how it can be done:
+ * The priority of a action- or filter-hook is done by going one level deeper
+ * and mapping the priority to the class-method (default: __invoke).
  *
  * ```yaml
  * services:

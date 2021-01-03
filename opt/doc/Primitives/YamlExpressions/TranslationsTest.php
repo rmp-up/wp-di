@@ -44,8 +44,7 @@ use SomeThing;
  * ```
  *
  * Those translations won't be applied immediately.
- * They are lazy until the service is needed
- * to spare some runtime.
+ * They are lazy until they are used to spare some runtime.
  *
  * @copyright 2021 Pretzlaw (https://rmp-up.de)
  */

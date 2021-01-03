@@ -54,9 +54,8 @@ use SomeRepository;
  *
  * and generates some unnecessary overhead.
  *
- *   Widgets would be turned into objects during registration
- * (see `register_widgets`)
- * no matter if they are used or not.
+ *   WordPress breaks the lazy-loading for Widgets during registration
+ * (see `register_widgets`) no matter if they are used or not.
  * Block types also can be an immediate instance,
  * which would generate costs as all injected services also need to wake up
  * and be instantiated.

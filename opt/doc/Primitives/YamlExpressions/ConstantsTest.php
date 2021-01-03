@@ -29,7 +29,7 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  * Using constants as value
  *
  * At some point you may like to access a PHP constant
- * or use a WordPress function.
+ * or use a WordPress constant.
  * Usually this would be:
  *
  * ```yaml

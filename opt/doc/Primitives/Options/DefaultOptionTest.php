@@ -29,7 +29,7 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  * Default option
  *
  * When an option does not exist in WordPress then you may want to define a default
- * (without writing it to the database directly).
+ * (without writing it to the database).
  *
  * ```yaml
  * options:

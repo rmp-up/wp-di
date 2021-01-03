@@ -30,7 +30,7 @@ use RmpUp\WpDi\Test\Mirror;
  * Options
  *
  * WordPress-Options can be fetched using `get_options`.
- * The "options" section is needed to register specific options
+ * The "options" section is made to register specific options
  * so that they can be used in services:
  *
  * ```yaml

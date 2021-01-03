@@ -25,7 +25,7 @@ namespace RmpUp\WpDi\Test;
 /**
  * Global parameters
  *
- * By now a service had it's arguments directly injected:
+ * By now a service had its arguments directly injected:
  *
  * ```yaml
  * services:
@@ -35,8 +35,7 @@ namespace RmpUp\WpDi\Test;
  *     arguments: [ '2020-02-29', 42 ]
  * ```
  *
- * But here we seem to have some very central information (the "29.02")
- * which is reused.
+ * But here we seem to have some often used information (the "2020-02-29").
  * To keep things maintainable this can go into it's own section
  * (e.g. "parameters"):
  *

@@ -34,16 +34,9 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  *
  * Services can be defined using a very simple data structure:
  *
- * ```php
- * <?php
- *
- * return [
- *   Provider\Services => [
- *
- *     SomeThing::class,
- *
- *   ]
- * ];
+ * ```yaml
+ * services:
+ *   SomeThing: ~
  * ```
  *
  * This kind of definition registers one service named "SomeThing"
@@ -57,22 +50,13 @@ class NoArgumentsTest extends AbstractTestCase
 {
     protected function setUp()
     {
-        $this->services = [
-            ArrayObject::class,
-            ArrayIterator::class => [
-                ArrayObject::class,
-                ArrayIterator::STD_PROP_LIST
-            ]
-        ];
+        parent::setUp();
 
-        $this->pimple = new Container();
-
-        (new Provider\Services())($this->services, $this->pimple);
+        $this->registerServices();
     }
-
 
     public function testHasInstance()
     {
-        static::assertInstanceOf(ArrayIterator::class, $this->pimple[ArrayIterator::class]);
+        static::assertInstanceOf(\SomeThing::class, $this->pimple[\SomeThing::class]);
     }
 }
