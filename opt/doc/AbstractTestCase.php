@@ -53,13 +53,6 @@ abstract class AbstractTestCase extends TestCase
     public static $actions = [];
     public static $calls = [];
 
-    /**
-     * @var \Pimple\Psr11\Container
-     *
-     * @deprecated 0.9 Please use Pimple directly.
-     */
-    protected $container;
-
     private $filterBackup;
 
     private function backupWpFilter()
@@ -84,7 +77,6 @@ abstract class AbstractTestCase extends TestCase
     protected function setUp()
     {
         $this->pimple = new Container();
-        $this->container = new \Pimple\Psr11\Container($this->pimple);
 
         $this->backupWpFilter();
     }

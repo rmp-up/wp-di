@@ -68,7 +68,7 @@ class TranslationsTest extends YamlExpressionsTest
         $this->registerServices();
 
         /** @var Mirror $thing */
-        $thing = $this->container->get(SomeThing::class);
+        $thing = $this->pimple[SomeThing::class];
 
         static::assertEquals('Nicht Eva!', $thing->getConstructorArgs()[0]);
     }

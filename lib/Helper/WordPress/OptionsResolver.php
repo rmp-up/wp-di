@@ -24,7 +24,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Helper\WordPress;
 
 use Pimple\Container;
-use Psr\Container\NotFoundExceptionInterface;
+use Pimple\Exception\UnknownIdentifierException;
 
 /**
  * Resolve default options from the container
@@ -66,7 +66,7 @@ class OptionsResolver
 
         try {
             $this->cache[$option] = $this->container['%' . $option . '%'];
-        } catch (NotFoundExceptionInterface $e) {
+        } catch (UnknownIdentifierException $e) {
             $this->cache[$option] = $currentDefault;
         }
 

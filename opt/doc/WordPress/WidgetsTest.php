@@ -56,8 +56,8 @@ class WidgetsTest extends AbstractTestCase
 {
     protected function tearDown()
     {
-        if ($this->container->has(MyOwnWidget::class) && $this->pimple->raw(MyOwnWidget::class)['class']) {
-            unregister_widget($this->container->get(MyOwnWidget::class));
+        if (isset($this->pimple[MyOwnWidget::class]) && $this->pimple->raw(MyOwnWidget::class)['class']) {
+            unregister_widget($this->pimple[MyOwnWidget::class]);
             static::assertWidgetNotExists('rmpup_myownwidget');
         }
 

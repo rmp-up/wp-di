@@ -126,10 +126,10 @@ class ConfigTest extends AbstractTestCase
 
     public function testServicesRegistered()
     {
-        static::assertInstanceOf(ArrayObject::class, $this->container->get(ArrayObject::class));
+        static::assertInstanceOf(ArrayObject::class, $this->pimple[ArrayObject::class]);
 
         /** @var Mirror $mirror */
-        $mirror = $this->container->get(Mirror::class);
+        $mirror = $this->pimple[Mirror::class];
         static::assertInstanceOf(Mirror::class, $mirror);
 
         static::assertEquals(['foo'], $mirror->getConstructorArgs());

@@ -67,7 +67,6 @@ class NoArgumentsTest extends AbstractTestCase
         ];
 
         $this->pimple = new Container();
-        $this->container = new \Pimple\Psr11\Container($this->pimple);
 
         (new Provider\Services())($this->services, $this->pimple);
     }
@@ -75,6 +74,6 @@ class NoArgumentsTest extends AbstractTestCase
 
     public function testHasInstance()
     {
-        static::assertInstanceOf(ArrayIterator::class, $this->container->get(ArrayIterator::class));
+        static::assertInstanceOf(ArrayIterator::class, $this->pimple[ArrayIterator::class]);
     }
 }
