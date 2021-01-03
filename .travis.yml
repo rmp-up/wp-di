@@ -24,22 +24,25 @@ env:
     - WP_VERSION=5.0.*
     - WP_VERSION=5.2.*
     - WP_VERSION=5.4.*
-    - WP_VERSION=5.5.*
-    - WP_VERSION=dev-master
+    - WP_VERSION=5.6.*
 
 matrix:
+  # We add some tests here for that we want to achieve or keep compatibility.
+  # Some are made due to unstable SemVer of testing packages (guess which).
   include:
-    # Intermediate version tests due to unstable SemVer
-    #- php: '7.1'
-    #  env: WP_VERSION=4.9
-    # additional combination among env (as above)
+    # Try creating compatibility with the minimum WordPress version
     - php: '5.6'
       env: WP_VERSION=4.8.*
+    # Try using HHVM
     - php: 'hhvm'
       env: WP_VERSION=5.4.*
+    # Check with latest PHP version (using a working WP version)
     - php: 'nightly'
       env: WP_VERSION=5.4.*
-  # in the process to achieve support
+    # Check with nightly build of WordPress (using a working PHP version)
+    - php: 7.4
+      env: WP_VERSION=dev-master
+  # all above are allowed to fail because they just check the compatibility
   allow_failures:
     - php: '5.6'
     - php: 'hhvm'

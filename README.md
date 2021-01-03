@@ -1,5 +1,5 @@
 ![](https://img.shields.io/badge/PHP-7.0%20--%207.4-blue?style=for-the-badge&logo=php)
-![](https://img.shields.io/badge/WordPress-4.8%20--%205.5-blue?style=for-the-badge&logo=wordpress)
+![](https://img.shields.io/badge/WordPress-4.8%20--%205.6-blue?style=for-the-badge&logo=wordpress)
 
 [![Build Status](https://travis-ci.org/rmp-up/wp-di.svg?branch=release/0.7)](https://travis-ci.org/rmp-up/wp-di)
 [![Coverage Status](https://coveralls.io/repos/github/rmp-up/wp-di/badge.svg?branch=release/0.7)](https://coveralls.io/github/rmp-up/wp-di?branch=release/0.7)
@@ -28,20 +28,17 @@ composer require rmp-up/wp-di
 and set up the container provider
 
 ```php
-$container = \Pimple\Container();
-$container->register(
-    new \RmpUp\WpDi\Provider( require 'services.php' )
-);
+\RmpUp\WpDi\WpDi::load( require 'services.php' );
+
+$container = \RmpUp\WpDi\WpDi::pimple();
 ```
 
 Friends of YAML can add `composer require symfony/yaml`
 and use
 
 ```php
-$container->register(
-  new \RmpUp\WpDi\Provider(
-    \RmpUp\WpDi\Yaml::parseFile( 'services.yaml' )
-  )
+\RmpUp\WpDi\WpDi::load(
+  \RmpUp\WpDi\Yaml::parseFile( 'services.yaml' )
 );
 ```
 
