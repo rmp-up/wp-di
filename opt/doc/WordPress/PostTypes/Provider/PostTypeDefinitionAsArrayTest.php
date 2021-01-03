@@ -24,11 +24,7 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Test\WordPress\PostTypes\Provider;
 
 use PHPUnit\Framework\Constraint\IsEqual;
-use Pretzlaw\WPInt\Filter\FilterAssertions;
 use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
-use RmpUp\WpDi\Provider;
-use RmpUp\WpDi\Provider\WordPress\PostTypes as PostTypesProvider;
-use RmpUp\WpDi\Sanitizer\WordPress\PostTypes;
 use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**

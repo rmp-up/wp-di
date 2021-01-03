@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi\Helper;
 
+use Closure;
 use Pimple\Container;
 
 /**
@@ -52,7 +53,7 @@ class Deprecated
     {
         trigger_error($this->makeDeprecatedMessage(), E_USER_DEPRECATED);
 
-        if ($this->serviceDefinition instanceof \Closure) {
+        if ($this->serviceDefinition instanceof Closure) {
             return ($this->serviceDefinition)($pimple);
         }
 
@@ -74,6 +75,8 @@ class Deprecated
      * But forward-compatible changes will always raise an error during testing,
      * which you can't get rid of until the new API/interface is fulfilled.
      * Errors about forward-incompatible changes can be suppressed
+     *
+     * @noinspection OverridingDeprecatedMethodInspection
      *
      * @param string $message
      */
@@ -103,6 +106,8 @@ class Deprecated
      * but not for our internal usage leading to failing CI-Tests.
      * So we suppress those deprecation warnings
      * when the "WPDI_TEST" environment is set to one, true or similar.
+     *
+     * @noinspection OverridingDeprecatedMethodInspection
      *
      * @param string $message
      */

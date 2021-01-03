@@ -26,9 +26,6 @@ namespace RmpUp\WpDi\Test\WordPress\Actions\Definition;
 use MyOwnActionListener;
 use MyOwnFilterHandler;
 use RmpUp\WpDi\Provider\Services;
-use RmpUp\WpDi\Provider\WordPress\Actions as Provider;
-use RmpUp\WpDi\Sanitizer\WordPress\Actions;
-use RmpUp\WpDi\Test\Mirror;
 use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**

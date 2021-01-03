@@ -27,7 +27,6 @@ use ArrayIterator;
 use ArrayObject;
 use Pimple\Container;
 use RmpUp\WpDi\Provider;
-use RmpUp\WpDi\Sanitizer;
 use RmpUp\WpDi\Test\AbstractTestCase;
 
 /**

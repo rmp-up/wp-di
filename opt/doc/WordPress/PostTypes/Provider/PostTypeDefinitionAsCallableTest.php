@@ -26,9 +26,7 @@ namespace RmpUp\WpDi\Test\WordPress\PostTypes\Provider;
 use PHPUnit\Framework\Constraint\IsEqual;
 use RmpUp\WpDi\Factory;
 use RmpUp\WpDi\Helper\WordPress\RegisterPostType;
-use RmpUp\WpDi\Sanitizer\WordPress\PostTypes;
 use RmpUp\WpDi\Test\AbstractTestCase;
-use function RmpUp\WpDi\Factory;
 
 /**
  * The post-type definition class
