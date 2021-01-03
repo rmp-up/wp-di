@@ -14,7 +14,7 @@
  * note to mail@rmp-up.de so we can mail you a copy.
  *
  * @package   wp-di
- * @copyright 2020 Pretzlaw
+ * @copyright 2021 Pretzlaw
  * @license   https://rmp-up.de/license-generic.txt
  */
 
@@ -49,7 +49,7 @@ use SomeThing;
  *
  * Here the callback is `MyFactory->__invoke("wand", ...)`.
  *
- * @copyright 2020 Pretzlaw (https://rmp-up.de)
+ * @copyright 2021 Pretzlaw (https://rmp-up.de)
  */
 class FactoryWithArgumentsTest extends AbstractTestCase
 {

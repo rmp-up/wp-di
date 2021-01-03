@@ -14,7 +14,7 @@
  * note to mail@rmp-up.de so we can mail you a copy.
  *
  * @package   WpDi
- * @copyright 2020 Pretzlaw
+ * @copyright 2021 Pretzlaw
  * @license   https://rmp-up.de/license-generic.txt proprietary
  * @link      https://project.rmp-up.de/wp-di
  */
@@ -32,7 +32,7 @@ use RmpUp\WpDi\ServiceDefinition\TemplateNode;
 /**
  * Templates
  *
- * @copyright 2020 Pretzlaw (https://rmp-up.de)
+ * @copyright 2021 Pretzlaw (https://rmp-up.de)
  */
 class Templates implements ProviderNode
 {

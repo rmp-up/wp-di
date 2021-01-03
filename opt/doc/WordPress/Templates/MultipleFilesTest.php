@@ -14,7 +14,7 @@
  * note to mail@rmp-up.de so we can mail you a copy.
  *
  * @package    wp-di
- * @copyright 2020 Pretzlaw
+ * @copyright 2021 Pretzlaw
  * @license    https://rmp-up.de/license-generic.txt
  * @link       https://project.rmp-up.de/wp-di
  */
@@ -50,7 +50,7 @@ use const RmpUp\WpDi\Test\MY_PLUGIN_DIR;
  * (using `locate_template`) and stops with the first found.
  * In doubt it returns the very last entry even when not found.
  *
- * @copyright 2020 Pretzlaw (https://rmp-up.de)
+ * @copyright 2021 Pretzlaw (https://rmp-up.de)
  */
 class MultipleFilesTest extends TemplatesTestCase
 {

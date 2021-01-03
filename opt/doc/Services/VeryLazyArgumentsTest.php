@@ -14,7 +14,7 @@
  * note to mail@rmp-up.de so we can mail you a copy.
  *
  * @package   wp-di
- * @copyright 2020 Pretzlaw
+ * @copyright 2021 Pretzlaw
  * @license   https://rmp-up.de/license-generic.txt
  */
 
@@ -91,7 +91,7 @@ use SomeRepository;
  * because a proxy-class will be injected instead of the real ones
  * (here: `LazyPimple` instead of `SomeRepository`).**
  *
- * @copyright 2020 Pretzlaw (https://rmp-up.de)
+ * @copyright 2021 Pretzlaw (https://rmp-up.de)
  */
 class VeryLazyArgumentsTest extends AbstractTestCase
 {

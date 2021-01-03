@@ -14,7 +14,7 @@
  * note to mail@rmp-up.de so we can mail you a copy.
  *
  * @package   wp-di
- * @copyright 2020 Pretzlaw
+ * @copyright 2021 Pretzlaw
  * @license   https://rmp-up.de/license-generic.txt
  */
 

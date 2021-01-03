@@ -14,7 +14,7 @@
  * note to mail@rmp-up.de so we can mail you a copy.
  *
  * @package    wp-di
- * @copyright 2020 Pretzlaw
+ * @copyright 2021 Pretzlaw
  * @license    https://rmp-up.de/license-generic.txt
  * @link       https://project.rmp-up.de/wp-di
  */
@@ -32,7 +32,7 @@ use RmpUp\WpDi\Helper\LazyPimple;
  * This way they spare some costs (ticks, memory, reads/writes, network, etc.)
  * and can be exchanged as long as not yet loaded.
  *
- * @copyright 2020 Pretzlaw (https://rmp-up.de)
+ * @copyright 2021 Pretzlaw (https://rmp-up.de)
  */
 class ServicesTest extends AbstractTestCase
 {

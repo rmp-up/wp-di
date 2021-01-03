@@ -14,7 +14,7 @@
  * note to mail@rmp-up.de so we can mail you a copy.
  *
  * @package   wp-di
- * @copyright 2020 Pretzlaw
+ * @copyright 2021 Pretzlaw
  * @license   https://rmp-up.de/license-generic.txt
  */
 
@@ -50,7 +50,7 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  * Each part is separated by a empty space which makes it possible to
  * concat multiple constants (here: `ABSPATH` and `WPINC`).
  *
- * @copyright 2020 Pretzlaw (https://rmp-up.de)
+ * @copyright 2021 Pretzlaw (https://rmp-up.de)
  */
 class ConstantsTest extends AbstractTestCase
 {

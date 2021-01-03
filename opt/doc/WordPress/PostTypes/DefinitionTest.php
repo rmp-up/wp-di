@@ -14,7 +14,7 @@
  * note to mail@rmp-up.de so we can mail you a copy.
  *
  * @package   wp-di
- * @copyright 2020 Pretzlaw
+ * @copyright 2021 Pretzlaw
  * @license   https://rmp-up.de/license-generic.txt
  */
 
@@ -43,7 +43,7 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  * An instance of the `MyOwnPostType` class will be converted into an array
  * which defines the post-type as known from `register_post_type()`.
  *
- * @copyright 2020 Pretzlaw (https://rmp-up.de)
+ * @copyright 2021 Pretzlaw (https://rmp-up.de)
  */
 class DefinitionTest extends AbstractTestCase
 {

@@ -14,7 +14,7 @@
  * note to mail@rmp-up.de so we can mail you a copy.
  *
  * @package    wp-di
- * @copyright 2020 Pretzlaw
+ * @copyright 2021 Pretzlaw
  * @license    https://rmp-up.de/license-generic.txt
  * @link       https://project.rmp-up.de/wp-di
  */
@@ -100,7 +100,7 @@ use RmpUp\WpDi\Provider\WordPress\PostTypes;
  * $provider(require 'my-plugin-services.php', $container)
  * ```
  *
- * @copyright 2020 Mike Pretzlaw (https://mike-pretzlawWordPress.de)
+ * @copyright 2021 Mike Pretzlaw (https://mike-pretzlawWordPress.de)
  */
 class ConfigTest extends AbstractTestCase
 {

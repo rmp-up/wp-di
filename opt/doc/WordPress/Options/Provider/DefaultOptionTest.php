@@ -14,7 +14,7 @@
  * note to mail@rmp-up.de so we can mail you a copy.
  *
  * @package    wp-di
- * @copyright 2020 Pretzlaw
+ * @copyright 2021 Pretzlaw
  * @license    https://rmp-up.de/license-generic.txt
  * @link       https://project.rmp-up.de/wp-di
  */
@@ -41,7 +41,7 @@ use RmpUp\WpDi\Test\WordPress\Options\OptionsTestCase;
  * Such configuration will make the `get_option( 'my_fav_isni' )` return the
  * integer 423379498.
  *
- * @copyright 2020 Pretzlaw (https://rmp-up.de)
+ * @copyright 2021 Pretzlaw (https://rmp-up.de)
  */
 class DefaultOptionTest extends OptionsTestCase
 {
