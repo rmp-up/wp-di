@@ -13,7 +13,6 @@ require_once 'lib/Helper/InvokeRedirect.php';
 require_once 'lib/Helper/LazyInstantiating.php';
 require_once 'lib/Helper/LazyInvoke.php';
 require_once 'lib/Helper/LazyPimple.php';
-require_once 'lib/Helper/Versions.php';
 require_once 'lib/Helper/WordPress/LazyFunctionCall.php';
 require_once 'lib/Helper/WordPress/MetaBox.php';
 require_once 'lib/Helper/WordPress/OptionsResolver.php';

@@ -49,9 +49,9 @@ class DefaultOptionTest extends AbstractTestCase
     private $describedDefault;
     private $describedOption;
 
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         $this->registerServices();
 

@@ -48,9 +48,9 @@ use SomeThingElse;
  */
 class FactoryTest extends AbstractTestCase
 {
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         $this->registerServices();
     }

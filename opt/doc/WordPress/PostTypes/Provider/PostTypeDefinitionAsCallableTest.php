@@ -71,9 +71,9 @@ class PostTypeDefinitionAsCallableTest extends AbstractTestCase
 {
     private static $called = false;
 
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         if (!class_exists('TypeSappy')) {
             $this->classComment()->execute(0);

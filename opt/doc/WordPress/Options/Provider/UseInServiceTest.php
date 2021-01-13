@@ -57,14 +57,16 @@ class UseInServiceTest extends OptionsTestCase
 {
     private $customOptionValue = 'Hello, hello, hello, how low';
 
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         $this->registerServices();
 
-        $this->mockFilter('pre_option_blog_public')->expects($this->any())->willReturn(0);
-        $this->mockFilter('pre_option_ping_sites')->expects($this->any())->willReturn(['example.org', 'rmp-up.de']);
+        $this->mockFilter('pre_option_blog_public')
+			->andReturn(0);
+        $this->mockFilter('pre_option_ping_sites')
+			->andReturn(['example.org', 'rmp-up.de']);
     }
 
     public function testInjectOptions()
@@ -80,19 +82,22 @@ class UseInServiceTest extends OptionsTestCase
 
     public function testInjectExistingOptionsInsteadOfDefault()
     {
-        $this->mockFilter('pre_option_my_own_new_one')->expects($this->once())->willReturn('Ta Hun Kwai');
+        $this->mockFilter('pre_option_my_own_new_one')
+			->once()
+			->andReturn('Ta Hun Kwai');
+
         /** @var Mirror $mirror */
         $mirror = $this->pimple[SomeThing::class];
 
         static::assertEquals('Ta Hun Kwai', $mirror->getConstructorArgs()[2]);
     }
 
-    public function tearDown()
+    public function compatTearDown()
     {
         remove_all_filters('pre_option_blog_public');
         remove_all_filters('pre_option_ping_sites');
         remove_all_filters('pre_option_with_default');
 
-        parent::tearDown();
+        parent::compatTearDown();
     }
 }

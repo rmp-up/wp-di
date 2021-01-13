@@ -91,7 +91,7 @@ class WithClosuresTest extends TemplatesTestCase
         return $serviceDefinition;
     }
 
-    protected function setUp()
+    protected function compatSetUp()
     {
         $this->definition = $this->classComment()->execute(0);
         $this->services[Templates::class] = $this->definition[Templates::class];

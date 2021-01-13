@@ -22,12 +22,13 @@ declare(strict_types=1);
 
 namespace RmpUp\WpDi;
 
-use RmpUp\WpDi\Helper\Versions;
 use RmpUp\WpDi\Compat\Symfony3\Yaml as Symfony3Yaml;
 use RmpUp\WpDi\Compat\Symfony4\Yaml as Symfony4Yaml;
 
 switch (true) {
-    case Versions::isLowerThan('symfony/yaml', '4.0.0'):
+
+    case defined(\Symfony\Component\Yaml\Yaml::class . '::PARSE_KEYS_AS_STRINGS'):
+    	// 3.4 constant found which got removed in 4.0
         class_alias(Symfony3Yaml::class, Yaml::class);
         break;
     default:

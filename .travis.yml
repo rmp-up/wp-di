@@ -2,9 +2,6 @@ language: php
 
 php:
   # see http://php.net/supported-versions.php
-  - '7.0' # deprecated
-  - '7.1' # deprecated
-  - '7.2' # deprecated
   - '7.3' # Until 6 Dec 2021
   - '7.4' # Until 28 Nov 2022
 
@@ -18,7 +15,9 @@ env:
     - COMPOSER_CACHE_DIR=/home/travis/.composer
     - XDEBUG_MODE=coverage
   matrix:
-    # see https://codex.wordpress.org/WordPress_Versions
+    # Only contains widely used or supported versions
+    #
+    # see https://codex.wordpress.org/WordPress_Versions (patched recently)
     # see https://phpunit.de/supported-versions.html
     - WP_VERSION=4.8.*
     - WP_VERSION=5.0.*
@@ -27,27 +26,47 @@ env:
     - WP_VERSION=5.6.*
 
 matrix:
-  # We add some tests here for that we want to achieve or keep compatibility.
-  # Some are made due to unstable SemVer of testing packages (guess which).
   include:
-    # Try creating compatibility with the minimum WordPress version
+    # Bleeding edge (the latest stable of all)
+    - php: '8.0'
+      env: WP_VERSION=5.6.*
+
+    # Lowest edge as described in README.md
+    - php: '7.0'
+      env: WP_VERSION=4.8.*
+
+    #
+    # Checking deprecated PHP versions
+    #
+    - php: '7.2'
+      env: WP_VERSION=5.5.*
+    - php: '7.1'
+      env: WP_VERSION=5.3.*
+    - php: '7.0'
+      env: WP_VERSION=5.2.*
+
+    #
+    # Trying to support ... (first entry indicates what we try to support)
+    #
     - php: '5.6'
       env: WP_VERSION=4.8.*
-    # Try using HHVM
+    - env: WP_VERSION=4.7.*
+      php: '7.0'
     - php: 'hhvm'
       env: WP_VERSION=5.4.*
-    # Check with latest PHP version (using a working WP version)
+
+    # ... upcoming versions
     - php: 'nightly'
       env: WP_VERSION=5.4.*
-    # Check with nightly build of WordPress (using a working PHP version)
-    - php: 7.4
-      env: WP_VERSION=dev-master
+    - env: WP_VERSION=dev-master
+      php: 7.4
   # all above are allowed to fail because they just check the compatibility
   allow_failures:
     - php: '5.6'
     - php: 'hhvm'
     - php: 'nightly'
     - env: WP_VERSION=dev-master
+
   # Do not wait for allowed failures
   fast_finish: true
 
@@ -61,14 +80,16 @@ cache:
 before_install:
   - mysql -e 'CREATE DATABASE dev;'
   # Disable PHPStan because it gives false-positives PHP < 7.1
-  - "[[ $TRAVIS_PHP_VERSION > '7.0' ]] || composer remove --no-update -n --dev phpstan/phpstan"
+  - "[[ $TRAVIS_PHP_VERSION > '7.0' ]] || rm -rf etc/composer-bin/phpstan"
   # Try supporting other versions
   - "[[ $WP_VERSION != *'dev-master' ]] || composer config minimum-stability dev"
   - "[[ $WP_VERSION != *'dev-master' ]] || composer config prefer-stable true"
   - composer require --update-with-dependencies johnpbloch/wordpress:$WP_VERSION
+  # PHP8 compat
+  - "[[ $TRAVIS_PHP_VERSION != 8.0 ]] || composer bin wp update --ignore-platform-reqs --no-scripts"
 
 install:
-  - composer install
+  - composer install --no-scripts
   # Using WP-CLI instead of Composer because this way we can use the env matrix (above).
   - vendor/bin/wp --allow-root config create --skip-check --force --dbuser=travis --dbpass="" --dbhost="127.0.0.1"
   - vendor/bin/wp --allow-root core install --skip-email
@@ -83,7 +104,8 @@ script:
   - "[[ $TRAVIS_PHP_VERSION != 7.3 ]] || vendor/bin/phpcs --standard=etc/phpcs.xml.dist -s lib/"
 
 after_success:
-  - vendor/bin/coveralls --verbose
+  - composer bin ci require php-coveralls/php-coveralls
+  - travis_retry php vendor/bin/php-coveralls -v
 
 after_failure:
   - cat srv/wp-content/debug.log || true

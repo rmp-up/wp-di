@@ -57,9 +57,9 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  */
 class PostTypeDefinitionAsArrayTest extends AbstractTestCase
 {
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         if (!class_exists('TypeBox')) {
             $this->classComment()->execute(0);
@@ -68,13 +68,13 @@ class PostTypeDefinitionAsArrayTest extends AbstractTestCase
         remove_all_actions('init');
     }
 
-    protected function tearDown()
+    protected function compatTearDown()
     {
         if (post_type_exists('albini')) {
             static::assertTrue(unregister_post_type('albini'));
         }
 
-        parent::tearDown();
+        parent::compatTearDown();
     }
 
     public function testServiceConvertedToArray()

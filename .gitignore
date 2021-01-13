@@ -1,16 +1,19 @@
 /.bash_history
 /.composer
 /.idea
+/composer.lock
 /coverage.xml
 /documentation.css
+/etc/composer-bin/ci
+/etc/composer-bin/**/vendor
+/etc/composer-bin/**/composer.lock
 /srv
 /tmp
 /var
 /vendor
 
-.coveralls.yml
-.docker
-.env
-composer.lock
-phpcs.xml.dist
-phpstan.neon.dist
+/.coveralls.yml
+/.docker
+/.env
+/phpcs.xml.dist
+/phpstan.neon.dist

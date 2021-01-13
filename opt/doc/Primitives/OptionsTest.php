@@ -56,15 +56,15 @@ class OptionsTest extends AbstractTestCase
 {
     private $expectedValue;
 
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         $this->expectedValue = uniqid('', true);
 
         $this->mockOption('my_own_option')
-            ->expects($this->atLeastOnce())
-            ->willReturn($this->expectedValue);
+			->once()
+            ->andReturn($this->expectedValue);
     }
 
     public function testOptionsIntro()

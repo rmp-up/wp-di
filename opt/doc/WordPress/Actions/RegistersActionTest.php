@@ -76,9 +76,9 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  */
 class RegistersActionTest extends AbstractTestCase
 {
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         remove_all_filters('posts_pre_query');
         remove_all_filters('template_redirect');
@@ -123,11 +123,11 @@ class RegistersActionTest extends AbstractTestCase
         );
     }
 
-    protected function tearDown()
+    protected function compatTearDown()
     {
         remove_all_filters('posts_pre_query');
         remove_all_filters('template_redirect');
 
-        parent::tearDown();
+        parent::compatTearDown();
     }
 }

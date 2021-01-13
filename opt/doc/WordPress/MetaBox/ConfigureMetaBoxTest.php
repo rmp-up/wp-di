@@ -66,9 +66,9 @@ class ConfigureMetaBoxTest extends MetaBoxTestCase
 
     }
 
-    protected function tearDown()
+    protected function compatTearDown()
     {
-        parent::tearDown();
+        parent::compatTearDown();
 
         remove_meta_box('rlcs', 'post', 'side');
     }

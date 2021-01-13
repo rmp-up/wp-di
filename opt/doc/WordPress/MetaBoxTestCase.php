@@ -33,9 +33,9 @@ abstract class MetaBoxTestCase extends AbstractTestCase
 {
     private $backupScreen;
 
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         // Imagine we are on the post screen
         global $current_screen;
@@ -91,11 +91,11 @@ abstract class MetaBoxTestCase extends AbstractTestCase
         static::assertNull($this->findMetaBox($id, $postType, $context), sprintf('Meta box "%s" does exist', $id));
     }
 
-    protected function tearDown()
+    protected function compatTearDown()
     {
         global $current_screen;
         $current_screen = $this->backupScreen;
 
-        parent::tearDown();
+        parent::compatTearDown();
     }
 }

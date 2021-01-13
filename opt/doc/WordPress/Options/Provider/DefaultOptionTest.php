@@ -139,10 +139,10 @@ class DefaultOptionTest extends OptionsTestCase
 
     }
 
-    protected function tearDown()
+    protected function compatTearDown()
     {
         remove_all_actions('default_option_my_fav_isni');
 
-        parent::tearDown();
+        parent::compatTearDown();
     }
 }

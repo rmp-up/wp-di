@@ -47,9 +47,9 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  */
 class DefineParametersTest extends AbstractTestCase
 {
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         $this->registerServices();
     }

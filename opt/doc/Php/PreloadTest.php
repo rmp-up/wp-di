@@ -149,7 +149,7 @@ class PreloadTest extends AbstractTestCase
         return array_merge(...$dependencies);
     }
 
-    protected function setUp()
+    protected function compatSetUp()
     {
         $this->preloadFilePath = realpath(WPDI_BASE_DIR) . '/preload.php';
 
@@ -188,7 +188,7 @@ class PreloadTest extends AbstractTestCase
             $this->markTestSkipped('Flag to regenerate preload.php is set');
         }
 
-        static::assertSame($content, file_get_contents($this->preloadFilePath));
+        static::assertSame(trim($content), trim(file_get_contents($this->preloadFilePath)));
     }
 
     private function isBlacklisted(string $className): bool

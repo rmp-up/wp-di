@@ -84,9 +84,9 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  */
 class UsingCallbacksTest extends AbstractTestCase
 {
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         $provider = new Provider([]);
 
@@ -108,7 +108,7 @@ class UsingCallbacksTest extends AbstractTestCase
     {
         $this->assertRandomThing($this->pimple['random_things']);
 
-        static::assertInternalType('int', $this->pimple['%some_int%']);
+        static::assertTrue(is_int($this->pimple['%some_int%']));
         static::assertSame($this->pimple['%some_int%'] * 42, $this->pimple['more_random_things']['int']);
         static::assertSame('xoxo' . $this->pimple['%some_string%'] . '<3', $this->pimple['more_random_things']['string']);
     }
@@ -120,10 +120,10 @@ class UsingCallbacksTest extends AbstractTestCase
     {
         static::assertInstanceOf(ArrayObject::class, $things);
 
-        static::assertInternalType('string', $things['string']);
+        static::assertTrue(is_string($things['string']));
         static::assertRegExp('/[anis]{4}/', $things['string']);
 
-        static::assertInternalType('int', $things['int']);
+        static::assertTrue(is_int($things['int']));
         static::assertLessThan(10, $things['int']);
         static::assertGreaterThan(0, $things['int']);
     }

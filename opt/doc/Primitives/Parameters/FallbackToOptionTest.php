@@ -55,11 +55,14 @@ use SomeThingElse;
  */
 class FallbackToOptionTest extends AbstractTestCase
 {
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
-        $this->mockOption('blog_public')->expects($this->atLeastOnce())->willReturn('nice');
+        $this->mockOption('blog_public')
+			->atLeast()
+			->once()
+			->andReturn('nice');
 
         $this->registerServices();
     }

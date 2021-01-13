@@ -54,9 +54,9 @@ use RmpUp\WpDi\Test\AbstractTestCase;
  */
 class ConstantsTest extends AbstractTestCase
 {
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         $this->registerServices();
     }

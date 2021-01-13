@@ -53,9 +53,9 @@ use RmpUp\WpDi\Test\WordPress\ShortcodeTestCase;
  */
 class RegisterMultipleShortcodesTest extends ShortcodeTestCase
 {
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         self::assertShortcodeNotExists('i_am_the_danger');
         self::assertShortcodeNotExists('is_that_you');
@@ -74,7 +74,7 @@ class RegisterMultipleShortcodesTest extends ShortcodeTestCase
         static::assertEquals(['', '', 'is_that_you'], MyOwnShortcode::_history('__invoke')[0]['arguments']);
     }
 
-    protected function tearDown()
+    protected function compatTearDown()
     {
         if (shortcode_exists('i_am_the_danger')) {
             remove_shortcode('i_am_the_danger');
@@ -84,6 +84,6 @@ class RegisterMultipleShortcodesTest extends ShortcodeTestCase
             remove_shortcode('is_that_you');
         }
 
-        parent::tearDown();
+        parent::compatTearDown();
     }
 }

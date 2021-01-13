@@ -45,9 +45,9 @@ use RmpUp\WpDi\Test\WordPress\MetaBoxTestCase;
  */
 class RegisterMetaBoxTest extends MetaBoxTestCase
 {
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         global $wp_meta_boxes;
         $this->assertMetaBoxNotExists(MyBox::class, 'page');
@@ -64,10 +64,10 @@ class RegisterMetaBoxTest extends MetaBoxTestCase
         $this->assertMetaBoxExists(MyBox::class, 'page');
     }
 
-    protected function tearDown()
+    protected function compatTearDown()
     {
         remove_meta_box(MyBox::class, 'page', 'advanced');
 
-        parent::tearDown();
+        parent::compatTearDown();
     }
 }

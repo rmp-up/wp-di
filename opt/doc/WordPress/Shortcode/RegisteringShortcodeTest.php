@@ -64,12 +64,12 @@ class RegisteringShortcodeTest extends ShortcodeTestCase
         $this->registerServices();
     }
 
-    protected function tearDown()
+    protected function compatTearDown()
     {
         if (shortcode_exists('i_am_the_danger')) {
             remove_shortcode('i_am_the_danger');
         }
 
-        parent::tearDown();
+        parent::compatTearDown();
     }
 }

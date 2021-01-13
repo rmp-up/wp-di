@@ -125,9 +125,9 @@ class ServiceDefinitionTest extends AbstractTestCase
         ];
     }
 
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         remove_all_filters('the_content');
         $this->assertActionEmpty('the_content');

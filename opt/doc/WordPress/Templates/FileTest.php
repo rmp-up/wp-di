@@ -57,7 +57,7 @@ use RmpUp\WpDi\Provider;
  */
 class FileTest extends TemplatesTestCase
 {
-    protected function setUp()
+    protected function compatSetUp()
     {
         $this->pimple = new Container();
     }
@@ -98,12 +98,12 @@ class FileTest extends TemplatesTestCase
         static::assertTemplatePathCorrect('my-own-plugin/template-parts/fester.php', $current);
     }
 
-    protected function tearDown()
+    protected function compatTearDown()
     {
         if (shortcode_exists('uncle')) {
             remove_shortcode('uncle');
         }
 
-        parent::tearDown();
+        parent::compatTearDown();
     }
 }

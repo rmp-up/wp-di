@@ -24,12 +24,12 @@ declare(strict_types=1);
 namespace RmpUp\WpDi\Test;
 
 use Closure;
-use PHPUnit\Framework\TestCase;
 use Pimple\Container;
 use Pretzlaw\WPInt\Traits\WordPressTests;
 use ReflectionException;
 use ReflectionObject;
 use RmpUp\Doc\DocParser;
+use RmpUp\PHPUnitCompat\TestCase;
 use RmpUp\WpDi\Helper\LazyPimple;
 use RmpUp\WpDi\WpDi;
 use RmpUp\WpDi\Yaml;
@@ -74,7 +74,7 @@ abstract class AbstractTestCase extends TestCase
         }
     }
 
-    protected function setUp()
+    protected function compatSetUp()
     {
         $this->pimple = new Container();
 
@@ -140,9 +140,9 @@ abstract class AbstractTestCase extends TestCase
         return $list[$serviceName] ?? false;
     }
 
-    protected function tearDown()
+    protected function compatTearDown()
     {
-        parent::tearDown();
+        parent::compatTearDown();
 
         static::$calls = [];
         static::$actions = [];

@@ -47,7 +47,7 @@ class LazyInstanceTest extends AbstractTestCase
      */
     private $proxyTarget;
 
-    protected function setUp()
+    protected function compatSetUp()
     {
         $this->proxyTarget = new Mirror();
         $this->lazyInstance = new class ($this->proxyTarget) {
@@ -68,7 +68,7 @@ class LazyInstanceTest extends AbstractTestCase
                 return $this->mirror;
             }
         };
-        parent::setUp();
+        parent::compatSetUp();
     }
 
     public function testCallMethod()

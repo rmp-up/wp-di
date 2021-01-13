@@ -54,7 +54,7 @@ use const RmpUp\WpDi\Test\MY_PLUGIN_DIR;
  */
 class MultipleFilesTest extends TemplatesTestCase
 {
-    protected function setUp()
+    protected function compatSetUp()
     {
         $this->pimple = new Container();
 

@@ -60,9 +60,10 @@ class TranslationsTest extends YamlExpressionsTest
     public function testIsTranslatedWithinContainer()
     {
         $this->mockFilter('gettext')
-            ->expects($this->atLeastOnce())
-            ->with('Wer ist Adam?', 'Wer ist Adam?', 'dark')
-            ->willReturn('Nicht Eva!');
+			->atLeast()
+			->once()
+			->with('Wer ist Adam?', 'Wer ist Adam?', 'dark')
+            ->andReturn('Nicht Eva!');
 
         $this->registerServices();
 

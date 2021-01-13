@@ -54,7 +54,7 @@ abstract class CliTestCase extends AbstractTestCase
         return \WP_CLI::get_runner()->find_command_to_run($command);
     }
 
-    protected function tearDown()
+    protected function compatTearDown()
     {
         MyOwnCliCommand::_reset();
 
@@ -68,6 +68,6 @@ abstract class CliTestCase extends AbstractTestCase
             $rootCommand->remove_subcommand($cmd);
         }
 
-        parent::tearDown();
+        parent::compatTearDown();
     }
 }

@@ -41,9 +41,9 @@ class ServicesTest extends AbstractTestCase
      */
     private $lazy;
 
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         $this->pimple['qux'] = static function () {
             return new Mirror();

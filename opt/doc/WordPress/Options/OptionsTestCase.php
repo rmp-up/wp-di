@@ -60,9 +60,9 @@ abstract class OptionsTestCase extends AbstractTestCase
 
     protected $optionsDefinition = [];
 
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         $this->optionsDefinition = $this->classComment(OptionsTestCase::class)->code(0)->evaluate();
 
@@ -80,7 +80,7 @@ abstract class OptionsTestCase extends AbstractTestCase
         return $this->optionsResolver->__invoke($default, $optionName, func_num_args() > 1);
     }
 
-    protected function tearDown()
+    protected function compatTearDown()
     {
         foreach (array_keys($this->optionsDefinition) as $key) {
             if (is_string($key)) {
@@ -88,6 +88,6 @@ abstract class OptionsTestCase extends AbstractTestCase
             }
         }
 
-        parent::tearDown();
+        parent::compatTearDown();
     }
 }

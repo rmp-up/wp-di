@@ -54,14 +54,14 @@ use RuntimeException;
  */
 class WidgetsTest extends AbstractTestCase
 {
-    protected function tearDown()
+    protected function compatTearDown()
     {
         if (isset($this->pimple[MyOwnWidget::class]) && $this->pimple->raw(MyOwnWidget::class)['class']) {
             unregister_widget($this->pimple[MyOwnWidget::class]);
             static::assertWidgetNotExists('rmpup_myownwidget');
         }
 
-        parent::tearDown();
+        parent::compatTearDown();
     }
 
     public function testDefinition()
@@ -82,7 +82,7 @@ class WidgetsTest extends AbstractTestCase
      */
     public function testRegisterWidgetHasJustOneArgument()
     {
-        static::assertContains('first and only argument', $this->classComment()->markdown());
+    	static::assertNotFalse(strpos($this->classComment()->markdown(), 'first and only argument'));
 
         $func = new ReflectionFunction('register_widget');
         static::assertEquals(1, $func->getNumberOfParameters());

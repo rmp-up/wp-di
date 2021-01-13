@@ -59,9 +59,9 @@ class NullConfigurationTest extends MetaBoxTestCase
         static::assertLazyPimple(MyBox::class, $registeredBox['callback']);
     }
 
-    protected function tearDown()
+    protected function compatTearDown()
     {
-        parent::tearDown();
+        parent::compatTearDown();
 
         remove_meta_box(MyBox::class, 'post', 'advanced');
     }

@@ -49,9 +49,9 @@ class DefinitionTest extends AbstractTestCase
 {
     private $backupPostTypes;
 
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         global $wp_post_types;
         $this->backupPostTypes = $wp_post_types;
@@ -59,12 +59,12 @@ class DefinitionTest extends AbstractTestCase
         remove_all_actions('init');
     }
 
-    protected function tearDown()
+    protected function compatTearDown()
     {
         global $wp_post_types;
         $wp_post_types = $this->backupPostTypes;
 
-        parent::tearDown();
+        parent::compatTearDown();
     }
 
     public function testSimplePostTypeExample()

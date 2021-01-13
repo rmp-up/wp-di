@@ -53,9 +53,9 @@ use SomeThing;
  */
 class FactoryWithArgumentsTest extends AbstractTestCase
 {
-    protected function setUp()
+    protected function compatSetUp()
     {
-        parent::setUp();
+        parent::compatSetUp();
 
         $this->registerServices();
     }

@@ -104,11 +104,11 @@ use RmpUp\WpDi\Provider\WordPress\PostTypes;
  */
 class ConfigTest extends AbstractTestCase
 {
-    protected function setUp()
+    protected function compatSetUp()
     {
         remove_all_actions('template_redirect'); // TODO use ::truncateActions instead as soon as available
 
-        parent::setUp();
+        parent::compatSetUp();
 
         $provider = new Provider();
         $provider(

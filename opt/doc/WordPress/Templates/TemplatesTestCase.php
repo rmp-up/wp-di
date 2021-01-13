@@ -62,12 +62,12 @@ abstract class TemplatesTestCase extends AbstractTestCase
         return realpath($fullPath);
     }
 
-    protected function tearDown()
+    protected function compatTearDown()
     {
         foreach ($this->stubFiles as $stubFile) {
             unlink($stubFile);
         }
 
-        parent::tearDown();
+        parent::compatTearDown();
     }
 }
