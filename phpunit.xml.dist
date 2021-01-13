@@ -23,7 +23,8 @@
             <exclude>
                 <directory>lib/Compat/Symfony3</directory>
                 <directory>lib/Compat/Symfony4</directory>
-                <file>lib/Helper/Versions</file> <!-- CI covers that -->
+                <file>lib/Helper/Versions.php</file> <!-- CI covers that -->
+                <file>lib/Yaml.php</file> <!-- CI covers that -->
             </exclude>
         </whitelist>
     </filter>
