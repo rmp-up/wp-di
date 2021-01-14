@@ -1,5 +1,6 @@
 {
   "require-dev": {
+    "infection/infection": "0.*",
     "php-mock/php-mock": "^2.3",
     "phpunit/phpunit": "6.* || 7.* || 8.* || 9.*",
     "pretzlaw/wp-integration-test": "0.4.0-rc.2",

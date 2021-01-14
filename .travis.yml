@@ -97,10 +97,12 @@ install:
 
 script:
   - "[[ $WP_VERSION == *'dev-master' ]] || composer validate --strict --no-check-lock"
-  - vendor/bin/phpunit -c etc/phpunit/phpunit.xml.dist --coverage-clover coverage.xml
-  # Code quality checks should not differ among different PHP versions, so we spare runtime here
-  - "[[ $TRAVIS_PHP_VERSION != 7.3 ]] || vendor/bin/phpstan analyse -c etc/phpstan/phpstan.neon.dist lib/"
-  - "[[ $TRAVIS_PHP_VERSION != 7.3 ]] || vendor/bin/phpcs --standard=etc/phpcs/phpcs.xml.dist -s lib/"
+  - composer phpunit
+  # Code quality checks should not differ among different PHP versions
+  # We spare runtime here by spreading them across versions
+  - "[[ $TRAVIS_PHP_VERSION != 7.2 ]] || composer phpcs"
+  - "[[ $TRAVIS_PHP_VERSION != 7.3 ]] || composer phpstan"
+  - "[[ $TRAVIS_PHP_VERSION != 7.4 ]] || composer infection"
 
 after_success:
   - composer bin php-coveralls require php-coveralls/php-coveralls

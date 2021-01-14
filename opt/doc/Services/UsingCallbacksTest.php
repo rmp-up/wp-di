@@ -121,7 +121,7 @@ class UsingCallbacksTest extends AbstractTestCase
         static::assertInstanceOf(ArrayObject::class, $things);
 
         static::assertTrue(is_string($things['string']));
-        static::assertRegExp('/[anis]{4}/', $things['string']);
+        static::assertMatchesRegularExpression('/[anis]{4}/', $things['string']);
 
         static::assertTrue(is_int($things['int']));
         static::assertLessThan(10, $things['int']);

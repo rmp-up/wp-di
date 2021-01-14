@@ -21,7 +21,7 @@
   "require-dev": {
     "php": "7.0 - 7.4 || 8.0.*",
     "bamarni/composer-bin-plugin": "^1.4",
-    "johnpbloch/wordpress": "5.2.*",
+    "johnpbloch/wordpress": "5.6.*",
     "perftools/php-profiler": "0.12.*",
     "roave/security-advisories": "dev-master"
   },
@@ -43,11 +43,17 @@
   "scripts": {
     "post-install-cmd": [
       "test -h srv/wp-content/plugins/wp-di || ln -sr opt/wp-di srv/wp-content/plugins/",
-      "@composer bin all install --ansi"
+      "@composer bin all install --ansi",
+      "vendor/bin/wp --allow-root core config --force"
     ],
     "post-update-cmd": [
       "test -h srv/wp-content/plugins/wp-di || ln -sr opt/wp-di srv/wp-content/plugins/",
-      "@composer bin all install --ansi"
-    ]
+      "@composer bin all install --ansi",
+      "vendor/bin/wp --allow-root core config --force"
+    ],
+    "infection": "vendor/bin/infection --configuration=etc/phpunit/infection.json.dist --threads=8",
+    "phpcs": "vendor/bin/phpcs --standard=etc/phpcs/phpcs.xml.dist -s lib/",
+    "phpstan": "vendor/bin/phpstan analyse -c etc/phpstan/phpstan.neon.dist lib/",
+    "phpunit": "vendor/bin/phpunit -c etc/phpunit/phpunit.xml.dist --coverage-clover coverage.xml"
   }
 }
