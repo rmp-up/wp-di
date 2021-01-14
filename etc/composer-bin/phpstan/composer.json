@@ -2,5 +2,8 @@
     "require-dev": {
         "phpstan/phpstan": "0.12.*",
         "symfony/yaml": "^3.4 || ~4"
+    },
+    "config": {
+        "sort-packages": true
     }
 }

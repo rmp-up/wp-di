@@ -24,14 +24,7 @@
     "bamarni/composer-bin-plugin": "^1.4",
     "johnpbloch/wordpress": "5.2.*",
     "perftools/php-profiler": "0.12.*",
-    "php-mock/php-mock": "^2.3",
-    "phpcompatibility/php-compatibility": "^9.3",
-    "phpunit/phpunit": "6.* || 7.* || 8.* || 9.*",
-    "pretzlaw/wp-integration-test": "0.4.0-rc.2",
-    "rmp-up/doc-parser": "0.2.*",
-    "rmp-up/phpunit-compat": "0.1.*",
-    "roave/security-advisories": "dev-master",
-    "symfony/yaml": "~3 || ~4"
+    "roave/security-advisories": "dev-master"
   },
   "conflict": {
     "symfony/yaml": "<3.4"

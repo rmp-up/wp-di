@@ -1,0 +1,13 @@
+{
+  "require-dev": {
+    "php-mock/php-mock": "^2.3",
+    "phpunit/phpunit": "6.* || 7.* || 8.* || 9.*",
+    "pretzlaw/wp-integration-test": "0.4.0-rc.2",
+    "rmp-up/doc-parser": "0.2.*",
+    "rmp-up/phpunit-compat": "0.1.*",
+    "symfony/yaml": "~3 || ~4"
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
