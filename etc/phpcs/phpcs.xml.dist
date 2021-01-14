@@ -4,7 +4,7 @@
 
     <exclude-pattern>*/lib/Test/*</exclude-pattern>
 
-    <config name="installed_paths" value="etc/composer-bin/phpcs/vendor/phpcompatibility/php-compatibility" />
+    <config name="installed_paths" value="etc/phpcs/vendor/phpcompatibility/php-compatibility" />
 
     <arg name="basepath" value="."/>
     <arg name="colors"/>

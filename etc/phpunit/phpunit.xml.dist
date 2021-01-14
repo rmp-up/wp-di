@@ -2,7 +2,7 @@
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/7.0/phpunit.xsd"
          backupGlobals="false"
          colors="true"
-         bootstrap="opt/doc/bootstrap.php"
+         bootstrap="../../opt/doc/bootstrap.php"
 >
     <php>
         <!-- Never raise errors for incompatible changes, as they will be resolved in the next major version -->
@@ -13,18 +13,18 @@
 
     <testsuites>
         <testsuite name="default">
-            <directory>opt/doc</directory>
+            <directory>../../opt/doc</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>lib/</directory>
+            <directory>../../lib/</directory>
             <exclude>
-                <directory>lib/Compat/Symfony3</directory>
-                <directory>lib/Compat/Symfony4</directory>
-                <file>lib/Helper/Versions.php</file> <!-- CI covers that -->
-                <file>lib/Yaml.php</file> <!-- CI covers that -->
+                <directory>../../lib/Compat/Symfony3</directory>
+                <directory>../../lib/Compat/Symfony4</directory>
+                <file>../../lib/Helper/Versions.php</file> <!-- CI covers that -->
+                <file>../../lib/Yaml.php</file> <!-- CI covers that -->
             </exclude>
         </whitelist>
     </filter>
