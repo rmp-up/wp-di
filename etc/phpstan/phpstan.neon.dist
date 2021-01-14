@@ -1,9 +1,9 @@
 parameters:
     level: 7
     bootstrapFiles:
-        - ./opt/doc/bootstrap.php
+        - ../../opt/doc/bootstrap.php
     excludes_analyse:
-        - ./lib/Compat
+        - ../../lib/Compat
     reportUnmatchedIgnoredErrors: false
     # From 0.11 to 0.12 lead to some new hints
     # which are suppressed until completely fixed

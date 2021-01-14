@@ -1,8 +1,0 @@
-{
-    "require-dev": {
-        "php-coveralls/php-coveralls": "2.4.*"
-    },
-    "config": {
-        "sort-packages": true
-    }
-}

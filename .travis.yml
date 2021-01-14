@@ -80,7 +80,7 @@ cache:
 before_install:
   - mysql -e 'CREATE DATABASE dev;'
   # Disable PHPStan because it gives false-positives PHP < 7.1
-  - "[[ $TRAVIS_PHP_VERSION > '7.0' ]] || rm -rf etc/composer-bin/phpstan"
+  - "[[ $TRAVIS_PHP_VERSION > '7.0' ]] || rm -rf etc/phpstan"
   # Try supporting other versions
   - "[[ $WP_VERSION != *'dev-master' ]] || composer config minimum-stability dev"
   - "[[ $WP_VERSION != *'dev-master' ]] || composer config prefer-stable true"
@@ -93,19 +93,18 @@ install:
   # Using WP-CLI instead of Composer because this way we can use the env matrix (above).
   - vendor/bin/wp --allow-root config create --skip-check --force --dbuser=travis --dbpass="" --dbhost="127.0.0.1"
   - vendor/bin/wp --allow-root core install --skip-email
-  - for L in etc/*; do ln -s $L; done
   - ln -s etc/.coveralls.yml
 
 script:
   - "[[ $WP_VERSION == *'dev-master' ]] || composer validate --strict --no-check-lock"
-  - vendor/bin/phpunit --coverage-clover coverage.xml
+  - vendor/bin/phpunit -c etc/phpunit/phpunit.xml.dist --coverage-clover coverage.xml
   # Code quality checks should not differ among different PHP versions, so we spare runtime here
-  - "[[ $TRAVIS_PHP_VERSION != 7.3 ]] || vendor/bin/phpstan analyse lib/"
-  - "[[ $TRAVIS_PHP_VERSION != 7.3 ]] || vendor/bin/phpcs --standard=etc/phpcs.xml.dist -s lib/"
+  - "[[ $TRAVIS_PHP_VERSION != 7.3 ]] || vendor/bin/phpstan analyse -c etc/phpstan/phpstan.neon.dist lib/"
+  - "[[ $TRAVIS_PHP_VERSION != 7.3 ]] || vendor/bin/phpcs --standard=etc/phpcs/phpcs.xml.dist -s lib/"
 
 after_success:
-  - composer bin ci require php-coveralls/php-coveralls
-  - travis_retry php vendor/bin/php-coveralls -v
+  - composer bin php-coveralls require php-coveralls/php-coveralls
+  - travis_retry php vendor/bin/php-coveralls -c etc/coveralls.yml -v
 
 after_failure:
   - cat srv/wp-content/debug.log || true

@@ -4,9 +4,9 @@
 /composer.lock
 /coverage.xml
 /documentation.css
-/etc/composer-bin/ci
-/etc/composer-bin/**/vendor
-/etc/composer-bin/**/composer.lock
+/etc/php-coveralls
+/etc/**/vendor
+/etc/**/composer.lock
 /srv
 /tmp
 /var
