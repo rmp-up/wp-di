@@ -1,0 +1,247 @@
+stages:
+  # first QA because if those basics things don't work
+  # then we don't waste more runtime for it.
+  - qa
+  - test
+  # The "deprecated" pipeline marks old things that may be dropped
+  # but still supported by us as long as possible (e.g. PHP 7.0).
+  #
+  # see https://www.php.net/supported-versions.php
+  # see https://www.php.net/eol.php
+  # see https://codex.wordpress.org/WordPress_Versions (hint: search for the current year)
+  # see https://phpunit.de/supported-versions.html
+  - deprecated
+
+variables:
+  COMPOSER_CACHE_DIR: /var/composer
+  PHP__memory_limit: 512M
+  MYSQL_DATABASE: dev
+  MYSQL_USER: dev
+  MYSQL_PASSWORD: dev
+  MYSQL_ROOT_PASSWORD: dev
+  WP_VERSION: "5.6.*"
+
+cache:
+  key: global
+  paths:
+    - /var/composer
+
+.base: &base
+  image: pretzlaw/php:7.4-apache
+
+  services:
+    - name: mariadb:10.5
+      alias: db
+
+  before_script:
+    - rm -rf etc/phpstan # as long as it conflicts with PHP 7.0
+    - composer require --update-with-dependencies johnpbloch/wordpress:$WP_VERSION
+    - vendor/bin/wp --allow-root config create --skip-check --force
+    - vendor/bin/wp --allow-root core install --skip-email
+
+.test: &test
+  <<: *base
+  script:
+    - vendor/bin/phpunit -c etc/phpunit/phpunit.xml.dist --coverage-clover coverage.xml
+
+  after_script:
+    - composer bin php-coveralls require php-coveralls/php-coveralls
+    - php vendor/bin/php-coveralls -c etc/coveralls.yml -v
+
+#
+# PHP 8.0
+#
+.php80: &php80
+  <<: *test
+  image: pretzlaw/php:8.0-apache
+
+  before_script:
+    - rm -rf etc/phpstan # as long as it conflicts with PHP 7.0
+    - composer require --update-with-dependencies johnpbloch/wordpress:$WP_VERSION
+    # wp-cli is not ready for PHP 8 so we need to have the following workaround.
+    - composer bin wp update --ignore-platform-reqs
+    - vendor/bin/wp --allow-root config create --skip-check --force
+    - vendor/bin/wp --allow-root core install --skip-email
+
+php80 wp 5 6:
+  <<: *php80
+  variables:
+    WP_VERSION: 5.6.*
+
+php80 wp 5 4:
+  <<: *php80
+  variables:
+    WP_VERSION: 5.4.*
+
+# NOTE: WP 5.3 or lower doesn't work with PHP8 here
+
+#
+# PHP 7.4
+#
+.php74: &php74
+  <<: *test
+  image: pretzlaw/php:7.4-apache
+
+php74 wp 5 6:
+  <<: *php74
+  variables:
+    WP_VERSION: 5.6.*
+
+php74 wp 5 4:
+  <<: *php74
+  variables:
+    WP_VERSION: 5.4.*
+
+php74 wp 5 2:
+  <<: *php74
+  variables:
+    WP_VERSION: 5.2.*
+
+php74 wp 5 0:
+  <<: *php74
+  variables:
+    WP_VERSION: 5.0.*
+
+#
+# PHP 7.3
+#
+.php73: &php73
+  <<: *test
+  image: pretzlaw/php:7.3-apache
+
+php73 wp 5 6:
+  <<: *php73
+  variables:
+    WP_VERSION: 5.6.*
+
+php73 wp 5 4:
+  <<: *php73
+  variables:
+    WP_VERSION: 5.4.*
+
+php73 wp 5 2:
+  <<: *php73
+  variables:
+    WP_VERSION: 5.2.*
+
+php73 wp 5 0:
+  <<: *php73
+  variables:
+    WP_VERSION: 5.0.*
+
+
+#
+# PHP 7.2 (deprecated: 30 Nov 2020)
+#
+.php72: &php72
+  <<: *test
+  image: pretzlaw/php:7.2-apache
+  stage: deprecated
+
+php72 wp 5 5:
+  <<: *php72
+  variables:
+    WP_VERSION: 5.5.*
+
+php72 wp 5 3:
+  <<: *php72
+  variables:
+    WP_VERSION: 5.2.*
+
+php72 wp 5 1:
+  <<: *php72
+  variables:
+    WP_VERSION: 5.1.*
+
+php72 wp 5 0:
+  <<: *php72
+  variables:
+    WP_VERSION: 5.0.*
+
+
+#
+# PHP 7.1 (deprecated: 1 Dec 2019)
+#
+.php71: &php71
+  <<: *test
+  image: pretzlaw/php:7.1-apache
+  stage: deprecated
+
+php71 wp 5 5:
+  <<: *php71
+  variables:
+    WP_VERSION: 5.5.*
+
+php71 wp 5 3:
+  <<: *php71
+  variables:
+    WP_VERSION: 5.3.*
+
+php71 wp 5 1:
+  <<: *php71
+  variables:
+    WP_VERSION: 5.1.*
+
+
+#
+# PHP 7.0 (deprecated: 10 Jan 2019)
+#
+.php70: &php70
+  <<: *test
+  image: pretzlaw/php:7.0-apache
+  stage: deprecated
+
+php70 wp 5 6:
+  <<: *php70
+  variables:
+    WP_VERSION: 5.3.*
+
+php70 wp 5 1:
+  <<: *php70
+  variables:
+    WP_VERSION: 5.1.*
+
+php70 wp 4 9:
+  <<: *php70
+  variables:
+    WP_VERSION: 5.0.*
+
+php70 wp 4 8:
+  <<: *php70
+  variables:
+    WP_VERSION: 4.8.*
+
+
+#
+# Code quality
+#
+.qa: &qa
+  <<: *base
+  after_script:
+    - echo 1 # disables sending code coverage
+
+code quality:
+  <<: *qa
+  stage: qa
+  script:
+    - git checkout etc/phpstan
+    - composer bin phpstan install
+    - vendor/bin/phpstan analyse -c etc/phpstan/phpstan.neon.dist lib/
+    - vendor/bin/phpcs --standard=etc/phpcs/phpcs.xml.dist -s lib/
+
+sast:
+  <<: *qa
+  stage: qa
+  allow_failure: true # we just want to be informed about this
+  script:
+    - vendor/bin/phpcs --standard=etc/phpcs/sast.xml -s lib/
+    - composer require --dev --no-scripts roave/security-advisories:dev-master
+
+housekeeping:
+  <<: *qa
+  stage: qa
+  allow_failure: true # we just want to be informed about this
+  script:
+    - composer validate --strict --no-check-lock
+    - composer outdated --direct
+    - test -z $(composer outdated --minor-only)
