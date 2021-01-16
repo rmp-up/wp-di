@@ -1,12 +1,27 @@
 version: '3'
 
 services:
+  php80:
+    build:
+      dockerfile: php80.dockerfile
+      context: etc/docker/
+    image: pretzlaw/php:8.0-apache
+    env_file: [ .env ]
+    volumes:
+      - ".:/var/www"
+      - "$COMPOSER_LOCAL:/var/composer"
+    networks:
+      default:
+        ipv4_address: 10.210.9.80
+
   php73:
     image: pretzlaw/php:7.3-apache
     volumes:
       - ".:/var/www"
       - "$COMPOSER_LOCAL:/var/composer"
     env_file: [ .env ]
+    environment:
+      PHP_php5enmod: mysqli xdebug zip
     networks:
       default:
         ipv4_address: 10.210.9.73
@@ -17,6 +32,8 @@ services:
       - ".:/var/www"
       - "$COMPOSER_LOCAL:/var/composer"
     env_file: [ .env ]
+    environment:
+      PHP_php5enmod: mysqli xdebug zip
     networks:
       default:
         ipv4_address: 10.210.9.10
@@ -27,6 +44,8 @@ services:
       - ".:/var/www"
       - "$COMPOSER_LOCAL:/var/composer"
     env_file: [ .env ]
+    environment:
+      PHP_php5enmod: mysqli xdebug zip
     networks:
       default:
         ipv4_address: 10.210.9.70
