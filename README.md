@@ -28,7 +28,7 @@ composer require rmp-up/wp-di
 and set up the container provider
 
 ```php
-\RmpUp\WpDi\WpDi::load( require 'services.php' );
+RmpUp\WpDi\WpDi::load( require 'services.php' );
 
 $container = \RmpUp\WpDi\WpDi::pimple();
 ```
@@ -37,8 +37,8 @@ Friends of YAML can add `composer require symfony/yaml`
 and use
 
 ```php
-\RmpUp\WpDi\WpDi::load(
-  \RmpUp\WpDi\Yaml::parseFile( 'services.yaml' )
+RmpUp\WpDi\WpDi::load(
+	RmpUp\WpDi\Yaml::parseFile( 'services.yaml' )
 );
 ```
 
@@ -48,8 +48,16 @@ and use
 A full documentation can be found in the
 [documentation of the latest releases](https://github.com/rmp-up/wp-di/releases).
 The following is just a sneak peek into some of the possibilities.
-Please use the "preload.php" when you are using PHP >= 7.4
-for even more performance of the following features.
+Try using the "preload.php" when you have PHP >= 7.4
+or a composer workflow to get even more performance:
+
+```json
+{
+  "autoload": {
+    "files": [ "vendor/rmp-up/wp-di/preload.php" ]
+  }
+}
+```
 
 ### Services and parameters
 
