@@ -7,6 +7,7 @@
 /etc/php-coveralls
 /etc/**/vendor
 /etc/**/composer.lock
+/etc/phpunit/.phpunit.result.cache
 /srv
 /tmp
 /var
